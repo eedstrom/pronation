@@ -10,7 +10,7 @@ Copyright (C) 2021 Dominic Culotta, Eric Edstrom, Jae Young Lee, Teagan Mathur, 
 
 File `Arduino_LSM9DS1.h` is Copyright (C) 2019 Arduino SA.
 
-File `SD.h` is Copyright (C) 2010 Sparkfun Electronics.
+File `SD.h` is Copyright (C) 2010 SparkFun Electronics.
 
 File `SPI.h` is Copyright (C) 2010 Cristian Maglie.
 
