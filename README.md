@@ -14,4 +14,4 @@ File `SD.h` is Copyright (C) 2010 SparkFun Electronics.
 
 File `SPI.h` is Copyright (C) 2010 Cristian Maglie.
 
-This work is licensed under the GNU General Public License (GPL) version 3 or later.
+This work is licensed under the GNU General Public License (GPL) version 3 or later.  See `COPYING` for more information.
