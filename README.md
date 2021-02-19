@@ -24,4 +24,6 @@ Python library `pandas` is Copyright 2008-2011 AQR Capital Management, LLC.
 
 Python library `matplotlib` is Copyright (C) 2002-2011 John D. Hunter; All rights reserved.
 
+Python library `seaborn` is Copyright (C) 2012-2020 Michael Waskom.
+
 This work is licensed under the GNU General Public License (GPL) version 3 or later.  See `COPYING` for more information.
