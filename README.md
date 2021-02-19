@@ -14,4 +14,14 @@ File `SD.h` is Copyright (C) 2010 SparkFun Electronics.
 
 File `SPI.h` is Copyright (C) 2010 Cristian Maglie.
 
+File `Wire.h` is Copyright (C) 2006 Nicholas Zambetti.
+
+File `RTC.h` is Copyright (C) 2009 Amadeusz Jasak.
+
+Python library `numpy` is Copyright 2005-2021 NumPy Developers.
+
+Python library `pandas` is Copyright 2008-2011 AQR Capital Management, LLC.
+
+Python library `matplotlib` is Copyright (C) 2002-2011 John D. Hunter; All rights reserved.
+
 This work is licensed under the GNU General Public License (GPL) version 3 or later.  See `COPYING` for more information.
