@@ -21,6 +21,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
+import scipy.optimize as sy
+
 
 # Load in the dat
 df = pd.read_csv("pronation\Python Code\Data\TESTFILE.CSV", header=None)
@@ -32,5 +34,19 @@ time = np.linspace(0,len(df['ay']), len(df['ay']))
 sns.lineplot(x=time, y=df['az'], linewidth=1, color='r')
 sns.lineplot(x=time, y=df['ax'], linewidth=1)
 sns.lineplot(x=time, y=df['ay'], linewidth=1, color='g')
+
+#making a best fit line to az data
+def model(x,m,b):
+    return m*x+b
+
+intit_guess = [1,1]
+fit = sy.curve_fit(model, time, df['az'], p0=intit_guess, absolute_sigma=True)
+
+#extracking out m and b
+ans = fit[0]
+slope_fit, y_fit = ans[0], ans[1]
+
+plt.plot(time, model(time, slope_fit, y_fit))
+
 
 plt.show()
