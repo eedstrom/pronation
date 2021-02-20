@@ -15,21 +15,21 @@
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
+
+import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
+import seaborn as sns
 
-accel_raw = open( 'RAWACCEL.CSV', 'r' ) #read the raw data
+# Load in the data
+df = pd.read_csv("pronation\Python Code\Data\TESTFILE.CSV", header=None)
 
-xaccel = []
-yaccel = []
-zaccel = []
+# Give it a header
+df.columns = ["ax", "ay", "az", "gx", "gy", "gz"]
+time = np.linspace(0,len(df['ay']), len(df['ay']))
 
+sns.lineplot(x=time, y=df['az'], linewidth=1, color='r')
+sns.lineplot(x=time, y=df['ax'], linewidth=1)
+sns.lineplot(x=time, y=df['ay'], linewidth=1, color='g')
 
-for line in accel_raw.readlines():
-    line = line.strip()  # remove whitespace from the line
-    values = line.split(',') # split the line by commas ','
-
-    xaccel.append(values[0])
-    yaccel.append(values[1])
-    zaccel.append(values[2])
-
-print(zaccel)
+plt.show()
