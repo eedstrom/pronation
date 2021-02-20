@@ -21,10 +21,10 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 
-# Load in the data
+# Load in the dat
 df = pd.read_csv("pronation\Python Code\Data\TESTFILE.CSV", header=None)
 
-# Give it a header
+# Give it a heade
 df.columns = ["ax", "ay", "az", "gx", "gy", "gz"]
 time = np.linspace(0,len(df['ay']), len(df['ay']))
 
