@@ -25,7 +25,7 @@ import seaborn as sns
 # Load in the dat
 df = pd.read_csv("pronation\Python Code\Data\TESTFILE.CSV", header=None)
 
-# Give it a heade
+# Give it a header
 df.columns = ["ax", "ay", "az", "gx", "gy", "gz"]
 time = np.linspace(0,len(df['ay']), len(df['ay']))
 
