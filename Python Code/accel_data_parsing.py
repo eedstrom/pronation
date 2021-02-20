@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # Pronation Program
 # Copyright (C) 2021 Dominic Culotta, Eric Edstrom, Jae Young Lee, Teagan Mathur, Brian Petro, Wilma Rishko, Ruizhi Wang
 #
