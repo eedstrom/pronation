@@ -16,7 +16,6 @@
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
-
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -25,24 +24,28 @@ import scipy.optimize as sy
 
 
 # Load in the dat
-df = pd.read_csv("pronation\Python Code\Data\TESTFILE.CSV", header=None)
+df = pd.read_csv(
+    "pronation\Python Code\Data\TESTFILE_OLDFORMAT.CSV", header=None)
 
 # Give it a header
 df.columns = ["ax", "ay", "az", "gx", "gy", "gz"]
-time = np.linspace(0,len(df['ay']), len(df['ay']))
+time = np.linspace(0, len(df['ay']), len(df['ay']))
 
 sns.lineplot(x=time, y=df['az'], linewidth=1, color='r')
 sns.lineplot(x=time, y=df['ax'], linewidth=1)
 sns.lineplot(x=time, y=df['ay'], linewidth=1, color='g')
 
-#making a best fit line to az data
-def model(x,m,b):
+# making a best fit line to az data
+
+
+def model(x, m, b):
     return m*x+b
 
-intit_guess = [1,1]
+
+intit_guess = [1, 1]
 fit = sy.curve_fit(model, time, df['az'], p0=intit_guess, absolute_sigma=True)
 
-#extracking out m and b
+# extracking out m and b
 ans = fit[0]
 slope_fit, y_fit = ans[0], ans[1]
 
