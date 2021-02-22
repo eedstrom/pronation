@@ -21,11 +21,13 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 import scipy.optimize as sy
+from pathlib import Path
 
+# Load in the path to the data
+p = Path("Python Code") / "Data" / "TESTFILE_OLDFORMAT.CSV"
 
 # Load in the dat
-df = pd.read_csv(
-    "pronation\Python Code\Data\TESTFILE_OLDFORMAT.CSV", header=None)
+df = pd.read_csv(p, header=None)
 
 # Give it a header
 df.columns = ["ax", "ay", "az", "gx", "gy", "gz"]
