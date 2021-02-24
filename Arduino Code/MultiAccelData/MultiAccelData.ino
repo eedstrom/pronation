@@ -18,6 +18,9 @@ const int chipSelect = 53;
 // File name to be written to
 const char* filename = "restdata.csv";
 
+// Buses used with I2C
+const uint8_t buses[] = { 0, 3, 6 };
+
 // Function to change bus
 void TCA9548A(uint8_t bus)
 {
@@ -58,18 +61,18 @@ void setup() {
 
   // Container for the sample rate data
   uint8_t sample_data_arr[6];
-  char sampledata[250];
+  char sampledata[100];
   
   // Check Accelerometer rates for all channels in Hz
   for (channel = 0; channel < 3; ++channel) {
-    TCA9548A(channel); // Set the channel
+    TCA9548A(buses[channel]); // Set the channel
     // Store the rate
     sample_data_arr[channel] = (uint8_t) IMU.accelerationSampleRate();
   }
 
   // Check Gyroscopic rates for all channels in Hz
   for (channel = 0; channel < 3; ++channel) {
-    TCA9548A(channel + 3); // Set the channel
+    TCA9548A(buses[channel]); // Set the channel
     // Store the rate
     sample_data_arr[channel + 3] = (uint8_t) IMU.gyroscopeSampleRate();
   }
@@ -95,7 +98,7 @@ void loop() {
   // Get the acceleration & gyro values for each channel
   uint8_t channel;
   for (channel = 0; channel < 3; ++channel) {
-    TCA9548A(channel); // Set the channel
+    TCA9548A(buses[channel]); // Set the channel
     
     // Read the data
     IMU.readAcceleration(ax, ay, az);
@@ -124,10 +127,11 @@ void loop() {
 
     // Put into one datachar
     char datachar[100];
-    sprintf(datachar, "%i,%s,%s,%s,%s,%s,%s", channel, ax_c, ay_c, az_c, gx_c, gy_c, gz_c);
+    sprintf(datachar, "%i,%s,%s,%s,%s,%s,%s", buses[channel], ax_c, ay_c, az_c, gx_c, gy_c, gz_c);
 
     // Write to the SD
     File datafile = SD.open(filename, FILE_WRITE); // Open the file
     writeSD(datafile, datachar);
+    
   }
 }
