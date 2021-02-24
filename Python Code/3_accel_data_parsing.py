@@ -23,7 +23,7 @@ import scipy.optimize as sy
 import scipy.interpolate as syi
 
 
-df = pd.read_csv("pronation\Python Code\Data\RESTDATA1.CSV", header=None)           # Load in the data      
+df = pd.read_csv("pronation\Python Code\Data\Walking.CSV", header=None)           # Load in the data      
 
 df.columns = ["accel", "ax", "ay", "az", "gx", "gy", "gz"]          # Give it a header
 df = df.drop(columns=['accel'])
@@ -51,14 +51,14 @@ plt.plot(time, df0['az'], 'ko', markersize=3.5)         # plot accel data pts
 plt.plot(time, df0['ax'], 'ro', markersize=3.5)        
 plt.plot(time, df0['ay'], 'go', markersize=3.5)        
 
-plt.plot(time, df0['gx'], 'go', markersize=3.5)        # plot gyro data pts
-plt.plot(time, df0['gy'], 'go', markersize=3.5)        
-plt.plot(time, df0['gz'], 'go', markersize=3.5)        
+# plt.plot(time, df0['gx'], 'go', markersize=3.5)        # plot gyro data pts
+# plt.plot(time, df0['gy'], 'go', markersize=3.5)        
+# plt.plot(time, df0['gz'], 'go', markersize=3.5)        
 
 # using scypi spline tools
 timespline = np.linspace(0, len(df0['ay']), num=100, endpoint=True)         #adjust num=___ to change the amount of pts of spline
 az_spln = syi.interp1d(time, df0['az'], kind='cubic')
-plt.plot(timespline, az_spln(timespline), 'b--', label='cubic spline')
+plt.plot(timespline, az_spln(timespline), 'b-', label='cubic spline')
 
 
 
@@ -71,7 +71,7 @@ fit = sy.curve_fit(model, time, df0['az'], p0=intit_guess, absolute_sigma=True)
 ans = fit[0]            # extracking out m and b
 slope_fit, y_fit = ans[0], ans[1]
 
-plt.plot(time, model(time, slope_fit, y_fit))
+# plt.plot(time, model(time, slope_fit, y_fit))
 
 
 plt.show()
