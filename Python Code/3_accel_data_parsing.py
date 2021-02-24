@@ -19,31 +19,25 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import seaborn as sns
 import scipy.optimize as sy
+import scipy.interpolate as syi
 
 
+df = pd.read_csv("pronation\Python Code\Data\RESTDATA1.CSV", header=None)           # Load in the data      
 
-
-
-# Load in the data
-df = pd.read_csv(
-    "pronation\Python Code\Data\RESTDATA1.CSV", header=None)
-
-# Give it a header
-df.columns = ["accel", "ax", "ay", "az", "gx", "gy", "gz"]
+df.columns = ["accel", "ax", "ay", "az", "gx", "gy", "gz"]          # Give it a header
 df = df.drop(columns=['accel'])
-
 # print(df)
 
+
+
 # I want to take every third row starting from the second row and put it in a sigle table.
-# Seperating data from each accelerometer into data frames
-df0 = df.iloc[1::3, :]
+df0 = df.iloc[1::3, :]          # Seperating data from each accelerometer into data frames
 df1 = df.iloc[2::3, :]
 df2 = df.iloc[3::3, :]
 # print(df0, df1,df2)
 
-time = np.linspace(0, len(df['ay']), len(df['ay']))
+time = np.linspace(0, len(df0['ay']), len(df0['ay']))
 
 # I want to create a best fit line for the gyro data then define
 # an equation for that line. With that model I will solve the 
@@ -52,27 +46,32 @@ time = np.linspace(0, len(df['ay']), len(df['ay']))
 # position in time.  
 # Taking the positions of the vertiacl and horizonal sensors 
 # I will find delta change between the sensors subrtacted by 90 deg. 
-#
+
+plt.plot(time, df0['az'], 'ko', markersize=3.5)         # plot accel data pts
+plt.plot(time, df0['ax'], 'ro', markersize=3.5)        
+plt.plot(time, df0['ay'], 'go', markersize=3.5)        
+
+plt.plot(time, df0['gx'], 'go', markersize=3.5)        # plot gyro data pts
+plt.plot(time, df0['gy'], 'go', markersize=3.5)        
+plt.plot(time, df0['gz'], 'go', markersize=3.5)        
+
+# using scypi spline tools
+timespline = np.linspace(0, len(df0['ay']), num=100, endpoint=True)         #adjust num=___ to change the amount of pts of spline
+az_spln = syi.interp1d(time, df0['az'], kind='cubic')
+plt.plot(timespline, az_spln(timespline), 'b--', label='cubic spline')
 
 
-sns.lineplot(x=time, y=df['az'], linewidth=1, color='r')
-sns.lineplot(x=time, y=df['ax'], linewidth=1)
-sns.lineplot(x=time, y=df['ay'], linewidth=1, color='g')
 
-
-# making a best fit line to az data
-def model(x, m, b):
+def model(x, m, b):         # making a best fit line to az data
     return m*x+b
 
-
 intit_guess = [1, 1]
-fit = sy.curve_fit(model, time, df['az'], p0=intit_guess, absolute_sigma=True)
+fit = sy.curve_fit(model, time, df0['az'], p0=intit_guess, absolute_sigma=True)
 
-# extracking out m and b
-ans = fit[0]
+ans = fit[0]            # extracking out m and b
 slope_fit, y_fit = ans[0], ans[1]
 
 plt.plot(time, model(time, slope_fit, y_fit))
 
 
-# plt.show()
+plt.show()
