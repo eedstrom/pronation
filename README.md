@@ -10,4 +10,4 @@ Copyright (C) 2021 Dominic Culotta, Eric Edstrom, Jae Young Lee, Teagan Mathur, 
 
 Please see `additional_copyrights.md` for information about other files' copyrights.
 
-This work is licensed under the GNU General Public License (GPL) version 3 or later.  See `COPYING` for more information.
+This work is licensed under the GNU General Public License (GPL) version 3 or later.  See `COPYING.md` for more information.
