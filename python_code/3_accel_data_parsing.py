@@ -22,9 +22,10 @@ import pandas as pd
 import scipy.optimize as sy
 import scipy.interpolate as syi
 import sys
+import os
 from pathlib import Path
 
-df = pd.read_csv(Path("Data") / sys.argv[1], header=None)           # Load in the data      
+df = pd.read_csv(Path(os.getcwd()) / sys.argv[1], header=None)           # Load in the data      
 
 df.columns = ["accel", "ax", "ay", "az", "gx", "gy", "gz"]          # Give it a header
 df = df.drop(columns=['accel'])
