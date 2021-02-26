@@ -17,11 +17,13 @@ Copyright (C) 2021 Dominic Culotta, Eric Edstrom, Jae Young Lee, Teagan Mathur, 
 
    Writes data from accelerometer and gyroscope to a file on an SD card
  * The file format is a csv with the following columns:
- * LSM9 bus (0-2), acceleration_x, acceleration_y, acceleration_z, gyroscope_x, gyroscope_y, gyroscope_z
+ * LSM9 bus (0-2), acceleration_x, acceleration_y, acceleration_z, gyroscope_x, gyroscope_y, gyroscope_z,
+ *                 magnetic_field_x, magnetic_field_y, magnetic_field_z
  * 
  * First row contains the Sample Rate for each accelerometer for both acceleration and gyroscope in the form:
- * Sample Rate Identifyer (-1), acceleration sample rate channel 1, acceleration sample rate channel 2, acceleration sample rate channel 3,
- ** gyroscope sample rate channel 1, gyroscope sample rate channel 2, gyroscope sample rate channel 3
+ * Sample Rate Identifyer (-1), acceleration sample rate channel 0, acceleration sample rate channel 1, acceleration sample rate channel 2,
+ ** gyroscope sample rate channel 0, gyroscope sample rate channel 1, gyroscope sample rate channel 2,
+ ** magnetic field sample rate channel 0, magnetic field sample rate channel 1, magnetic field sample rate channel 2
  */
 
 #include <Arduino_LSM9DS1.h>
@@ -60,67 +62,80 @@ void setup() {
 
   // Make sure the sd card is present
   if (!SD.begin(chipSelect)) {
-    Serial.println("SD Card not present");
+    Serial.println("SD Card not present or wiring issue");
     // Halt operations
     while (1);
   }
 
   // Get the sample rate
   uint8_t sr_a0, sr_a1, sr_a2,
-          sr_g0, sr_g1, sr_g2;
+          sr_g0, sr_g1, sr_g2,
+          sr_m0, sr_m1, sr_m2;
+          
 
   // Get for channel 0
   TCA9548A(0);
   sr_a0 = (uint8_t) IMU.accelerationSampleRate();
   sr_g0 = (uint8_t) IMU.gyroscopeSampleRate();
+  sr_m0 = (uint8_t) IMU.magneticFieldSampleRate();
 
   // Get for channel 1
   TCA9548A(1);
   sr_a1 = (uint8_t) IMU.accelerationSampleRate();
   sr_g1 = (uint8_t) IMU.gyroscopeSampleRate();
+  sr_m1 = (uint8_t) IMU.magneticFieldSampleRate();
 
   // Get for channel 2
   TCA9548A(2);
   sr_a2 = (uint8_t) IMU.accelerationSampleRate();
   sr_g2 = (uint8_t) IMU.gyroscopeSampleRate();
+  sr_m2 = (uint8_t) IMU.magneticFieldSampleRate();
 
-    // Write to the file
-    File datafile = SD.open(FILENAME, FILE_WRITE);
+  // Write to the file
+  File datafile = SD.open(FILENAME, FILE_WRITE);
 
-    datafile.print(-1);
-    datafile.print(",");
-    datafile.print(sr_a0); // in Hz
-    datafile.print(",");
-    datafile.print(sr_a0); // in Hz
-    datafile.print(",");
-    datafile.print(sr_a0); // in Hz
-    datafile.print(",");
-    datafile.print(sr_a0); // in Hz
-    datafile.print(",");
-    datafile.print(sr_a0); // in Hz
-    datafile.print(",");
-    datafile.println(sr_a0); // in Hz
-    datafile.close();
-
-    
-    // Print sample Rate info
-    /*
-    Serial.print(-1);
-    Serial.print(",");
-    Serial.print(sr_a0); // in Hz
-    Serial.print(",");
-    Serial.print(sr_a0); // in Hz
-    Serial.print(",");
-    Serial.print(sr_a0); // in Hz
-    Serial.print(",");
-    Serial.print(sr_a0); // in Hz
-    Serial.print(",");
-    Serial.print(sr_a0); // in Hz
-    Serial.print(",");
-    Serial.println(sr_a0); // in Hz
-    */
+  datafile.print(-1);
+  datafile.print(",");
+  datafile.print(sr_a0); // in Hz
+  datafile.print(",");
+  datafile.print(sr_a1); // in Hz
+  datafile.print(",");
+  datafile.print(sr_a2); // in Hz
+  datafile.print(",");
+  datafile.print(sr_g0); // in Hz
+  datafile.print(",");
+  datafile.print(sr_g1); // in Hz
+  datafile.print(",");
+  datafile.print(sr_g2); // in Hz
+  datafile.print(",");
+  datafile.print(sr_m0); // in Hz
+  datafile.print(",");
+  datafile.print(sr_m1); // in Hz
+  datafile.print(",");
+  datafile.println(sr_m2); // in Hz
+  datafile.close();
 
   
+  // Print sample rate info
+  Serial.print(-1);
+  Serial.print('\t');
+  Serial.print(sr_a0); // in Hz
+  Serial.print('\t');
+  Serial.print(sr_a1); // in Hz
+  Serial.print('\t');
+  Serial.print(sr_a2); // in Hz
+  Serial.print('\t');
+  Serial.print(sr_g0); // in Hz
+  Serial.print('\t');
+  Serial.print(sr_g1); // in Hz
+  Serial.print('\t');
+  Serial.print(sr_g2); // in Hz
+  Serial.print('\t');
+  Serial.print(sr_m0); // in Hz
+  Serial.print('\t');
+  Serial.print(sr_m1); // in Hz
+  Serial.print('\t');
+  Serial.println(sr_m2); // in Hz
 }
 
 void loop() {
@@ -131,6 +146,7 @@ void loop() {
     // Hold the values
     float ax, ay, az;
     float g1, g2, g3;
+    float m1, m2, m3;
 
     // Get the acceleration
     while(!IMU.accelerationAvailable()) {}
@@ -140,6 +156,10 @@ void loop() {
     while(!IMU.gyroscopeAvailable()) {}
     IMU.readGyroscope(g1, g2, g3);
 
+    // Get the magnetic field
+    while(!IMU.magneticFieldAvailable()) {}
+    IMU.readMagneticField(m1, m2, m3);
+    
     // Write to the file
     File datafile = SD.open(FILENAME, FILE_WRITE);
     
@@ -155,13 +175,18 @@ void loop() {
     datafile.print(",");
     datafile.print(g2 * 10); // in d(dps)
     datafile.print(",");
-    datafile.println(g3 * 10); // in d(dps)
+    datafile.print(g3 * 10); // in d(dps)
+    datafile.print(","); 
+    datafile.print(m1); // in microT
+    datafile.print(",");
+    datafile.print(m2); // in microT
+    datafile.print(",");
+    datafile.println(m3); // in microT
 
     datafile.close();
 
 
     // Print acceleration and gyro info
-    /*
     Serial.print(channel);
     Serial.print("\t");
     Serial.print(ax);
@@ -174,7 +199,12 @@ void loop() {
     Serial.print('\t');
     Serial.print(g2);
     Serial.print('\t');
-    Serial.println(g3);
-    */
+    Serial.print(g3);
+    Serial.print('\t');
+    Serial.print(m1);
+    Serial.print('\t');
+    Serial.print(m2);
+    Serial.print('\t');
+    Serial.println(m3);
   }
 }
