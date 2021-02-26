@@ -26,17 +26,14 @@ Copyright (C) 2021 Dominic Culotta, Eric Edstrom, Jae Young Lee, Teagan Mathur, 
 
 #include <Arduino_LSM9DS1.h>
 #include <Wire.h>
-#include <SPI.h>
 #include <SD.h>
+#include <SPI.h>
 
 // Put this as the CS pin
 const int chipSelect = 53;
 
 // File name to be written to
-const char* filename = "restdata.csv";
-
-// Buses used with I2C
-const uint8_t buses[] = { 0, 3, 6 };
+const char* FILENAME = "restdata.csv";
 
 // Function to change bus
 void TCA9548A(uint8_t bus)
@@ -46,109 +43,138 @@ void TCA9548A(uint8_t bus)
   Wire.endTransmission();
 }
 
-// Function to write to SD card
-void writeSD(File datafile, char* datachar)
-{
-  if (datafile) {
-    datafile.println(datachar);
-    datafile.close();
-
-    // Print to the Serial Monitor too
-    Serial.println(datachar);
-  }
-}
-
 void setup() {
-  // Initialize
-  Wire.begin();
-  IMU.begin();
-  // Prepare the Serial Monitor for output
-  Serial.begin(9600);
-  while (!Serial);
+  // Initialize for each channel
+  for (uint8_t channel = 0; channel < 3; ++channel) {
+    // Set to channel 0, 1, 2
+    TCA9548A(channel);
 
-  // make sure the sd card is present
+    // Initialize
+    Wire.begin();
+    IMU.begin();
+  }
+  
+  // For printing
+    Serial.begin(9600);
+    while (!Serial);
+
+  // Make sure the sd card is present
   if (!SD.begin(chipSelect)) {
     Serial.println("SD Card not present");
     // Halt operations
     while (1);
   }
 
-  // Iterator for the accelerometers
-  uint8_t channel;
+  // Get the sample rate
+  uint8_t sr_a0, sr_a1, sr_a2,
+          sr_g0, sr_g1, sr_g2;
 
-  // Container for the sample rate data
-  uint8_t sample_data_arr[6];
-  char sampledata[100];
+  // Get for channel 0
+  TCA9548A(0);
+  sr_a0 = (uint8_t) IMU.accelerationSampleRate();
+  sr_g0 = (uint8_t) IMU.gyroscopeSampleRate();
+
+  // Get for channel 1
+  TCA9548A(1);
+  sr_a1 = (uint8_t) IMU.accelerationSampleRate();
+  sr_g1 = (uint8_t) IMU.gyroscopeSampleRate();
+
+  // Get for channel 2
+  TCA9548A(2);
+  sr_a2 = (uint8_t) IMU.accelerationSampleRate();
+  sr_g2 = (uint8_t) IMU.gyroscopeSampleRate();
+
+    // Write to the file
+    File datafile = SD.open(FILENAME, FILE_WRITE);
+
+    datafile.print(-1);
+    datafile.print(",");
+    datafile.print(sr_a0); // in Hz
+    datafile.print(",");
+    datafile.print(sr_a0); // in Hz
+    datafile.print(",");
+    datafile.print(sr_a0); // in Hz
+    datafile.print(",");
+    datafile.print(sr_a0); // in Hz
+    datafile.print(",");
+    datafile.print(sr_a0); // in Hz
+    datafile.print(",");
+    datafile.println(sr_a0); // in Hz
+    datafile.close();
+
+    
+    // Print sample Rate info
+    /*
+    Serial.print(-1);
+    Serial.print(",");
+    Serial.print(sr_a0); // in Hz
+    Serial.print(",");
+    Serial.print(sr_a0); // in Hz
+    Serial.print(",");
+    Serial.print(sr_a0); // in Hz
+    Serial.print(",");
+    Serial.print(sr_a0); // in Hz
+    Serial.print(",");
+    Serial.print(sr_a0); // in Hz
+    Serial.print(",");
+    Serial.println(sr_a0); // in Hz
+    */
+
   
-  // Check Accelerometer rates for all channels in Hz
-  for (channel = 0; channel < 3; ++channel) {
-    TCA9548A(buses[channel]); // Set the channel
-    // Store the rate
-    sample_data_arr[channel] = (uint8_t) IMU.accelerationSampleRate();
-  }
-
-  // Check Gyroscopic rates for all channels in Hz
-  for (channel = 0; channel < 3; ++channel) {
-    TCA9548A(buses[channel]); // Set the channel
-    // Store the rate
-    sample_data_arr[channel + 3] = (uint8_t) IMU.gyroscopeSampleRate();
-  }
-
-  // Convert int array to chars
-  sprintf(sampledata, "%i,%i,%i,%i,%i,%i,%i", -1, sample_data_arr[0], sample_data_arr[1], sample_data_arr[2],
-          sample_data_arr[3], sample_data_arr[4], sample_data_arr[5]);
-
-  // Write to the SD
-  File datafile_init = SD.open(filename, FILE_WRITE); // Open the file
-  writeSD(datafile_init, sampledata);
 }
 
 void loop() {
-  // Initialize variables
-  float ax, ay, az, gx, gy, gz;
-  float acc_arr[9];
-  float gyr_arr[9]; 
-  char ax_c[11], ay_c[11], az_c[11],
-       gx_c[11], gy_c[11], gz_c[11];
-
-  
-  // Get the acceleration & gyro values for each channel
+  // Initialize storage variables
   uint8_t channel;
+  
   for (channel = 0; channel < 3; ++channel) {
-    TCA9548A(buses[channel]); // Set the channel
-    
-    // Read the data
+    // Hold the values
+    float ax, ay, az;
+    float g1, g2, g3;
+
+    // Get the acceleration
+    while(!IMU.accelerationAvailable()) {}
     IMU.readAcceleration(ax, ay, az);
-    IMU.readGyroscope(gx, gy, gz);
 
-    // Save the values to the acceleration array
-    acc_arr[0 + (channel * 3)] = ax;
-    acc_arr[1 + (channel * 3)] = ay;
-    acc_arr[2 + (channel * 3)] = az;
+    // Get the gyroscope
+    while(!IMU.gyroscopeAvailable()) {}
+    IMU.readGyroscope(g1, g2, g3);
+
+    // Write to the file
+    File datafile = SD.open(FILENAME, FILE_WRITE);
     
-    // Save the values to the gyroscope array
-    gyr_arr[0 + (channel * 3)] = gx;
-    gyr_arr[1 + (channel * 3)] = gy;
-    gyr_arr[2 + (channel * 3)] = gz;
+    datafile.print(channel);
+    datafile.print(",");
+    datafile.print(ax * 1000); // in kG
+    datafile.print(",");
+    datafile.print(ay * 1000); // in kG
+    datafile.print(",");
+    datafile.print(az * 1000); // in kG
+    datafile.print(",");
+    datafile.print(g1 * 10); // in d(dps)
+    datafile.print(",");
+    datafile.print(g2 * 10); // in d(dps)
+    datafile.print(",");
+    datafile.println(g3 * 10); // in d(dps)
 
-  }
+    datafile.close();
 
-  // Convert floats to char for each channel
-  for (channel = 0; channel < 3; ++channel){
-    dtostrf(acc_arr[0 + (channel * 3)] * 1000, 10, 5, ax_c); // in kG
-    dtostrf(acc_arr[1 + (channel * 3)] * 1000, 10, 5, ay_c); // in kG
-    dtostrf(acc_arr[2 + (channel * 3)] * 1000, 10, 5, az_c); // in kG
-    dtostrf(gyr_arr[0 + (channel * 3)], 10, 5, gx_c); // in dps
-    dtostrf(gyr_arr[1 + (channel * 3)], 10, 5, gy_c); // in dps
-    dtostrf(gyr_arr[2 + (channel * 3)], 10, 5, gz_c); // in dps
 
-    // Put into one datachar
-    char datachar[100];
-    sprintf(datachar, "%i,%s,%s,%s,%s,%s,%s", buses[channel], ax_c, ay_c, az_c, gx_c, gy_c, gz_c);
-
-    // Write to the SD
-    File datafile = SD.open(filename, FILE_WRITE); // Open the file
-    writeSD(datafile, datachar);
-    
+    // Print acceleration and gyro info
+    /*
+    Serial.print(channel);
+    Serial.print("\t");
+    Serial.print(ax);
+    Serial.print('\t');
+    Serial.print(ay);
+    Serial.print('\t');
+    Serial.print(az);
+    Serial.print("\t");
+    Serial.print(g1);
+    Serial.print('\t');
+    Serial.print(g2);
+    Serial.print('\t');
+    Serial.println(g3);
+    */
   }
 }
