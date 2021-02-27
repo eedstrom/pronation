@@ -27,6 +27,7 @@ df = pd.read_csv("pronation\Python Code\Data\Walking.CSV", header=None)         
 
 df.columns = ["accel", "ax", "ay", "az", "gx", "gy", "gz"]          # Give it a header
 df = df.drop(columns=['accel'])
+df = np.abs(df) 
 # print(df)
 
 
@@ -39,6 +40,7 @@ df2 = df.iloc[3::3, :]
 
 time = np.linspace(0, len(df0['ay']), len(df0['ay']))
 
+# My notes to help organize my thoughts
 # I want to create a best fit line for the gyro data then define
 # an equation for that line. With that model I will solve the 
 # I.V.P. for an eqution of positon. 
@@ -56,9 +58,15 @@ plt.plot(time, df0['ay'], 'go', markersize=3.5)
 # plt.plot(time, df0['gz'], 'go', markersize=3.5)        
 
 # using scypi spline tools
-timespline = np.linspace(0, len(df0['ay']), num=100, endpoint=True)         #adjust num=___ to change the amount of pts of spline
-az_spln = syi.interp1d(time, df0['az'], kind='cubic')
-plt.plot(timespline, az_spln(timespline), 'b-', label='cubic spline')
+timespline = np.linspace(0, len(df0['ay']), num=2000, endpoint=True)         #adjust num=___ to change the amount of pts of spline
+
+az_spln_rep = syi.splrep(time, df0['az'], k=3, s=0)
+az_spln_ev = syi.splev(timespline, az_spln_rep)
+plt.plot(timespline, az_spln_ev, 'b', label='cubic spline')
+
+az_CubicSpline = syi.CubicSpline(time, df0['az'])
+# plt.plot(timespline, az_CubicSpline(timespline), 'ro', label='cubic spline')
+
 
 
 
