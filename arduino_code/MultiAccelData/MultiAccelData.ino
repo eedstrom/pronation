@@ -186,6 +186,23 @@ void loop() {
     datafile.close();
 
 
+  /*I added these, Brian P. Calculates the tilt and pitch when laid flat on table. 
+  Uncomment to see work. Comment the serial print below this to see in monitor
+  Code source, https://gist.github.com/jimblom/08b333892ee383d6e443*/
+    
+    // float pitch, roll;
+  
+    // pitch = atan2(ax, sqrt(ay * ay) + (az * az));
+    // roll = atan2(ay, sqrt(ax * ax) + (az * az));
+    // pitch *= 180.0 / M_PI;
+    // roll *= 180.0 / M_PI;
+  
+    // Serial.print("Pitch, Roll: ");
+    // Serial.print(pitch, 2);
+    // Serial.print(", ");
+    // Serial.println(roll, 2)
+
+
     // Print acceleration and gyro info
     Serial.print(channel);
     Serial.print("\t");
