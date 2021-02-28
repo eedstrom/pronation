@@ -31,11 +31,16 @@ Copyright (C) 2021 Dominic Culotta, Eric Edstrom, Jae Young Lee, Teagan Mathur, 
 #include <SD.h>
 #include <SPI.h>
 
+// Constants //
+
 // Put this as the CS pin
 const int chipSelect = 53;
 
 // File name to be written to
 const char* FILENAME = "restdata.csv";
+
+
+// Helper Functions //
 
 // Function to change bus
 void TCA9548A(uint8_t bus)
@@ -44,6 +49,20 @@ void TCA9548A(uint8_t bus)
   Wire.write(1 << bus);          // send byte to select bus
   Wire.endTransmission();
 }
+
+// Function to calculate pitch
+float calcPitch(float ax, float ay, float az)
+{
+  return atan2(ax, sqrt(ay * ay) + (az * az)) * 180.0 / M_PI;
+}
+
+// Function to calculate roll
+float calcRoll(float ax, float ay, float az)
+{
+  return atan2(ay, sqrt(ax * ax) + (az * az)) * 180.0 / M_PI;
+}
+
+// Arduino Functions //
 
 void setup() {
   // Initialize for each channel
@@ -112,7 +131,8 @@ void setup() {
   datafile.print(",");
   datafile.print(sr_m1); // in Hz
   datafile.print(",");
-  datafile.println(sr_m2); // in Hz
+  datafile.print(sr_m2); // in Hz
+  datafile.println(",,"); // Filler commas 
   datafile.close();
 
   
@@ -147,6 +167,7 @@ void loop() {
     float ax, ay, az;
     float g1, g2, g3;
     float m1, m2, m3;
+    float pitch, roll;
 
     // Get the acceleration
     while(!IMU.accelerationAvailable()) {}
@@ -159,10 +180,14 @@ void loop() {
     // Get the magnetic field
     while(!IMU.magneticFieldAvailable()) {}
     IMU.readMagneticField(m1, m2, m3);
+
+    // Calculate tilt
+    pitch = calcPitch(ax, ay, az); // in deg
+    roll = calcRoll(ax, ay, az);   // in deg
     
     // Write to the file
     File datafile = SD.open(FILENAME, FILE_WRITE);
-    
+   
     datafile.print(channel);
     datafile.print(",");
     datafile.print(ax * 1000); // in kG
@@ -181,26 +206,13 @@ void loop() {
     datafile.print(",");
     datafile.print(m2); // in microT
     datafile.print(",");
-    datafile.println(m3); // in microT
-
-    datafile.close();
-
-
-  /*I added these, Brian P. Calculates the tilt and pitch when laid flat on table. 
-  Uncomment to see work. Comment the serial print below this to see in monitor
-  Code source, https://gist.github.com/jimblom/08b333892ee383d6e443*/
+    datafile.print(m3); // in microT
+    datafile.print(",");
+    datafile.print(pitch); // in deg
+    datafile.print(",");
+    datafile.println(roll); // in deg
     
-    // float pitch, roll;
-  
-    // pitch = atan2(ax, sqrt(ay * ay) + (az * az));
-    // roll = atan2(ay, sqrt(ax * ax) + (az * az));
-    // pitch *= 180.0 / M_PI;
-    // roll *= 180.0 / M_PI;
-  
-    // Serial.print("Pitch, Roll: ");
-    // Serial.print(pitch, 2);
-    // Serial.print(", ");
-    // Serial.println(roll, 2)
+    datafile.close();//
 
 
     // Print acceleration and gyro info
@@ -222,6 +234,10 @@ void loop() {
     Serial.print('\t');
     Serial.print(m2);
     Serial.print('\t');
-    Serial.println(m3);
+    Serial.print(m3);
+    Serial.print('\t');
+    Serial.print(pitch);
+    Serial.print('\t');
+    Serial.println(roll);
   }
 }
