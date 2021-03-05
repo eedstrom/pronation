@@ -20,17 +20,16 @@ import os
 from pathlib import Path
 import cv2
 import numpy as np
-#print(sys.argv[1])
 
-def GetFrames(Path(os.getcwd()) / sys.argv[1]):
-    vidObj = cv2.VideoCapture(sys.argv[1])
+def GetFrames(path):
+    vidObj = cv2.VideoCapture(path)
     
     count = 0
     
     success = 1
     while success:
 
-        success, image = viObj.read()
+        success, image = vidObj.read()
 
         cv2.imwrite("frame%d.jpg" % count, image)
 
