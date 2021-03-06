@@ -111,12 +111,18 @@ roll0 *= 180.0 / np.pi;
 
 # plt.plot(time, pitch0, 'k', markersize=3.5)         # plot roll data
 plt.plot(time, roll0, 'r', markersize=3.5)  
+
+# Label the axes
+
+plt.xlabel("Bin number")
+
+plt.ylabel("Acceleration in milli g")
 # print(pitch0)
 print(roll0)
 
 plt.show()
 
-roll0.to_csv('roll_brianp_test')
+roll0.to_csv('roll_brianp_test.csv')
 
 
 
