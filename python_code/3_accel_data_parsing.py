@@ -116,7 +116,7 @@ print(roll0)
 
 plt.show()
 
-roll0.to_csv('roll_brianp_test')
+# roll0.to_csv('roll_brianp_test')
 
 
 
