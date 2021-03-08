@@ -43,20 +43,15 @@ df2 = df.iloc[3::3, :]
 
 time = np.linspace(0, len(df0['ay']), len(df0['ay']))
 
-# My notes to help organize my thoughts
-# I want to create a best fit line for the gyro data then define
-# an equation for that line. With that model I will solve the 
-# I.V.P. for an eqution of positon. 
-# I will then use the time values with the modol to solve for all
-# position in time.  
-# Taking the positions of the vertiacl and horizonal sensors 
-# I will find delta change between the sensors subrtacted by 90 deg. 
+plt.plot(time, df0['az'], 'k', markersize=3.5, label='az')      # plot accel data pts
+plt.plot(time, df0['ax'], 'b', markersize=3.5, label='ax')        
+plt.plot(time, df0['ay'], 'g', markersize=3.5, label='ay')
+plt.xlabel("Bin number")                                        # Label the axes
+plt.ylabel("Acceleration(mg)")
+plt.legend()
+      
 
-# plt.plot(time, df0['az'], 'k', markersize=3.5)         # plot accel data pts
-# plt.plot(time, df0['ax'], 'r', markersize=3.5)        
-# plt.plot(time, df0['ay'], 'g', markersize=3.5)        
-
-# plt.plot(time, df0['gx'], 'k', markersize=3.5)        # plot gyro data pts
+# plt.plot(time, df0['gx'], 'k', markersize=3.5)                # plot gyro data pts
 # plt.plot(time, df0['gy'], 'r', markersize=3.5)        
 # plt.plot(time, df0['gz'], 'g', markersize=3.5)        
 
@@ -84,35 +79,13 @@ slope_fit, y_fit = ans[0], ans[1]
 
 
 
-
-from scipy.signal import sosfiltfilt, butter    # running the data though a pass filter
-sos = butter(4, 0.1, output='sos')
-y = sosfiltfilt(sos, df0['ay'])
-
-from scipy.signal import sosfilt, sosfilt_zi
-sos8 = butter(8, 0.125, output='sos')
-zi = df0['ay'][:4].mean() * sosfilt_zi(sos8)
-y2, zo = sosfilt(sos8, df0['ay'], zi=zi)
-
-
-# plt.plot(time, df0['ay'], 'g',alpha=0.5)
-# plt.plot(time, y, label='y(t)')
-# plt.plot(time, y2, label='y2(t)')
-# plt.legend(framealpha=1, shadow=True)
-# plt.grid(alpha=0.25)
-# plt.xlabel('time')
-
-
-
 pitch0 =np.arctan2(df0['ax'], np.sqrt(df0['ay'] * df0['ay']) + (df0['az'] * df0['az'])); #putting roll fromula in python 
 roll0 = np.arctan2(df0['ay'], np.sqrt(df0['ax'] * df0['ax']) + (df0['az'] * df0['az']));
 pitch0 *= 180.0 / np.pi;
 roll0 *= 180.0 / np.pi;
 
 # plt.plot(time, pitch0, 'k', markersize=3.5)         # plot roll data
-plt.plot(time, roll0, 'r', markersize=3.5)  
-# print(pitch0)
-print(roll0)
+# plt.plot(time, roll0, 'r', markersize=3.5)  
 
 plt.show()
 
