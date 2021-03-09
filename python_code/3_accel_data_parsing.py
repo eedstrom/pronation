@@ -29,7 +29,7 @@ df = pd.read_csv(Path(os.getcwd()) / sys.argv[1], header=None)           # Load 
 # df = pd.read_csv("pronation/python_code/data/running_on_treadmil.csv")
 
 
-df.columns = ["accel", "ax", "ay", "az", "gx", "gy", "gz", "mx", "my", "mz"]          # Give it a header
+df.columns = ["time", "accel", "ax", "ay", "az", "gx", "gy", "gz", "mx", "my", "mz"]          # Give it a header
 df = df.drop(columns=['accel'])
 df = np.abs(df) 
 # print(df)
@@ -41,14 +41,15 @@ df1 = df.iloc[2::3, :]
 df2 = df.iloc[3::3, :]
 # print(df0, df1,df2)
 
+# time = np.linspace(0, len(df0['ay']), len(df0['ay']))
+# plt.plot(time, df0['az'], 'k', markersize=3.5, label='az')      # plot accel data pts
+# plt.plot(time, df0['ax'], 'b', markersize=3.5, label='ax')        
+# plt.plot(time, df0['ay'], 'g', markersize=3.5, label='ay')
 
-
-time = np.linspace(0, len(df0['ay']), len(df0['ay']))
-
-plt.plot(time, df0['az'], 'k', markersize=3.5, label='az')      # plot accel data pts
-plt.plot(time, df0['ax'], 'b', markersize=3.5, label='ax')        
-plt.plot(time, df0['ay'], 'g', markersize=3.5, label='ay')
-plt.xlabel("Bin number")                                        # Label the axes
+plt.plot(df0['time'], df0['ax'], 'b', markersize=3.5, label='ax')      # plot accel data pts
+plt.plot(df0['time'], df0['ay'], 'g', markersize=3.5, label='ay')      # plot accel data pts
+plt.plot(df0['time'], df0['az'], 'k', markersize=3.5, label='az')      # plot accel data pts
+plt.xlabel("Write time(ms)")                                        # Label the axes
 plt.ylabel("Acceleration(mg)")
 plt.legend()
       
@@ -58,8 +59,7 @@ plt.legend()
 # plt.plot(time, df0['gz'], 'g', markersize=3.5)        
 
 
-timespline = np.linspace(0, len(df0['ay']), num=2000, endpoint=True)         # adjust num=___ to change the amount of pts of spline
-                                                                             # using scypi spline tools
+timespline = np.linspace(0, len(df0['ay']), num=2000, endpoint=True)         # adjust num=___ to change the amount of pts of spline using scypi spline tools
 
 az_spln_rep = syi.splrep(time, df0['az'], k=3, s=0)
 az_spln_ev = syi.splev(timespline, az_spln_rep)
