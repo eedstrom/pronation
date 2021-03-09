@@ -26,6 +26,8 @@ import os
 from pathlib import Path
 
 df = pd.read_csv(Path(os.getcwd()) / sys.argv[1], header=None)           # Load in the data      
+# df = pd.read_csv("pronation/python_code/data/running_on_treadmil.csv")
+
 
 df.columns = ["accel", "ax", "ay", "az", "gx", "gy", "gz", "mx", "my", "mz"]          # Give it a header
 df = df.drop(columns=['accel'])
