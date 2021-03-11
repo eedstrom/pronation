@@ -17,7 +17,7 @@ Copyright (C) 2021 Dominic Culotta, Eric Edstrom, Jae Young Lee, Teagan Mathur, 
 
    Writes data from accelerometer and gyroscope to a file on an SD card
  * The file format is a csv with the following columns:
- * LSM9 bus (0-2), acceleration_x, acceleration_y, acceleration_z, gyroscope_x, gyroscope_y, gyroscope_z,
+ * LSM9 bus (0-2), time_taken, uncertainty_in_time, acceleration_x, acceleration_y, acceleration_z, gyroscope_x, gyroscope_y, gyroscope_z,
  *                 magnetic_field_x, magnetic_field_y, magnetic_field_z
  * 
  * First row contains the Sample Rate for each accelerometer for both acceleration and gyroscope in the form:
@@ -112,8 +112,6 @@ void setup() {
   sr_m2 = (uint8_t) IMU.magneticFieldSampleRate();
 
   // Write to the file
-  datafile.print(millis());
-  datafile.print(",");
   datafile.print(-1);
   datafile.print(",");
   datafile.print(sr_a0); // in Hz
@@ -133,8 +131,6 @@ void setup() {
   datafile.print(sr_m1); // in Hz
   datafile.print(",");
   datafile.println(sr_m2); // in Hz
-
-  Serial.print("Samples written");
 }
 
 void loop() {
@@ -144,7 +140,7 @@ void loop() {
     datafile.close();
 
     // Inform user that data was saved - for testing only
-    Serial.print("Write");
+    //  Serial.print("Write");
 
     // Reset the counter to 0
     n_run = 0;
@@ -181,12 +177,12 @@ void loop() {
     // Get the time taken to collect all data
     dt = millis() - t;
     
-    // Write to a file   
+    // Write to a file
+    datafile.print(channel);
+    datafile.print(",");   
     datafile.print(t);
     datafile.print(",");
-    datafile.print(dt);
-    datafile.print(",");
-    datafile.print(channel);
+    datafile.print(dt);    
     datafile.print(",");
     datafile.print(ax * 1000); // in mG
     datafile.print(",");
