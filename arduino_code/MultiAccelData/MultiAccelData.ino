@@ -37,16 +37,16 @@ Copyright (C) 2021 Dominic Culotta, Eric Edstrom, Jae Young Lee, Teagan Mathur, 
 const int chipSelect = 53;
 
 // File name to be written to
-const char* FILENAME = "noprint.csv";
+const char* FILENAME = "test.csv";
 
 // File object
 File datafile;
 
 // Counter
-uint16_t n_run = 0;
+uint8_t n_run = 0;
 
-// Max number of iterations
-uint16_t n_max = 1000;
+// Number of iterations in between writes
+uint8_t n_iter = 100;
 
 
 // Helper Functions //
@@ -58,18 +58,6 @@ void TCA9548A(uint8_t bus)
   Wire.write(1 << bus);          // send byte to select bus
   Wire.endTransmission();
 }
-
-//// Function to calculate pitch
-//float calcPitch(float ax, float ay, float az)
-//{
-//  return atan2(ax, sqrt(ay * ay) + (az * az)) * 180.0 / M_PI;
-//}
-//
-//// Function to calculate roll
-//float calcRoll(float ax, float ay, float az)
-//{
-//  return atan2(ay, sqrt(ax * ax) + (az * az)) * 180.0 / M_PI;
-//}
 
 // Arduino Functions //
 
@@ -97,6 +85,7 @@ void setup() {
 
   // Open the file
   datafile = SD.open(FILENAME, FILE_WRITE);
+  Serial.print("File opened");
 
   // Get the sample rate
   uint8_t sr_a0, sr_a1, sr_a2,
@@ -145,46 +134,38 @@ void setup() {
   datafile.print(",");
   datafile.println(sr_m2); // in Hz
 
-  
-  // Print sample rate info
-//  Serial.print(-1);
-//  Serial.print('\t');
-//  Serial.print(sr_a0); // in Hz
-//  Serial.print('\t');
-//  Serial.print(sr_a1); // in Hz
-//  Serial.print('\t');
-//  Serial.print(sr_a2); // in Hz
-//  Serial.print('\t');
-//  Serial.print(sr_g0); // in Hz
-//  Serial.print('\t');
-//  Serial.print(sr_g1); // in Hz
-//  Serial.print('\t');
-//  Serial.print(sr_g2); // in Hz
-//  Serial.print('\t');
-//  Serial.print(sr_m0); // in Hz
-//  Serial.print('\t');
-//  Serial.print(sr_m1); // in Hz
-//  Serial.print('\t');
-//  Serial.println(sr_m2); // in Hz
+  Serial.print("Samples written");
 }
 
 void loop() {
   // Check if we have run the course
-  if (n_run >= n_max) {
+  if (n_run >= n_iter) {
+    // Close the file (save)
     datafile.close();
-    Serial.print("Done");
-    while(1);  
+
+    // Inform user that data was saved - for testing only
+    Serial.print("Write");
+
+    // Reset the counter to 0
+    n_run = 0;
+    
+    // Reopen the file
+    datafile = SD.open(FILENAME, FILE_WRITE);
   }
   
   // Initialize storage variables
+  Serial.print("Starting measurements");
   uint8_t channel;
   
   for (channel = 0; channel < 3; ++channel) {
-    // Hold the values
+    // Containers for the data
     float ax, ay, az;
     float g1, g2, g3;
     float m1, m2, m3;
+    int t, dt;
 
+    // Get the time where data is collected first
+    t = millis();
     // Get the acceleration
     while(!IMU.accelerationAvailable()) {}
     IMU.readAcceleration(ax, ay, az);
@@ -196,9 +177,14 @@ void loop() {
     // Get the magnetic field
     while(!IMU.magneticFieldAvailable()) {}
     IMU.readMagneticField(m1, m2, m3);
+
+    // Get the time taken to collect all data
+    dt = millis() - t;
     
     // Write to a file   
-    datafile.print(millis());
+    datafile.print(t);
+    datafile.print(",");
+    datafile.print(dt);
     datafile.print(",");
     datafile.print(channel);
     datafile.print(",");
@@ -219,27 +205,6 @@ void loop() {
     datafile.print(m2); // in microT
     datafile.print(",");
     datafile.println(m3); // in microT
-
-    // Print acceleration and gyro info
-//    Serial.print(channel);
-//    Serial.print("\t");
-//    Serial.print(ax);
-//    Serial.print('\t');
-//    Serial.print(ay);
-//    Serial.print('\t');
-//    Serial.print(az);
-//    Serial.print("\t");
-//    Serial.print(g1);
-//    Serial.print('\t');
-//    Serial.print(g2);
-//    Serial.print('\t');
-//    Serial.print(g3);
-//    Serial.print('\t');
-//    Serial.print(m1);
-//    Serial.print('\t');
-//    Serial.print(m2);
-//    Serial.print('\t');
-//    Serial.println(m3);
   }
   
   // Increment iterator
