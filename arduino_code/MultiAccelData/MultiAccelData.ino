@@ -52,7 +52,8 @@ uint8_t n_iter = 100;
 uint8_t channel;
 float ax, ay, az;
 float g1, g2, g3;
-float m1 = 0, m2 = 0, m3 = 0;
+float m1, m2, m3;
+float m[9] = { 0, 0, 0, 0, 0, 0 ,0, 0, 0 };
 int t, dt;
 
 
@@ -170,9 +171,12 @@ void loop() {
     IMU.readGyroscope(g1, g2, g3);
 
     // Get the magnetic field if possible
-    // Otherwise writes the previous values
+    // Otherwise writes the previous values from the same line
     if(IMU.magneticFieldAvailable()) {
       IMU.readMagneticField(m1, m2, m3);
+      m[3 * channel + 0] = m1;
+      m[3 * channel + 1] = m2;
+      m[3 * channel + 2] = m3;
     }
     
     // Get the time taken to collect all data
@@ -197,11 +201,11 @@ void loop() {
     datafile.print(",");
     datafile.print(g3 * 10); // in d(dps)
     datafile.print(","); 
-    datafile.print(m1); // in microT
+    datafile.print(m[3 * channel + 0]); // in microT
     datafile.print(",");
-    datafile.print(m2); // in microT
+    datafile.print(m[3 * channel + 1]); // in microT
     datafile.print(",");
-    datafile.println(m3); // in microT
+    datafile.println(m[3 * channel + 2]); // in microT
   }
   
   // Increment iterator
