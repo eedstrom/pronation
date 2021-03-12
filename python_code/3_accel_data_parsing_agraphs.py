@@ -37,26 +37,30 @@ print(df)
 df0 = df.iloc[1::3, :]          # Seperating data from each accelerometer into data frames
 df1 = df.iloc[2::3, :]
 df2 = df.iloc[3::3, :]
-# print(df0, df1,df2)
+print(df0.head())
 
 #finding mag of accel. vector
 df0amag = np.sqrt((df0['ax'])**2 + (df0['ay'])**2 + (df0['az'])**2)
+df0grav_mag = np.sqrt((df0['mx'])**2 + (df0['my'])**2 + (df0['mz'])**2)
 
+out_angle = np.tan(df0grav_mag/df0['ay'])
+print(out_angle)
+
+# az_minus_g = df0['ax'] - np.mean(df0['ax'])
 
 plt.plot(df0['time'], df0['ax'], 'bo', markersize=3, label='ax')      # plot accel data pts
 plt.plot(df0['time'], df0['ay'], 'go', markersize=3, label='ay')      # plot accel data pts
 plt.plot(df0['time'], df0['az'], 'ko', markersize=3, label='az')      # plot accel data pts
-plt.plot(df0['time'], df0amag, 'ro', markersize=3, label='a_mag')      # plot accel data pts
+# plt.plot(df0['time'], df0amag, 'r', markersize=3, label='a_mag')      # plot accel data pts
 
 # print(np.std(df0['az']))
 # print(np.mean(df0['az']))
       
 
-tspline = np.linspace(df0['time'].iloc[0], df0['time'].iloc[-1], num=3000, endpoint=True)         # adjust num=___ to change the amount of pts of spline using scypi spline tools
-
+tspline = np.linspace(df0['time'].iloc[0], df0['time'].iloc[-1], num=3000, endpoint=True)         # adjust num=___ to change the amount of pts of spline
 az_spln_rep = syi.splrep(df0['time'], df0amag, k=3, s=0)
 az_spln_ev = syi.splev(tspline, az_spln_rep)
-plt.plot(tspline, az_spln_ev, 'm', label='adjust Cubic spline')
+# plt.plot(tspline, az_spln_ev, 'm', label='adjust Cubic spline')
 
 
 

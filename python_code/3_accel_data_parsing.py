@@ -67,15 +67,15 @@ az_spln_ev = syi.splev(tspline, az_spln_rep)
 # plt.plot(tspline, az_spln_ev, 'm', label='adjust Cubic spline')
 
 #integrate the angular velocity 
-gy_spln_rep = syi.splrep(df0['time'], df0['gy'], k=3, s=0)
+gy_spln_rep = syi.splrep(df0['time'], df0['gy'], k=2, s=0)
 gy_spln_ev = syi.splev(tspline, gy_spln_rep)
 
-def integ(x, tck, constant=-1):
+def integ(x, tck):
     x = np.atleast_1d(x)
     out = np.zeros(x.shape, dtype=x.dtype)
     for n in range(len(out)):
         out[n] = syi.splint(0, x[n], tck)
-    out += constant
+    # out += constant
     return out
 
 gy_int = integ(tspline, gy_spln_rep)
@@ -111,7 +111,7 @@ roll0 *= 180.0 / np.pi
 plt.xlabel("Write time(ms)")                                        # Label the axes
 # plt.ylabel("Acceleration(mg)")
 plt.ylabel("Angle(deg)")
-plt.axis([0, 50000, -4000, 20000])
+# plt.axis([0, 50000, -4000, 20000])
 plt.legend()
 plt.show()
 
