@@ -154,6 +154,9 @@ void loop() {
   uint8_t channel;
   
   for (channel = 0; channel < 3; ++channel) {
+    // Change channel
+    TCA9548A(channel);
+    
     // Containers for the data
     float ax, ay, az;
     float g1, g2, g3;
@@ -162,6 +165,7 @@ void loop() {
 
     // Get the time where data is collected first
     t = millis();
+    
     // Get the acceleration
     while(!IMU.accelerationAvailable()) {}
     IMU.readAcceleration(ax, ay, az);
@@ -176,31 +180,34 @@ void loop() {
 
     // Get the time taken to collect all data
     dt = millis() - t;
+    Serial.print(t);
+    Serial.print("\t");
+    Serial.print(dt);
     
     // Write to a file
-    datafile.print(channel);
-    datafile.print(",");   
-    datafile.print(t);
-    datafile.print(",");
-    datafile.print(dt);    
-    datafile.print(",");
-    datafile.print(ax * 1000); // in mG
-    datafile.print(",");
-    datafile.print(ay * 1000); // in mG
-    datafile.print(",");
-    datafile.print(az * 1000); // in mG
-    datafile.print(",");
-    datafile.print(g1 * 10); // in d(dps)
-    datafile.print(",");
-    datafile.print(g2 * 10); // in d(dps)
-    datafile.print(",");
-    datafile.print(g3 * 10); // in d(dps)
-    datafile.print(","); 
-    datafile.print(m1); // in microT
-    datafile.print(",");
-    datafile.print(m2); // in microT
-    datafile.print(",");
-    datafile.println(m3); // in microT
+//    datafile.print(channel);
+//    datafile.print(",");   
+//    datafile.print(t);
+//    datafile.print(",");
+//    datafile.print(dt);    
+//    datafile.print(",");
+//    datafile.print(ax * 1000); // in mG
+//    datafile.print(",");
+//    datafile.print(ay * 1000); // in mG
+//    datafile.print(",");
+//    datafile.print(az * 1000); // in mG
+//    datafile.print(",");
+//    datafile.print(g1 * 10); // in d(dps)
+//    datafile.print(",");
+//    datafile.print(g2 * 10); // in d(dps)
+//    datafile.print(",");
+//    datafile.print(g3 * 10); // in d(dps)
+//    datafile.print(","); 
+//    datafile.print(m1); // in microT
+//    datafile.print(",");
+//    datafile.print(m2); // in microT
+//    datafile.print(",");
+//    datafile.println(m3); // in microT
   }
   
   // Increment iterator
