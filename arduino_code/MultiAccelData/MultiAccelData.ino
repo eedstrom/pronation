@@ -52,7 +52,7 @@ uint8_t n_iter = 100;
 uint8_t channel;
 float ax, ay, az;
 float g1, g2, g3;
-float m1, m2, m3;
+float m1 = 0, m2 = 0, m3 = 0;
 int t, dt;
 
 
