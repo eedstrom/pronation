@@ -48,6 +48,13 @@ uint8_t n_run = 0;
 // Number of iterations in between writes
 uint8_t n_iter = 100;
 
+// Variables //
+uint8_t channel;
+float ax, ay, az;
+float g1, g2, g3;
+float m1, m2, m3;
+int t, dt;
+
 
 // Helper Functions //
 
@@ -63,7 +70,7 @@ void TCA9548A(uint8_t bus)
 
 void setup() {
   // Initialize for each channel
-  for (uint8_t channel = 0; channel < 3; ++channel) {
+  for (channel = 0; channel < 3; ++channel) {
     // Set to channel 0, 1, 2
     TCA9548A(channel);
 
@@ -139,29 +146,17 @@ void loop() {
     // Close the file (save)
     datafile.close();
 
-    // Inform user that data was saved - for testing only
-    //  Serial.print("Write");
-
     // Reset the counter to 0
     n_run = 0;
     
     // Reopen the file
     datafile = SD.open(FILENAME, FILE_WRITE);
   }
-  
-  // Initialize storage variables
-  Serial.print("Starting measurements");
-  uint8_t channel;
-  
+
+  // Read for each channel
   for (channel = 0; channel < 3; ++channel) {
     // Change channel
     TCA9548A(channel);
-    
-    // Containers for the data
-    float ax, ay, az;
-    float g1, g2, g3;
-    float m1, m2, m3;
-    int t, dt;
 
     // Get the time where data is collected first
     t = millis();
@@ -174,40 +169,39 @@ void loop() {
     while(!IMU.gyroscopeAvailable()) {}
     IMU.readGyroscope(g1, g2, g3);
 
-    // Get the magnetic field
-    while(!IMU.magneticFieldAvailable()) {}
-    IMU.readMagneticField(m1, m2, m3);
-
+    // Get the magnetic field if possible
+    // Otherwise writes the previous values
+    if(IMU.magneticFieldAvailable()) {
+      IMU.readMagneticField(m1, m2, m3);
+    }
+    
     // Get the time taken to collect all data
     dt = millis() - t;
-    Serial.print(t);
-    Serial.print("\t");
-    Serial.print(dt);
     
     // Write to a file
-//    datafile.print(channel);
-//    datafile.print(",");   
-//    datafile.print(t);
-//    datafile.print(",");
-//    datafile.print(dt);    
-//    datafile.print(",");
-//    datafile.print(ax * 1000); // in mG
-//    datafile.print(",");
-//    datafile.print(ay * 1000); // in mG
-//    datafile.print(",");
-//    datafile.print(az * 1000); // in mG
-//    datafile.print(",");
-//    datafile.print(g1 * 10); // in d(dps)
-//    datafile.print(",");
-//    datafile.print(g2 * 10); // in d(dps)
-//    datafile.print(",");
-//    datafile.print(g3 * 10); // in d(dps)
-//    datafile.print(","); 
-//    datafile.print(m1); // in microT
-//    datafile.print(",");
-//    datafile.print(m2); // in microT
-//    datafile.print(",");
-//    datafile.println(m3); // in microT
+    datafile.print(channel);
+    datafile.print(",");   
+    datafile.print(t);
+    datafile.print(",");
+    datafile.print(dt);    
+    datafile.print(",");
+    datafile.print(ax * 1000); // in mG
+    datafile.print(",");
+    datafile.print(ay * 1000); // in mG
+    datafile.print(",");
+    datafile.print(az * 1000); // in mG
+    datafile.print(",");
+    datafile.print(g1 * 10); // in d(dps)
+    datafile.print(",");
+    datafile.print(g2 * 10); // in d(dps)
+    datafile.print(",");
+    datafile.print(g3 * 10); // in d(dps)
+    datafile.print(","); 
+    datafile.print(m1); // in microT
+    datafile.print(",");
+    datafile.print(m2); // in microT
+    datafile.print(",");
+    datafile.println(m3); // in microT
   }
   
   // Increment iterator
