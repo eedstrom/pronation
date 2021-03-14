@@ -93,7 +93,6 @@ void setup() {
 
   // Open the file
   datafile = SD.open(FILENAME, FILE_WRITE);
-  Serial.print("File opened");
 
   // Get the sample rate
   uint8_t sr_a0, sr_a1, sr_a2,
