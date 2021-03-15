@@ -1,43 +1,19 @@
-/* Pronation Program
-Copyright (C) 2021 Dominic Culotta, Eric Edstrom, Jae Young Lee, Teagan Mathur, Brian Petro, Wilma Rishko, Ruizhi Wang
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-
-   Writes data from accelerometer and gyroscope to a file on an SD card
- * The file format is a csv with the following columns:
- * LSM9 bus (0-2), time_taken, uncertainty_in_time, acceleration_x, acceleration_y, acceleration_z, gyroscope_x, gyroscope_y, gyroscope_z,
- *                 magnetic_field_x, magnetic_field_y, magnetic_field_z
- * 
- * First row contains the Sample Rate for each accelerometer for both acceleration and gyroscope in the form:
- * Sample Rate Identifyer (-1), acceleration sample rate channel 0, acceleration sample rate channel 1, acceleration sample rate channel 2,
- ** gyroscope sample rate channel 0, gyroscope sample rate channel 1, gyroscope sample rate channel 2,
- ** magnetic field sample rate channel 0, magnetic field sample rate channel 1, magnetic field sample rate channel 2
- */
-
 #include <Arduino_LSM9DS1.h>
 #include <Wire.h>
 #include <SD.h>
 #include <SPI.h>
+#include "RTClib.h"
 
 // Constants //
 
 // Put this as the CS pin
 const int chipSelect = 53;
 
+RTC_DS3231 rtc;         //declare RTC
+DateTime now;
+
 // File name to be written to
-const char* FILENAME = "test.csv";
+const char* FILENAME = "accel.txt";
 
 // File object
 File datafile;
@@ -46,15 +22,7 @@ File datafile;
 uint8_t n_run = 0;
 
 // Number of iterations in between writes
-uint8_t n_iter = 100;
-
-// Variables //
-uint8_t channel;
-float ax, ay, az;
-float g1, g2, g3;
-float m1, m2, m3;
-float m[9] = { 0, 0, 0, 0, 0, 0 ,0, 0, 0 };
-int t, dt;
+uint8_t n_iter = 10;
 
 
 // Helper Functions //
@@ -70,8 +38,17 @@ void TCA9548A(uint8_t bus)
 // Arduino Functions //
 
 void setup() {
+
+  int return_code = rtc.begin();
+  //check if RTC started correctly
+  if(!return_code) {    
+    Serial.println("RTC doesn't work.");
+    while (1) {};
+                    }
+
+  
   // Initialize for each channel
-  for (channel = 0; channel < 3; ++channel) {
+  for (uint8_t channel = 0; channel < 3; ++channel) {
     // Set to channel 0, 1, 2
     TCA9548A(channel);
 
@@ -93,6 +70,7 @@ void setup() {
 
   // Open the file
   datafile = SD.open(FILENAME, FILE_WRITE);
+  Serial.print("File opened");
 
   // Get the sample rate
   uint8_t sr_a0, sr_a1, sr_a2,
@@ -131,13 +109,13 @@ void setup() {
   datafile.print(",");
   datafile.print(sr_g1); // in Hz
   datafile.print(",");
-  datafile.print(sr_g2); // in Hz
+  datafile.println(sr_g2); // in Hz 
   datafile.print(",");
   datafile.print(sr_m0); // in Hz
   datafile.print(",");
   datafile.print(sr_m1); // in Hz
   datafile.print(",");
-  datafile.println(sr_m2); // in Hz
+  datafile.println(sr_m2); // in Hz 
 }
 
 void loop() {
@@ -146,21 +124,30 @@ void loop() {
     // Close the file (save)
     datafile.close();
 
+    // Inform user that data was saved - for testing only
+    //  Serial.print("Write");
+
     // Reset the counter to 0
     n_run = 0;
     
     // Reopen the file
     datafile = SD.open(FILENAME, FILE_WRITE);
   }
-
-  // Read for each channel
+  
+  // Initialize storage variables
+  Serial.print("\nStarting measurements");
+  uint8_t channel;
+  
   for (channel = 0; channel < 3; ++channel) {
-    // Change channel
-    TCA9548A(channel);
+    // Containers for the data
+    float ax, ay, az;
+    float g1, g2, g3;
+    float m1, m2, m3;
+    int t, dt;
 
     // Get the time where data is collected first
     t = millis();
-    
+    now = rtc.now();
     // Get the acceleration
     while(!IMU.accelerationAvailable()) {}
     IMU.readAcceleration(ax, ay, az);
@@ -169,15 +156,10 @@ void loop() {
     while(!IMU.gyroscopeAvailable()) {}
     IMU.readGyroscope(g1, g2, g3);
 
-    // Get the magnetic field if possible
-    // Otherwise writes the previous values from the same line
-    if(IMU.magneticFieldAvailable()) {
-      IMU.readMagneticField(m1, m2, m3);
-      m[3 * channel + 0] = m1;
-      m[3 * channel + 1] = m2;
-      m[3 * channel + 2] = m3;
-    }
-    
+    // Get the magnetic field
+    while(!IMU.magneticFieldAvailable()) {}
+    IMU.readMagneticField(m1, m2, m3);
+
     // Get the time taken to collect all data
     dt = millis() - t;
     
@@ -187,6 +169,14 @@ void loop() {
     datafile.print(t);
     datafile.print(",");
     datafile.print(dt);    
+    datafile.print(",");
+    datafile.print(now.hour(), DEC);
+      datafile.print(':');
+      if(now.minute() < 10)  datafile.print(0);
+      datafile.print(now.minute(), DEC);
+      datafile.print(':');
+      if(now.second() < 10)  datafile.print(0);
+      datafile.print(now.second(), DEC); 
     datafile.print(",");
     datafile.print(ax * 1000); // in mG
     datafile.print(",");
@@ -198,13 +188,13 @@ void loop() {
     datafile.print(",");
     datafile.print(g2 * 10); // in d(dps)
     datafile.print(",");
-    datafile.print(g3 * 10); // in d(dps)
+    datafile.print(g3 * 10); // in d(dps) 
     datafile.print(","); 
-    datafile.print(m[3 * channel + 0]); // in microT
+    datafile.print(m1); // in microT
     datafile.print(",");
-    datafile.print(m[3 * channel + 1]); // in microT
+    datafile.print(m2); // in microT
     datafile.print(",");
-    datafile.println(m[3 * channel + 2]); // in microT
+    datafile.println(m3); // in microT 
   }
   
   // Increment iterator
