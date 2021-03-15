@@ -37,7 +37,7 @@ Copyright (C) 2021 Dominic Culotta, Eric Edstrom, Jae Young Lee, Teagan Mathur, 
 const int chipSelect = 53;
 
 // File name to be written to
-const char* FILENAME = "test.csv";
+const char* FILENAME = "accel.csv";
 
 // File object
 File datafile;
@@ -54,7 +54,7 @@ float ax, ay, az;
 float g1, g2, g3;
 float m1, m2, m3;
 float m[9] = { 0, 0, 0, 0, 0, 0 ,0, 0, 0 };
-int t, dt;
+uint32_t t, dt;
 
 
 // Helper Functions //
