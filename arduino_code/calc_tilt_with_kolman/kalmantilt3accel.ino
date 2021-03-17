@@ -134,7 +134,6 @@ void loop() {                              // has completed loop??
        datafile = SD.open(FILENAME, FILE_WRITE);   // Reopen the file
       }                                       
   
-  // put your main code here, to run repeatedly:
   for (channel = 0; channel < 3; ++channel) {
                                                   // Change channel
     TCA9548A(channel);
@@ -265,18 +264,18 @@ float dt = (float)(micros() - timer) / 1000000; // Calculate delta time
     datafile.print(",");
     datafile.print(m[3 * channel + 2]); // in microT
     datafile.print(",");                  //filtered data
-    datafile.print(roll); 
-    datafile.print(",");
-    datafile.print(gyroXangle); 
-    datafile.print(",");
+    // datafile.print(roll); 
+    // datafile.print(",");
+    // datafile.print(gyroXangle); 
+    // datafile.print(",");
     datafile.print(compAngleX);
     datafile.print(",");
     datafile.print(kalAngleX); 
     datafile.print(",");
-    datafile.print(pitch); 
-    datafile.print(",");
-    datafile.print(gyroYangle); 
-    datafile.print(",");
+    // datafile.print(pitch); 
+    // datafile.print(",");
+    // datafile.print(gyroYangle); 
+    // datafile.print(",");
     datafile.print(compAngleY); 
     datafile.print(",");
     datafile.println(kalAngleY); 
