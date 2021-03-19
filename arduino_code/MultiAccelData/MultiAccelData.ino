@@ -19,6 +19,7 @@ Copyright (C) 2021 Dominic Culotta, Eric Edstrom, Jae Young Lee, Teagan Mathur, 
  * The file format is a csv with the following columns:
  * LSM9 bus (0-2), time_taken, uncertainty_in_time, acceleration_x, acceleration_y, acceleration_z, gyroscope_x, gyroscope_y, gyroscope_z,
  *                 magnetic_field_x, magnetic_field_y, magnetic_field_z
+ * FSR (0-3), time_taken, uncertainty_in_time, conductance
  * 
  * First row contains the Sample Rate for each accelerometer for both acceleration and gyroscope in the form:
  * Sample Rate Identifyer (-1), acceleration sample rate channel 0, acceleration sample rate channel 1, acceleration sample rate channel 2,
@@ -208,6 +209,43 @@ void loop() {
     datafile.print(m2); // in microT
     datafile.print(",");
     datafile.println(m3); // in microT
+  }
+
+  // Read for each FSR
+  for(int i = 0; i < number_of_FSRs; i++)
+  {
+    // Get the time where data is collected first
+    t = millis();
+    
+    int ADC_value = analogRead(FSR_pin[i]);
+
+    float voltage = ADC_V_ref * float(ADC_value) / (ADC_max + 1);
+
+    double FSR_resistance;
+    double FSR_conductance;
+
+    // see Gollin's notebook, p. 16 for the calculation.
+    if(ADC_value > 0)
+    {
+      FSR_resistance = (ADC_V_ref / voltage - 1.0) * R_series;
+      FSR_conductance = 1.0 / FSR_resistance;
+    } else {
+      // a billion ohms
+      FSR_resistance = 1.e9;
+      FSR_conductance = 0.;
+    }
+
+    // Get the time taken to collect all data
+    dt = millis() - t;
+    
+    // Write to a file
+    datafile.print(i); // Current FSR, e.g. FSR0 = 0
+    datafile.print(",");
+    datafile.print(t);
+    datafile.print(",");
+    datafile.print(dt);    
+    datafile.print(",");
+    datafile.println(1.e6 * FSR_conductance, 6); // in micro-mhos
   }
   
   // Increment iterator
