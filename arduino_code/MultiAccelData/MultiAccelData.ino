@@ -55,6 +55,12 @@ float g1, g2, g3;
 float m1 = 0, m2 = 0, m3 = 0;
 int t, dt;
 
+#define number_of_FSRs 4 // ADC channels used are 0 - 3, living in pins A0 - A3.
+#define R_series 10000 // series resistor in the circuit
+int FSR_pin[number_of_FSRs] = {A0, A1, A2, A3};
+#define ADC_V_ref 5.0 // ADC reference voltage
+#define ADC_max 1023 // ADC max value
+
 
 // Helper Functions //
 
