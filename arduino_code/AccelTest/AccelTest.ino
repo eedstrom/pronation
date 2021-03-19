@@ -43,7 +43,7 @@ void setup() {
   while (!Serial);
   
   // Set to channel 0, 3, or 6
-  TCA9548A(3);
+  TCA9548A(2);
   
   Serial.println("Started");
   Serial.print("Acc sample rate = ");
