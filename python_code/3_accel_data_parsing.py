@@ -83,30 +83,25 @@ plt.plot(tspline, gy_int, '--', label='angular position')
 
 
 
-# az_CubicSpline = syi.CubicSpline(df0['time'], df0['az'])
-# plt.plot(timespline, az_CubicSpline(timespline), 'ro', label='az0 cubic spline')
+# def model(x, m, b):         # using curve_fit with a 1st or poly
+#     return m*x+b
 
+# intit_guess = [1, 1]
+# fit = sy.curve_fit(model, df0['time'], df0['az'], p0=intit_guess, absolute_sigma=True)
 
+# ans = fit[0]            # extracking out m and b
+# slope_fit, y_fit = ans[0], ans[1]
 
+# # plt.plot(time, model(time, slope_fit, y_fit))
 
-def model(x, m, b):         # using curve_fit with a 1st or poly
-    return m*x+b
-
-intit_guess = [1, 1]
-fit = sy.curve_fit(model, df0['time'], df0['az'], p0=intit_guess, absolute_sigma=True)
-
-ans = fit[0]            # extracking out m and b
-slope_fit, y_fit = ans[0], ans[1]
-
-# plt.plot(time, model(time, slope_fit, y_fit))
-
-pitch0 =np.arctan2(df0['ax'], np.sqrt(df0['ay'] * df0['ay']) + (df0['az'] * df0['az'])) #putting roll fromula in python 
-roll0 = np.arctan2(df0['ay'], np.sqrt(df0['ax'] * df0['ax']) + (df0['az'] * df0['az']))
-pitch0 *= 180.0 / np.pi
-roll0 *= 180.0 / np.pi
+# pitch0 =np.arctan2(df0['ax'], np.sqrt(df0['ay'] * df0['ay']) + (df0['az'] * df0['az'])) #putting roll fromula in python 
+# roll0 = np.arctan2(df0['ay'], np.sqrt(df0['ax'] * df0['ax']) + (df0['az'] * df0['az']))
+# pitch0 *= 180.0 / np.pi
+# roll0 *= 180.0 / np.pi
 
 # plt.plot(time, pitch0, 'k', markersize=3.5)         # plot roll data
 # plt.plot(time, roll0, 'r', markersize=3.5)  
+
 
 plt.xlabel("Write time(ms)")                                        # Label the axes
 # plt.ylabel("Acceleration(mg)")

@@ -38,7 +38,7 @@ Copyright (C) 2021 Dominic Culotta, Eric Edstrom, Jae Young Lee, Teagan Mathur, 
 const int chipSelect = 53;
 
 // File name to be written to
-const char* FILENAME = "test.csv";
+const char* FILENAME = "accel.csv";
 
 // File object
 File datafile;
@@ -53,8 +53,9 @@ uint8_t n_iter = 100;
 uint8_t channel;
 float ax, ay, az;
 float g1, g2, g3;
-float m1 = 0, m2 = 0, m3 = 0;
-int t, dt;
+float m1, m2, m3;
+float m[9] = { 0, 0, 0, 0, 0, 0 ,0, 0, 0 };
+uint32_t t, dt;
 
 #define number_of_FSRs 4 // ADC channels used are 0 - 3, living in pins A0 - A3.
 #define R_series 10000 // series resistor in the circuit
@@ -99,7 +100,6 @@ void setup() {
 
   // Open the file
   datafile = SD.open(FILENAME, FILE_WRITE);
-  Serial.print("File opened");
 
   // Get the sample rate
   uint8_t sr_a0, sr_a1, sr_a2,
@@ -177,9 +177,12 @@ void loop() {
     IMU.readGyroscope(g1, g2, g3);
 
     // Get the magnetic field if possible
-    // Otherwise writes the previous values
+    // Otherwise writes the previous values from the same line
     if(IMU.magneticFieldAvailable()) {
       IMU.readMagneticField(m1, m2, m3);
+      m[3 * channel + 0] = m1;
+      m[3 * channel + 1] = m2;
+      m[3 * channel + 2] = m3;
     }
     
     // Get the time taken to collect all data
@@ -204,11 +207,11 @@ void loop() {
     datafile.print(",");
     datafile.print(g3 * 10); // in d(dps)
     datafile.print(","); 
-    datafile.print(m1); // in microT
+    datafile.print(m[3 * channel + 0]); // in microT
     datafile.print(",");
-    datafile.print(m2); // in microT
+    datafile.print(m[3 * channel + 1]); // in microT
     datafile.print(",");
-    datafile.println(m3); // in microT
+    datafile.println(m[3 * channel + 2]); // in microT
   }
 
   // Read for each FSR
