@@ -138,7 +138,7 @@ void loop() {                              // has completed loop??
                                                   // Change channel
     TCA9548A(channel);
     t = millis();
-    Serial.println("\n\nStart: ");
+   // Serial.println("\n\nStart: ");
                                              // Get the acceleration
     while(!IMU.accelerationAvailable()) {}
     IMU.readAcceleration(accX, accY, accZ);
@@ -283,5 +283,5 @@ float dt = (float)(micros() - timer) / 1000000; // Calculate delta time
   }
   n_run = n_run + 1;
   //delay(5000);
-  Serial.println("\nDELAY AFTER READING 3");
+ // Serial.println("\nDELAY AFTER READING 3");
 }
