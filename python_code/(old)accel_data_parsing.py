@@ -42,7 +42,7 @@ sns.lineplot(x=time, y=df['ay'], linewidth=1, color='g')
 
 # making a best fit line to az data
 
-
+"Hello nano world?"
 def model(x, m, b):
     return m*x+b
 
