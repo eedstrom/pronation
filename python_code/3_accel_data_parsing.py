@@ -25,7 +25,7 @@ import sys
 import os
 from pathlib import Path
 
-column_names = ["channel", "time", "dtime", "ax", "ay", "az", "gx", "gy", "gz", "mx", "my", "mz", "roll", "gyroXangle", "compAngleX", "kalAngleX", "pitch", "gryoYangle", "compAngleY", "kalAngleY"]          # Give it a header
+column_names = ["channel", "time", "dtime", "ax", "ay", "az", "gx", "gy", "gz", "mx", "my", "mz", "roll", "gyroXangle", "compAngleX", "kalAngleX", "pitch", "gyroYangle", "compAngleY", "kalAngleY"]          # Give it a header
 
 df = pd.read_csv(Path(os.getcwd()) / sys.argv[1], names=column_names)           # Load in the data      
 
@@ -47,9 +47,13 @@ print(np.std(df0['az']))
 print(np.mean(df0['az']))
 
 # plt.plot(time, df0['gx'], 'k', markersize=3.5)          # plot gyro data pts
-plt.plot(df0['time'], df0['kalAngleX'], 'k', markersize=3, label='angular position X')        
-plt.plot(df0['time'], df0['kalAngleY'], 'g', markersize=3, label='angular position Y') 
+if sys.argv[2]=="0":
+    plt.plot(df0['time'], df0['gyroXangle'], 'k', markersize=3, label='angular position X')        
+    plt.plot(df0['time'], df0['gyroYangle'], 'g', markersize=3, label='angular position Y') 
 
+if sys.argv[2]=="1":
+    plt.plot(df0['time'], df0['kalAngleX'], 'k', markersize=3, label='angular position X')        
+    plt.plot(df0['time'], df0['kalAngleY'], 'g', markersize=3, label='angular position Y') 
 
 tspline = np.linspace(df0['time'].iloc[0], df0['time'].iloc[-1], num=3000, endpoint=True)         # adjust num=___ to change the amount of pts of spline using scypi spline tools
 az_spln_rep = syi.splrep(df0['time'], df0amag, k=3, s=0)
