@@ -27,7 +27,7 @@ from pathlib import Path
 
 df = pd.read_csv(Path(os.getcwd()) / sys.argv[1], header=None)           # Load in the data      
 
-df.columns = ["channel", "time", "dtime", "ax", "ay", "az", "gx", "gy", "gz", "mx", "my", "mz", "roll", "gyroXangle", "compAngleX", "kalAngleX", "pitch", "gryoYangle", "compAngleY", "kalAngleY"]          # Give it a header
+df.columns = ["channel", "time", "dtime", "ax", "ay", "az", "gx", "gy", "gz", "mx", "my", "mz", "roll", "gyroXangle", "compAngleX", "kalAngleX", "pitch", "gyroYangle", "compAngleY", "kalAngleY"]          # Give it a header
 # print(df)
 df0 = df[df["channel"]==0]
 df1 = df[df["channel"]==1]
