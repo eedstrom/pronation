@@ -24,6 +24,7 @@ import scipy.interpolate as syi
 import sys
 import os
 from pathlib import Path
+from pykalman import KalmanFilter
 
 column_names = ["channel", "time", "dtime", "ax", "ay", "az", "gx", "gy", "gz", "mx", "my", "mz", "roll", "gyroXangle", "compAngleX", "kalAngleX", "pitch", "gyroYangle", "compAngleY", "kalAngleY"]          # Give it a header
 
@@ -38,6 +39,15 @@ df2 = df[df["channel"]==2]
 #finding mag of accel. vector
 df0amag = np.sqrt((df0['ax'])**2 + (df0['ay'])**2 + (df0['az'])**2)
 
+# Calculate roll and pitch
+
+#roll=np.array([])
+#pitch=np.array([])
+#for i in range(1,len(df0)):
+    #roll=np.append(roll,np.degrees(np.arctan2(df0['ay'][i],df0['az'][i])))
+    #pitch=np.append(pitch,np.degrees(np.arctan(-df0['ax'][i],np.sqrt((df0['ay'][i])**2,(df0['az'][i])**2))))
+
+
 
 # plt.plot(df0['time'], df0amag, 'bo', markersize=3, label='ax')      # plot accel data pts
 # plt.plot(df0['time'], df0['ay'], 'g', markersize=3.5, label='ay')      # plot accel data pts
@@ -45,6 +55,13 @@ df0amag = np.sqrt((df0['ax'])**2 + (df0['ay'])**2 + (df0['az'])**2)
 
 print(np.std(df0['az']))
 print(np.mean(df0['az']))
+
+# Learn the Kalman transition matrix
+
+kf=KalmanFilter(initial_state_mean=0,n_dim_obs=2)
+
+#print(df0['ax'].values[4])
+#transition=kf.em(df0['ax'].values)
 
 # plt.plot(time, df0['gx'], 'k', markersize=3.5)          # plot gyro data pts
 if sys.argv[2]=="0":
@@ -54,6 +71,9 @@ if sys.argv[2]=="0":
 if sys.argv[2]=="1":
     plt.plot(df0['time'], df0['kalAngleX'], 'k', markersize=3, label='angular position X')        
     plt.plot(df0['time'], df0['kalAngleY'], 'g', markersize=3, label='angular position Y') 
+if sys.argv[2]=="2":
+    plt.plot(df0['time'], df0['gx'], 'k', markersize=3, label='angular position X')        
+    #plt.plot(df0['time'], df0['gy'], 'g', markersize=3, label='angular position Y') 
 
 tspline = np.linspace(df0['time'].iloc[0], df0['time'].iloc[-1], num=3000, endpoint=True)         # adjust num=___ to change the amount of pts of spline using scypi spline tools
 az_spln_rep = syi.splrep(df0['time'], df0amag, k=3, s=0)
