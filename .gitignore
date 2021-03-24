@@ -12,6 +12,7 @@
 *.aiff
 *.webp
 *.log
+python_code/kalman_comp/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
