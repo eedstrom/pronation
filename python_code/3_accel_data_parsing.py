@@ -25,9 +25,11 @@ import sys
 import os
 from pathlib import Path
 
-df = pd.read_csv(Path(os.getcwd()) / sys.argv[1], header=None)           # Load in the data      
+column_names = ["channel", "time", "dtime", "ax", "ay", "az", "gx", "gy", "gz", "mx", "my", "mz", "roll", "gyroXangle", "compAngleX", "kalAngleX", "pitch", "gryoYangle", "compAngleY", "kalAngleY"]          # Give it a header
 
-df.columns = ["channel", "time", "dtime", "ax", "ay", "az", "gx", "gy", "gz", "mx", "my", "mz", "roll", "gyroXangle", "compAngleX", "kalAngleX", "pitch", "gryoYangle", "compAngleY", "kalAngleY"]          # Give it a header
+df = pd.read_csv(Path(os.getcwd()) / sys.argv[1], names=column_names)           # Load in the data      
+
+#df.columns = ["channel", "time", "dtime", "ax", "ay", "az", "gx", "gy", "gz", "mx", "my", "mz", "roll", "gyroXangle", "compAngleX", "kalAngleX", "pitch", "gryoYangle", "compAngleY", "kalAngleY"]          # Give it a header
 # print(df)
 df0 = df[df["channel"]==0]
 df1 = df[df["channel"]==1]
@@ -60,7 +62,7 @@ gy_spln_ev = syi.splev(tspline, gy_spln_rep)
 
 
 
-gy_int = integ(tspline, gy_spln_rep)
+#gy_int = integ(tspline, gy_spln_rep)
 # plt.plot(tspline, gy_int, '--', label='angular position')
 
 
