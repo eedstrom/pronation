@@ -38,7 +38,7 @@ Copyright (C) 2021 Dominic Culotta, Eric Edstrom, Jae Young Lee, Teagan Mathur, 
 const int chipSelect = 53;
 
 // File name to be written to
-const char* FILENAME = "accel.csv";
+const char* FILENAME = "rest.csv";
 
 // File object
 File datafile;
@@ -56,6 +56,7 @@ float g1, g2, g3;
 float m1, m2, m3;
 float m[9] = { 0, 0, 0, 0, 0, 0 ,0, 0, 0 };
 uint32_t t, dt;
+int fsr_idx[4] = { 3, 4, 5, 6 };
 
 #define number_of_FSRs 4 // ADC channels used are 0 - 3, living in pins A0 - A3.
 #define R_series 10000 // series resistor in the circuit
@@ -242,7 +243,7 @@ void loop() {
     dt = millis() - t;
     
     // Write to a file
-    datafile.print(i); // Current FSR, e.g. FSR0 = 0
+    datafile.print(fsr_idx[i]); // Current FSR, e.g. FSR0 = 0
     datafile.print(",");
     datafile.print(t);
     datafile.print(",");
