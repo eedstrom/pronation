@@ -25,20 +25,25 @@ Copyright (C) 2021 Dominic Culotta, Eric Edstrom, Jae Young Lee, Teagan Mathur, 
  ** magnetic field sample rate channel 0, magnetic field sample rate channel 1, magnetic field sample rate channel 2
  */
 
-#include <LiquidCrystal.h>
 #include <Arduino_LSM9DS1.h>
 #include <Wire.h>
 #include <SD.h>
 #include <SPI.h>
+#include <LiquidCrystal.h>
 #include <Keypad.h>
+#include "RTClib.h"
 
 // Constants //
 
 // Put this as the CS pin
 const int chipSelect = 53;
 
+// Declare RTC
+RTC_DS3231 rtc;         
+DateTime now;
+
 // File name to be written to
-const char* FILENAME = "fsr.csv";
+const char* FILENAME = "rest.csv";
 
 // File object
 File datafile;
@@ -56,6 +61,7 @@ float g1, g2, g3;
 float m1, m2, m3;
 float m[9] = { 0, 0, 0, 0, 0, 0 ,0, 0, 0 };
 uint32_t t, dt;
+int fsr_idx[4] = { 3, 4, 5, 6 };
 
 #define number_of_FSRs 4 // ADC channels used are 0 - 3, living in pins A0 - A3.
 #define R_series 10000 // series resistor in the circuit
@@ -63,24 +69,20 @@ int FSR_pin[number_of_FSRs] = {A0, A1, A2, A3};
 #define ADC_V_ref 5.0 // ADC reference voltage
 #define ADC_max 1023 // ADC max value
 
+char key;
+boolean keyPressed = false;
+boolean flag = true;
 const int ROW_NUM = 4; //four rows
 const int COLUMN_NUM = 3; //three columns
-
+byte pin_rows[ROW_NUM] = {31, 33, 35, 37}; //connect to the row pinouts of the keypad
+byte pin_column[COLUMN_NUM] = {2, 3, 18}; //connect to the column pinouts of the keypad
 char keys[ROW_NUM][COLUMN_NUM] = {
   {'1','2','3'},
   {'4','5','6'},
   {'7','8','9'},
   {'*','0','#'}
 };
-
-byte pin_rows[ROW_NUM] = {31, 33, 35, 37}; //connect to the row pinouts of the keypad
-byte pin_column[COLUMN_NUM] = {2, 3, 18}; //connect to the column pinouts of the keypad
-
 Keypad keypad = Keypad( makeKeymap(keys), pin_rows, pin_column, ROW_NUM, COLUMN_NUM );
-
-char key;
-boolean keyPressed = false;
-boolean flag = true;
 
 // initialize the library by associating any needed LCD interface pin
 // with the arduino pin number it is connected to
@@ -100,7 +102,21 @@ void TCA9548A(uint8_t bus)
 // Arduino Functions //
 
 void setup() {
-  // set up the LCD's number of columns and rows
+  
+  // Set up and check RTC
+  int return_code = rtc.begin();
+  
+  if(!return_code) {
+    Serial.println("RTC doesn't work.");
+    while (1) {};
+  }
+
+  // LED lights to arduino pins 4, 5, 6
+  pinMode(4, OUTPUT);
+  pinMode(5, OUTPUT);
+  pinMode(6, OUTPUT);
+  
+  // Set up the LCD's number of columns and rows
   lcd.begin(16, 2);
   
   // Initialize for each channel
@@ -124,12 +140,6 @@ void setup() {
     while (1);
   }
 
-
-  // Deletes file if it exists
-  if (SD.exists(FILENAME)) {
-    SD.remove(FILENAME);
-  }
-  
   // Open the file
   datafile = SD.open(FILENAME, FILE_WRITE);
 
@@ -157,6 +167,15 @@ void setup() {
   sr_g2 = (uint8_t) IMU.gyroscopeSampleRate();
   sr_m2 = (uint8_t) IMU.magneticFieldSampleRate();
 
+  // Test if LED is blinking
+  digitalWrite(4, HIGH);      
+  digitalWrite(5, HIGH);
+  digitalWrite(6, HIGH);
+  delay(2000);
+  digitalWrite(4, LOW);
+  digitalWrite(5, LOW);
+  digitalWrite(6, LOW);
+
   // Write to the file
   datafile.print(-1);
   datafile.print(",");
@@ -176,11 +195,32 @@ void setup() {
   datafile.print(",");
   datafile.print(sr_m1); // in Hz
   datafile.print(",");
-  datafile.println(sr_m2); // in Hz
+  datafile.print(sr_m2); // in Hz
+  datafile.print(",");
+  now = rtc.now();
+  datafile.print(now.hour()-6, DEC);      //subtract 6 to get central time, or get UTC w/out it
+  datafile.print(':');
+  if(now.minute() < 10)  datafile.print(0);
+  datafile.print(now.minute(), DEC);
+  datafile.print(':');
+  if(now.second() < 10)  datafile.print(0);
+  datafile.println(now.second(), DEC);
+
+  lcd.setCursor(0, 0);
+  lcd.print("* key to start");
 }
 
 void loop() {
-  if (!flag) exit(0);
+  now = rtc.now();
+  
+  // Stop grabbing data if the flag is up (# key pressed)
+  // Also turn off LEDs
+  if (!flag) {
+    digitalWrite(4, LOW);      
+    digitalWrite(5, LOW);
+    digitalWrite(6, LOW);    
+    exit(0);
+  }
 
   // Start grabbing data after * key is pressed
   while (keyPressed == false) {
@@ -188,9 +228,11 @@ void loop() {
     
     if (key == '*') {
       keyPressed = true;
-      
-      lcd.setCursor(0, 0);
+
+      lcd.clear();
       lcd.print("Grabbing data...");
+      lcd.setCursor(0, 1);
+      lcd.print("# key to stop");
       
       break;
     }
@@ -213,6 +255,19 @@ void loop() {
   for (channel = 0; channel < 3; ++channel) {
     // Change channel
     TCA9548A(channel);
+
+    // Blinking the 3 LEDs every second
+    if (now.second() % 2 == 0) {
+      digitalWrite(4, HIGH);      
+      digitalWrite(5, HIGH);
+      digitalWrite(6, HIGH);
+    } else {
+      digitalWrite(4, LOW);      
+      digitalWrite(5, LOW);
+      digitalWrite(6, LOW);
+    }
+
+    //digitalWrite(4, (millis() / 1000) % 2);
 
     // Get the time where data is collected first
     t = millis();
@@ -261,10 +316,9 @@ void loop() {
     datafile.print(m[3 * channel + 1]); // in microT
     datafile.print(",");
     datafile.println(m[3 * channel + 2]); // in microT
- 
   }
   */
-  
+
   // Read for each FSR
   for(int i = 0; i < number_of_FSRs; i++)
   {
@@ -301,16 +355,15 @@ void loop() {
     datafile.print(",");
     datafile.println(1.e6 * FSR_conductance, 6); // in micro-mhos
   }
-  
-  // Increment iterator
-  n_run = n_run + 1;
 
   // Stop collecting data if # key is pressed
   key = keypad.getKey();
-  if (key == '#'){
-    lcd.setCursor(0, 1);
+  if (key == '#') {
+    lcd.clear();
     lcd.print("Stopping...");
     flag = false;
   }
   
+  // Increment iterator
+  n_run = n_run + 1;
 }

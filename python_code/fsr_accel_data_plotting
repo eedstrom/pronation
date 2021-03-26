@@ -3,17 +3,19 @@
 import csv
 import matplotlib.pyplot as plt
 
-path = '/Users/teaganmathur/Documents/PHYS398DLP/pronation/python_code/data/FSR/'
-filenames = ['QuietStanceFSR.CSV', 'WalkingFSR.CSV', 'RunningFSR.CSV']
+# path = '/Users/teaganmathur/Documents/PHYS398DLP/pronation/python_code/data/'
+# filenames = ['QuietStance.CSV', 'Walking.CSV', 'Running.CSV']
+path = '/Volumes/NO NAME/'
+filenames = ['REST.CSV']
 
 for filename in filenames:
 
-    # Read in fsr data
+    # Read in data
     with open(path + filename, newline='') as csvfile:
         reader = csv.reader(csvfile)
-        fsr_data = list(reader)
-        fsr_data = fsr_data[1:] # Remove the first row
-        fsr_data = [[float(val) for val in row] for row in fsr_data]
+        data = list(reader)
+        data = data[1:] # Remove the first row
+        data = [[float(val) for val in row] for row in data]
 
     # Column information for fsr_data
     # fsr (0-3), time_taken, uncertainty_in_time, conductance in micro-mhos
@@ -26,8 +28,12 @@ for filename in filenames:
     # force = (1/6)*10^7*conductance + (1/6)
 
     # Separate fsr data and convert
-    for row in fsr_data:
-        fsr, t, dt, cond = row
+    for i in range(len(data)):
+        if len(data[i]) == 4:
+            fsr, t, dt, cond = data[i]
+            fsr = fsr - 3
+        else:
+            continue
 
         cond = cond * 10**(-6)   # convert micro mhos to mhos
         force = (1/6) * 10**7 * cond + (1/6) # convert conductance to force
@@ -56,11 +62,3 @@ for filename in filenames:
     plt.grid()
     plt.legend()
     plt.show()
-
-
-
-
-    
-
-
-

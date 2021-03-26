@@ -53,12 +53,12 @@ void TCA9548A(uint8_t bus)
 
 void setup() {
 
- int return_code = rtc.begin();     //setup and check RTC
- 
- if(!return_code) {
+  int return_code = rtc.begin();     //setup and check RTC
+  
+  if(!return_code) {
     Serial.println("RTC doesn't work.");
     while (1) {};
- }
+  }
 
   pinMode(4, OUTPUT); //led lights to arduino pins 4, 5, 6
   pinMode(5, OUTPUT);
@@ -113,13 +113,13 @@ void setup() {
   sr_g2 = (uint8_t) IMU.gyroscopeSampleRate();
   sr_m2 = (uint8_t) IMU.magneticFieldSampleRate();
 
-digitalWrite(4, HIGH);      //test if LED blinding
-digitalWrite(5, HIGH);
-digitalWrite(5, HIGH);
-delay(2000);
-digitalWrite(4, LOW);      
-digitalWrite(5, LOW);
-digitalWrite(5, LOW);
+  digitalWrite(4, HIGH);      // test if LED blinking
+  digitalWrite(5, HIGH);
+  digitalWrite(5, HIGH);
+  delay(2000);
+  digitalWrite(4, LOW);      
+  digitalWrite(5, LOW);
+  digitalWrite(5, LOW);
 
 
   // Write to the file
