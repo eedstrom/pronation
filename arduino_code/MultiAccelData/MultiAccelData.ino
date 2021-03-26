@@ -136,7 +136,6 @@ void setup() {
 
   if (SD.exists(FILENAME)) {
     Serial.println("File exists");
-    
     lcd.clear();
     lcd.print("File exists");
     lcd.setCursor(0, 1);
@@ -231,15 +230,6 @@ void setup() {
 
 void loop() {
   now = rtc.now();
-  
-  // Stop grabbing data if the flag is up (# key pressed)
-  // Also turn off LEDs
-  if (!flag) {
-    digitalWrite(4, LOW);      
-    digitalWrite(5, LOW);
-    digitalWrite(6, LOW);    
-    exit(0);
-  }
 
   // Start grabbing data after * key is pressed
   while (keyPressed == false) {
@@ -275,6 +265,7 @@ void loop() {
     TCA9548A(channel);
 
     // Blinking the 3 LEDs every second
+    /*
     if (now.second() % 2 == 0) {
       digitalWrite(4, HIGH);      
       digitalWrite(5, HIGH);
@@ -284,8 +275,11 @@ void loop() {
       digitalWrite(5, LOW);
       digitalWrite(6, LOW);
     }
+    */
+    digitalWrite(4, (millis() / 500) % 2);
+    digitalWrite(5, (millis() / 500) % 2);
+    digitalWrite(6, (millis() / 500) % 2);
 
-    //digitalWrite(4, (millis() / 1000) % 2);
 
     // Get the time where data is collected first
     t = millis();
@@ -374,11 +368,16 @@ void loop() {
   }
 
   // Stop collecting data if # key is pressed
+  // Also turn off LEDs and close the file
   key = keypad.getKey();
   if (key == '#') {
     lcd.clear();
-    lcd.print("Stopping...");
-    flag = false;
+    lcd.print("Quitting...");
+    digitalWrite(4, LOW);      
+    digitalWrite(5, LOW);
+    digitalWrite(6, LOW);
+    datafile.close();
+    while (1);
   }
   
   // Increment iterator
