@@ -188,7 +188,7 @@ void loop() {
       digitalWrite(6, LOW);
      } 
      
-    //digitalWrite(4, (millis() / 1000) % 2);
+    //digitalWrite(4, (millis() / 500) % 2);
     
     
     // Get the time where data is collected first
