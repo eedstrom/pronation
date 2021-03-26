@@ -104,22 +104,50 @@ void TCA9548A(uint8_t bus)
 // Arduino Functions //
 
 void setup() {
+  // For printing
+  Serial.begin(9600);
+  while (!Serial);
+  
+  // Set up the LCD's number of columns and rows
+  lcd.begin(16, 2);
   
   // Set up and check RTC
   int return_code = rtc.begin();
   
-  if(!return_code) {
+  if (!return_code) {
     Serial.println("RTC doesn't work.");
-    while (1) {};
+    lcd.clear();
+    lcd.print("RTC problem");
+    lcd.setCursor(0, 1);
+    lcd.print("Quitting...");
+    while (1);
+  }
+
+  // Make sure the sd card is present
+  if (!SD.begin(chipSelect)) {
+    Serial.println("SD Card not present or wiring issue");
+    lcd.clear();
+    lcd.print("SD card problem");
+    lcd.setCursor(0, 1);
+    lcd.print("Quitting...");
+    // Halt operations
+    while (1);
+  }
+
+  if (SD.exists(FILENAME)) {
+    Serial.println("File exists");
+    
+    lcd.clear();
+    lcd.print("File exists");
+    lcd.setCursor(0, 1);
+    lcd.print("Quitting...");
+    while (1);
   }
 
   // LED lights to arduino pins 4, 5, 6
   pinMode(4, OUTPUT);
   pinMode(5, OUTPUT);
   pinMode(6, OUTPUT);
-  
-  // Set up the LCD's number of columns and rows
-  lcd.begin(16, 2);
   
   // Initialize for each channel
   for (channel = 0; channel < 3; ++channel) {
@@ -129,17 +157,6 @@ void setup() {
     // Initialize
     Wire.begin();
     IMU.begin();
-  }
-  
-  // For printing
-  Serial.begin(9600);
-  while (!Serial);
-
-  // Make sure the sd card is present
-  if (!SD.begin(chipSelect)) {
-    Serial.println("SD Card not present or wiring issue");
-    // Halt operations
-    while (1);
   }
 
   // Open the file
@@ -208,7 +225,7 @@ void setup() {
   if(now.second() < 10)  datafile.print(0);
   datafile.println(now.second(), DEC);
 
-  lcd.setCursor(0, 0);
+  lcd.clear();
   lcd.print("* key to start");
 }
 
