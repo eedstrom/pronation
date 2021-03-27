@@ -40,9 +40,13 @@ df2 = df[df["channel"]==2]
 df0amag = np.sqrt((df0['ax'])**2 + (df0['ay'])**2 + (df0['az'])**2)
 
 # Calculate roll and pitch
-roll0=np.degrees(np.arctan2(df0['ay'],df0['az']))
-roll1=np.degrees(np.arctan2(df1['ay'],df0['az']))
-roll2=np.degrees(np.arctan2(df2['ay'],df0['az']))
+roll0=np.degrees(np.arctan2(df0['ay'].values,df0['az'].values))
+roll1=np.degrees(np.arctan2(df1['ay'].values,df0['az'].values))
+roll2=np.degrees(np.arctan2(df2['ay'].values,df0['az'].values))
+
+pitch0=np.degrees(np.arctan(-df0['ax'].values / np.sqrt((df0['ay'].values)**2+(df0['az'].values)**2)))
+pitch1=np.degrees(np.arctan(-df1['ax'].values / np.sqrt((df1['ay'].values)**2+(df1['az'].values)**2)))
+pitch2=np.degrees(np.arctan(-df2['ax'].values / np.sqrt((df2['ay'].values)**2+(df2['az'].values)**2)))
 
 
 
@@ -120,3 +124,10 @@ plt.legend()
 plt.show()
 
 # roll0.to_csv('roll_brianp_test')
+print(pitch0)
+
+print(df0['pitch'].values)
+
+#print(roll0)
+
+#print(df0['roll'].values)
