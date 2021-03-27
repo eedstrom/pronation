@@ -54,8 +54,8 @@ pitch2=np.degrees(np.arctan(-df2['ax'].values / np.sqrt((df2['ay'].values)**2+(d
 # plt.plot(df0['time'], df0['ay'], 'g', markersize=3.5, label='ay')      # plot accel data pts
 # plt.plot(df0['time'], df0['az'], 'k', markersize=3.5, label='az')      # plot accel data pts
 
-print(np.std(df0['az']))
-print(np.mean(df0['az']))
+#print(np.std(df0['az']))
+#print(np.mean(df0['az']))
 
 # Learn the Kalman transition matrix
 
@@ -124,9 +124,9 @@ plt.legend()
 plt.show()
 
 # roll0.to_csv('roll_brianp_test')
-print(pitch0)
+#print(pitch0)
 
-print(df0['pitch'].values)
+#print(df0['pitch'].values)
 
 #print(roll0)
 
