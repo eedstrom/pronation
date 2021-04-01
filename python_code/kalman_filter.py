@@ -10,7 +10,7 @@ angle_v=np.array([])
 for i in range(0,len(df0['gx'].values)-1):
     angle_a=np.append(angle_v,abs(df0['gx'].values[i+1])-abs(df0['gx'].values[i]))
 R=np.array([np.var(df0['gx'].values)])
-P=np.diag([R[0],max(angle_a)])
+P=np.diag([R[0],(max(angle_a))**2])
 z0=df0['gx'].values[0]
 print(z0)
 x=np.dot(pinv(H),z0)
@@ -32,7 +32,7 @@ def gyro_filter_helper(x, P, R, Q=0., dt=1.0):
         kf.Q[:] = Q
     return kf
 
-def run(x0=(34.18,0.), P=P, R=R, Q=0, dt=dt, track=None, zs=df0['gx'].values, count=0, do_plot=True, **kwargs):
+def run(x0=x, P=P, R=R, Q=0, dt=dt, track=None, zs=df0['gx'].values, count=0, do_plot=True, **kwargs):
     kf = gyro_filter_helper(x0, R=R, P=P, Q=Q, dt=dt)
     xs, cov = [], []
     for z in zs:
