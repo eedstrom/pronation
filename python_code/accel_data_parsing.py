@@ -48,6 +48,7 @@ pitch2=np.degrees(np.arctan(-df2['ax'].values / np.sqrt((df2['ay'].values)**2+(d
 
 import kalman_filter
 
+Ms, Ps = kalman_filter.run()
 # Choose which filter to use
 
 if sys.argv[2]=="0":

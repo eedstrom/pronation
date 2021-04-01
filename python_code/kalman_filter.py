@@ -42,4 +42,4 @@ def run(x0=x, P=P, R=R, Q=0, dt=dt, track=None, zs=df0['gx'].values, count=0, do
     """if do_plot:
         plot_track(xs[:, 0], track, zs, cov, **kwargs)"""
     return xs, cov
-Ms, Ps = run()
+#Ms, Ps = run()
