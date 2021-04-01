@@ -27,8 +27,9 @@ from pathlib import Path
 #from pykalman import KalmanFilter
 
 column_names = ["channel", "time", "dtime", "ax", "ay", "az", "gx", "gy", "gz", "mx", "my", "mz", "roll", "gyroXangle", "compAngleX", "kalAngleX", "pitch", "gyroYangle", "compAngleY", "kalAngleY"]          # Give it a header
+#column_names = ["channel", "time", "dtime", "ax", "ay", "az", "gx", "gy", "gz", "mx", "my", "mz"]
 
-df = pd.read_csv(Path(os.getcwd()) / sys.argv[1], names=column_names)           # Load in the data      
+df = pd.read_csv(Path(os.getcwd()) / sys.argv[1], names=column_names, skiprows=1)           # Load in the data      
 
 df0 = df[df["channel"]==0]
 df1 = df[df["channel"]==1]
@@ -37,8 +38,7 @@ df2 = df[df["channel"]==2]
 #finding mag of accel. vector
 df0amag = np.sqrt((df0['ax'])**2 + (df0['ay'])**2 + (df0['az'])**2)
 
-# Calculate roll and pitch
-roll0=np.degrees(np.arctan2(df0['ay'].values,df0['az'].values))
+# Calculate roll and pitch roll0=np.degrees(np.arctan2(df0['ay'].values,df0['az'].values))
 roll1=np.degrees(np.arctan2(df1['ay'].values,df0['az'].values))
 roll2=np.degrees(np.arctan2(df2['ay'].values,df0['az'].values))
 
@@ -57,15 +57,23 @@ if sys.argv[2]=="0":
 
 if sys.argv[2]=="1":
     plt.plot(df0['time'], df0['kalAngleX'], 'k', markersize=3, label='angular position X')        
-    plt.plot(df0['time'], df0['kalAngleY'], 'g', markersize=3, label='angular position Y') 
+    #plt.plot(df0['time'], df0['kalAngleY'], 'g', markersize=3, label='angular position Y') 
 
 if sys.argv[2]=="2":
     plt.plot(df0['time'], df0['gx'], 'k', markersize=3, label='angular position X')        
-    plt.plot(df0['time'], df0['gy'], 'g', markersize=3, label='angular position Y') 
+    #plt.plot(df0['time'], df0['gy'], 'g', markersize=3, label='angular position Y') 
 
 if sys.argv[2]=="3":
-    plt.plot(df0['time'], Ms, 'k', markersize=3, label='angular position X')        
+    print(Ms)
+    print(np.ndim(Ms))
+    print("\n\n End of Ms")
+    print(df0['gx'].values)
+    print(Ps)
+    print(np.ndim(Ps))
+    #plt.plot(df0['time'], Ms, 'k', markersize=3, label='angular position X')        
     #plt.plot(df0['time'], df0['gy'], 'g', markersize=3, label='angular position Y') 
+if sys.argv[2]=="4":
+    plt.plot(np.delete(df0['time'].values,len(df0['time'].values)-1), Ms[0][0], 'k', markersize=3, label='angular position X')
 
 plt.xlabel("Write time(ms)")                                        # Label the axes
 # plt.ylabel("Acceleration(mg)")
