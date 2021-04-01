@@ -46,6 +46,8 @@ pitch0=np.degrees(np.arctan(-df0['ax'].values / np.sqrt((df0['ay'].values)**2+(d
 pitch1=np.degrees(np.arctan(-df1['ax'].values / np.sqrt((df1['ay'].values)**2+(df1['az'].values)**2)))
 pitch2=np.degrees(np.arctan(-df2['ax'].values / np.sqrt((df2['ay'].values)**2+(df2['az'].values)**2)))
 
+import kalman_filter.py
+
 # Choose which filter to use
 
 if sys.argv[2]=="0":
@@ -59,6 +61,10 @@ if sys.argv[2]=="1":
 if sys.argv[2]=="2":
     plt.plot(df0['time'], df0['gx'], 'k', markersize=3, label='angular position X')        
     plt.plot(df0['time'], df0['gy'], 'g', markersize=3, label='angular position Y') 
+
+if sys.argv[2]=="3":
+    plt.plot(df0['time'], Ms, 'k', markersize=3, label='angular position X')        
+    #plt.plot(df0['time'], df0['gy'], 'g', markersize=3, label='angular position Y') 
 
 plt.xlabel("Write time(ms)")                                        # Label the axes
 # plt.ylabel("Acceleration(mg)")
