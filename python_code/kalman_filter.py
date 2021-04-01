@@ -10,7 +10,7 @@ angle_v=np.array([])
 for i in range(0,len(df0['gx'].values)-1):
     angle_v=np.append(angle_v,abs(df0['gx'].values[i+1])-abs(df0['gx'].values[i]))
 R=np.array([np.var(df0['gx'].values)])
-P=np.diag(R[0],max(angle_v))
+P=np.diag([R[0],max(angle_v)])
 z0=df0['gx'].values[0]
 x=np.dot(pinv(H),z0)
 dt=np.mean(df0['dtime'].values)
