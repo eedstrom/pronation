@@ -46,7 +46,7 @@ pitch0=np.degrees(np.arctan(-df0['ax'].values / np.sqrt((df0['ay'].values)**2+(d
 pitch1=np.degrees(np.arctan(-df1['ax'].values / np.sqrt((df1['ay'].values)**2+(df1['az'].values)**2)))
 pitch2=np.degrees(np.arctan(-df2['ax'].values / np.sqrt((df2['ay'].values)**2+(df2['az'].values)**2)))
 
-import kalman_filter.py
+import kalman_filter
 
 # Choose which filter to use
 
