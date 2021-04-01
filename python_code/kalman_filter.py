@@ -6,7 +6,7 @@ from scipy.linalg import pinv
 
 H=np.array([[1,0.]])
 angle_v=np.array([])
-for i range(0,len(df0['gx'].values)-1):
+for i in range(0,len(df0['gx'].values)-1):
     angle_v=np.append(angle_v,abs(df0['gx'].values[i+1])-abs(df0['gx'].values[i]))
 R=np.array([np.var(df0['gx'].values)])
 P=np.diag(R[0],max(angle_v))
