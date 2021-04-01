@@ -30,7 +30,7 @@ def gyro_filter_helper(x, P, R, Q=0., dt=1.0):
         kf.Q[:] = Q
     return kf
 
-def run(x0=x, P=P, R=R, Q=0, dt=dt, track=None, zs=df0['gx'].values, count=0, do_plot=true, **kwargs):
+def run(x0=x, P=P, R=R, Q=0, dt=dt, track=None, zs=df0['gx'].values, count=0, do_plot=True, **kwargs):
     kf = gyro_filter_helper(x0, R=R, P=P, Q=Q, dt=dt)
     xs, cov = [], []
     for z in zs:
