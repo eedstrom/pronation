@@ -24,7 +24,7 @@ import scipy.interpolate as syi
 import sys
 import os
 from pathlib import Path
-from pykalman import KalmanFilter
+#from pykalman import KalmanFilter
 
 column_names = ["channel", "time", "dtime", "ax", "ay", "az", "gx", "gy", "gz", "mx", "my", "mz", "roll", "gyroXangle", "compAngleX", "kalAngleX", "pitch", "gyroYangle", "compAngleY", "kalAngleY"]          # Give it a header
 
