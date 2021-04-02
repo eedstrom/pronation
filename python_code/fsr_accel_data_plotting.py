@@ -3,7 +3,7 @@
 import csv
 import matplotlib.pyplot as plt
 
-path = '/Users/teaganmathur/Documents/PHYS398DLP/pronation/python_code/data/'
+path = 'data/'
 # filenames = ['QuietStance.CSV', 'Walking.CSV', 'Running.CSV']
 filenames = ['3.31_Loomis_Data.CSV']
 
