@@ -4,6 +4,7 @@ import csv
 import matplotlib.pyplot as plt
 
 path = '/Users/teaganmathur/Documents/PHYS398DLP/pronation/python_code/data/FSR/'
+# path = '/Users/Brian/OneDrive/_documents_one/_PHYS 398 DLP/Git Ripository/pronation/python_code/data/FSR/'
 filenames = ['QuietStanceFSR.CSV', 'WalkingFSR.CSV', 'RunningFSR.CSV']
 
 for filename in filenames:
@@ -26,6 +27,8 @@ for filename in filenames:
     # force = (1/6)*10^7*conductance + (1/6)
 
     # Separate fsr data and convert
+
+    
     for row in fsr_data:
         fsr, t, dt, cond = row
 
@@ -56,6 +59,9 @@ for filename in filenames:
     plt.grid()
     plt.legend()
     plt.show()
+
+
+
 
 
 
