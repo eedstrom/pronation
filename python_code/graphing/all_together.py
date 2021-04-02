@@ -135,9 +135,9 @@ def plot_airplane(df_ind):
         d["pitch"] = np.arctan2(-1 * d["ax"],
                                 np.sqrt(d["ay"] ** 2 + d["az"] ** 2)) * 180 / np.pi
         bfy = d["mz"] * np.sin(d["roll"]) - d["my"] * np.cos(d["roll"])
-        # bfx = d["mx"] * np.cos(d["pitch"]) + d["my"] * \
-        #     np.sin(d["pitch"]) * np.sin(d["roll"]) + d["mz"] * \
-        #     np.sin(d["pitch"]) * np.cos(d["roll"])
+        bfx = d["mx"] * np.cos(d["pitch"]) + d["my"] * \
+            np.sin(d["pitch"]) * np.sin(d["roll"]) + d["mz"] * \
+            np.sin(d["pitch"]) * np.cos(d["roll"])
         bfx = 0
 
         d["yaw"] = np.arctan(-bfy, bfx) * 180 / np.pi
