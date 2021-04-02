@@ -2,15 +2,18 @@
 
 import csv
 import matplotlib.pyplot as plt
+import os
+from pathlib import Path
 
-path = '/Users/teaganmathur/Documents/PHYS398DLP/pronation/python_code/data/FSR/'
+path = Path(os.getcwd()) / "python_code/data/FSR"
+print(type(path))
 # path = '/Users/Brian/OneDrive/_documents_one/_PHYS 398 DLP/Git Ripository/pronation/python_code/data/FSR/'
 filenames = ['QuietStanceFSR.CSV', 'WalkingFSR.CSV', 'RunningFSR.CSV']
 
 for filename in filenames:
 
     # Read in fsr data
-    with open(path + filename, newline='') as csvfile:
+    with open(path / filename, newline='') as csvfile:
         reader = csv.reader(csvfile)
         fsr_data = list(reader)
         fsr_data = fsr_data[1:] # Remove the first row
