@@ -48,7 +48,8 @@ pitch2=np.degrees(np.arctan(-df2['ax'].values / np.sqrt((df2['ay'].values)**2+(d
 
 import kalman_filter
 
-Ms, Ps = kalman_filter.run()
+#Ms, Ps = kalman_filter.run()
+Xs, Ps, Xs_prior, Ps_prior = kalman_filter.f.batch_filter(kalman_filter.zs)
 # Choose which filter to use
 
 if sys.argv[2]=="0":
@@ -64,17 +65,25 @@ if sys.argv[2]=="2":
     #plt.plot(df0['time'], df0['gy'], 'g', markersize=3, label='angular position Y') 
 
 if sys.argv[2]=="3":
-    print(Ms)
+    """print(Ms)
     print(np.ndim(Ms))
     print("\n\n End of Ms")
     print(df0['gx'].values)
     print(Ps)
-    print(np.ndim(Ps))
+    print(np.ndim(Ps))"""
+    print(df0['gx'].values)
     #plt.plot(df0['time'], Ms, 'k', markersize=3, label='angular position X')        
     #plt.plot(df0['time'], df0['gy'], 'g', markersize=3, label='angular position Y') 
 if sys.argv[2]=="4":
-    plt.plot(np.delete(df0['time'].values,len(df0['time'].values)-1), Ms[0][0], 'k', markersize=3, label='angular position X')
-
+    plt.plot(df0['time'].values, Xs, 'k', markersize=3, label='angular position X')
+    #print(Ms)
+if sys.argv[2]=="5":
+    print(np.ndim(Xs))
+    print(Xs.shape)
+    #print(Xs[...,0][1])
+    #np.set_printoptions(threshold=sys.maxsize)
+    print(Xs)
+    #print(Xs)
 plt.xlabel("Write time(ms)")                                        # Label the axes
 # plt.ylabel("Acceleration(mg)")
 plt.ylabel("Angle(deg)")
