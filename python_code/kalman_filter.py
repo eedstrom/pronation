@@ -18,7 +18,7 @@ for i in range(0,len(df0['gx'].values)-1):
     angle_p=np.append(angle_p,pos)
 gyro=np.delete(df0['gx'].values,len(df0['gx'].values)-1)
 angle_v=np.delete(df0['gx'].values,len(df0['gx'].values)-1)
-x=np.vstack((angle_v,angle_p))
+#x=np.vstack((angle_v,angle_p))
 #print(x[0])
 #x=angle_p #print(angle_p)
 #print(len(df0['gx'].values))
@@ -27,9 +27,11 @@ R=np.array([np.var(angle_v)])
 #print(R)
 P=np.diag([R[0],np.var(angle_p)])
 #print(max(angle_v), np.var(angle_v))
-z0=angle_v[0]
+#z0=angle_v[0]
+z0=0
 #print(z0)
 #print(z0)
+print(pinv(H))
 x0=np.dot(pinv(H),z0)
 #print(x0)
 #print(x)
@@ -38,8 +40,8 @@ dt=np.mean(df0['dtime'].values)/(10e3)
 
 def gyro_filter_helper(x, P, R, Q=0., dt=1.0):
     kf = KalmanFilter(dim_x=2, dim_z=1)
-    kf.x = np.array([x[0], x[1]])
-    kf.F = np.array([[1., dt], [0., 1.]])
+    kf.x = x
+    kf.F = np.array([[dt, 1], [1., 0]])
     kf.R *= R
     if np.isscalar(P):
         kf.P *= P
@@ -51,7 +53,7 @@ def gyro_filter_helper(x, P, R, Q=0., dt=1.0):
         kf.Q[:] = Q
     return kf
 
-def run(x0=x0, P=P, R=R, Q=0, dt=dt, track=None, zs=x[0], count=0, do_plot=True, **kwargs):
+"""def run(x0=x0, P=P, R=R, Q=0, dt=dt, track=None, zs=x[0], count=0, do_plot=True, **kwargs):
     kf = gyro_filter_helper(x0, R=R, P=P, Q=Q, dt=dt)
     xs, cov = [], []
     for z in zs:
@@ -60,11 +62,11 @@ def run(x0=x0, P=P, R=R, Q=0, dt=dt, track=None, zs=x[0], count=0, do_plot=True,
         xs.append(kf.x)
         cov.append(kf.P)
     xs, cov = np.array(xs), np.array(cov)
-    """if do_plot:
-        plot_track(xs[:, 0], track, zs, cov, **kwargs)"""
-    return xs, cov
+    if do_plot:
+        plot_track(xs[:, 0], track, zs, cov, **kwargs)
+    return xs, cov"""
 #Ms, Pss = run()
-zs=df0['gx'].values
-f=gyro_filter_helper(x0, R=R, P=P, Q=0, dt=dt)
+zs=angle_v
+f=gyro_filter_helper(x=x0, R=R, P=P, Q=0, dt=dt)
 #Xs, Ps, Xs_prior, Ps_prior = f.batch_filter(zs)
 #print(Xs)

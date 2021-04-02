@@ -75,13 +75,14 @@ if sys.argv[2]=="3":
     #plt.plot(df0['time'], Ms, 'k', markersize=3, label='angular position X')        
     #plt.plot(df0['time'], df0['gy'], 'g', markersize=3, label='angular position Y') 
 if sys.argv[2]=="4":
-    plt.plot(df0['time'].values, Xs, 'k', markersize=3, label='angular position X')
+    plt.plot(np.delete(df0['time'].values,len(df0['gx'].values)-1), Xs[...,0,0], 'k', markersize=3, label='angular position X')
+    #plt.plot(np.delete(df0['time'].values,len(df0['gx'].values)-1), kalman_filter.angle_p, 'k', markersize=3, label='angular position X')
     #print(Ms)
 if sys.argv[2]=="5":
     print(np.ndim(Xs))
     print(Xs.shape)
     #print(Xs[...,0][1])
-    #np.set_printoptions(threshold=sys.maxsize)
+    np.set_printoptions(threshold=sys.maxsize)
     print(Xs)
     #print(Xs)
 plt.xlabel("Write time(ms)")                                        # Label the axes
