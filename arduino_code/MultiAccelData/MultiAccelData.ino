@@ -222,8 +222,15 @@ void setup() {
   datafile.print(now.minute(), DEC);
   datafile.print(':');
   if(now.second() < 10)  datafile.print(0);
-  datafile.println(now.second(), DEC);
-
+  datafile.print(now.second(), DEC);
+  datafile.print(",");
+  if(now.month() < 10)  datafile.print(0);
+  datafile.print(now.month(), DEC);
+  datafile.print(' ');
+  if(now.day() < 10)  datafile.print(0);
+  datafile.print(now.day(), DEC);
+  datafile.print(' ');
+  datafile.println(now.year(), DEC);
   lcd.clear();
   lcd.print("* key to start");
 }
@@ -327,7 +334,16 @@ void loop() {
     datafile.print(",");
     datafile.print(m[3 * channel + 1]); // in microT
     datafile.print(",");
-    datafile.println(m[3 * channel + 2]); // in microT
+    datafile.print(m[3 * channel + 2]); // in microT
+    datafile.print(",");
+    now = rtc.now();
+      datafile.print(now.hour()-5, DEC);      //subtract 5 to get central time, or get UTC w/out it
+      datafile.print(':');
+      if(now.minute() < 10)  datafile.print(0);
+      datafile.print(now.minute(), DEC);
+      datafile.print(':');
+      if(now.second() < 10)  datafile.print(0);
+      datafile.println(now.second(), DEC);
   }
 
   // Read for each FSR
