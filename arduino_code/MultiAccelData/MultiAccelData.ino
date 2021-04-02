@@ -230,7 +230,8 @@ void setup() {
   if(now.day() < 10)  datafile.print(0);
   datafile.print(now.day(), DEC);
   datafile.print(' ');
-  datafile.println(now.year(), DEC);
+  datafile.print(now.year(), DEC);
+  datafile.println(",");
   lcd.clear();
   lcd.print("* key to start");
 }
@@ -343,7 +344,8 @@ void loop() {
       datafile.print(now.minute(), DEC);
       datafile.print(':');
       if(now.second() < 10)  datafile.print(0);
-      datafile.println(now.second(), DEC);
+      datafile.print(now.second(), DEC);
+      datafile.println(",");
   }
 
   // Read for each FSR
@@ -380,7 +382,8 @@ void loop() {
     datafile.print(",");
     datafile.print(dt);    
     datafile.print(",");
-    datafile.println(1.e6 * FSR_conductance, 6); // in micro-mhos
+    datafile.print(1.e6 * FSR_conductance, 6); // in micro-mhos
+    datafile.println(",");
   }
 
   // Stop collecting data if # key is pressed
