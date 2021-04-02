@@ -2,14 +2,17 @@
 
 import csv
 import matplotlib.pyplot as plt
+import os
+from pathlib import Path
 
-path = 'data/'
+path = Path(os.getcwd()) / "python_code/data/"
+
 # filenames = ['QuietStance.CSV', 'Walking.CSV', 'Running.CSV']
 filenames = ['3.31_Loomis_Data.CSV']
 
 for filename in filenames:
     # Read in data
-    with open(path + filename) as csvfile:
+    with open(path / filename) as csvfile:
         reader = csv.reader(csvfile)
         full_data = list(reader)
     
