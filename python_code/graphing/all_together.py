@@ -1,9 +1,8 @@
 #! usr/bin.env python3
 
 import matplotlib.pyplot as plt
-import numpy as np
 from matplotlib import style
-from numpy.lib.shape_base import split
+import numpy as np
 import pandas as pd
 
 # Load in all 3 datasets from Loomis
@@ -11,7 +10,7 @@ names = ["id", "t", "dt", "ax", "ay", "az",
          "gx", "gy", "gz", "mx", "my", "mz"]
 
 # Load in the Loomis data
-df = pd.read_csv("data/3.31_Loomis_Data_Ind/df1.csv")
+df = pd.read_csv("data/3.31_Loomis_2nd.csv", names=names)
 
 
 def separate_files(df):
@@ -128,57 +127,62 @@ def plot_airplane(df_ind):
 
     # Get dataframes from tuple
     df0, df1, df2, *_ = df_tup
-
+    i = 0
     # Calculate roll, pitch, and yaw for all 3
     for d in [df0, df1, df2]:
         d["roll"] = np.arctan2(d["ay"], d["az"]) * 180 / np.pi
         d["pitch"] = np.arctan2(-1 * d["ax"],
                                 np.sqrt(d["ay"] ** 2 + d["az"] ** 2)) * 180 / np.pi
+
+        # Convert to float
+        # d["my"] = d["my"].astype(float)
+
+        
         bfy = d["mz"] * np.sin(d["roll"]) - d["my"] * np.cos(d["roll"])
         bfx = d["mx"] * np.cos(d["pitch"]) + d["my"] * \
             np.sin(d["pitch"]) * np.sin(d["roll"]) + d["mz"] * \
             np.sin(d["pitch"]) * np.cos(d["roll"])
-        bfx = 0
 
         d["yaw"] = np.arctan(-bfy, bfx) * 180 / np.pi
 
-    # roll
-    axs[0].scatter(df0["t"], df0["roll"], label="Laces", alpha=0.3)
-    axs[0].scatter(df1["t"], df1["roll"], label="Heel", alpha=0.3)
-    axs[0].scatter(df2["t"], df2["roll"], label="Shin", alpha=0.3)
-    axs[0].plot(df0["t"], df0["roll"], alpha=0.3)
-    axs[0].plot(df1["t"], df1["roll"], alpha=0.3)
-    axs[0].plot(df2["t"], df2["roll"], alpha=0.3)
-    axs[0].legend()
+    if False:
+        # roll
+        axs[0].scatter(df0["t"], df0["roll"], label="Laces", alpha=0.3)
+        axs[0].scatter(df1["t"], df1["roll"], label="Heel", alpha=0.3)
+        axs[0].scatter(df2["t"], df2["roll"], label="Shin", alpha=0.3)
+        axs[0].plot(df0["t"], df0["roll"], alpha=0.3)
+        axs[0].plot(df1["t"], df1["roll"], alpha=0.3)
+        axs[0].plot(df2["t"], df2["roll"], alpha=0.3)
+        axs[0].legend()
 
-    # pitch
-    axs[1].scatter(df0["t"], df0["pitch"], label="Laces", alpha=0.3)
-    axs[1].scatter(df1["t"], df1["pitch"], label="Heel", alpha=0.3)
-    axs[1].scatter(df2["t"], df2["pitch"], label="Shin", alpha=0.3)
-    axs[1].plot(df0["t"], df0["pitch"], alpha=0.3)
-    axs[1].plot(df1["t"], df1["pitch"], alpha=0.3)
-    axs[1].plot(df2["t"], df2["pitch"], alpha=0.3)
-    axs[1].legend()
+        # pitch
+        axs[1].scatter(df0["t"], df0["pitch"], label="Laces", alpha=0.3)
+        axs[1].scatter(df1["t"], df1["pitch"], label="Heel", alpha=0.3)
+        axs[1].scatter(df2["t"], df2["pitch"], label="Shin", alpha=0.3)
+        axs[1].plot(df0["t"], df0["pitch"], alpha=0.3)
+        axs[1].plot(df1["t"], df1["pitch"], alpha=0.3)
+        axs[1].plot(df2["t"], df2["pitch"], alpha=0.3)
+        axs[1].legend()
 
-    # yaw
-    axs[2].scatter(df0["t"], df0["yaw"], label="Laces", alpha=0.3)
-    axs[2].scatter(df1["t"], df1["yaw"], label="Heel", alpha=0.3)
-    axs[2].scatter(df2["t"], df2["yaw"], label="Shin", alpha=0.3)
-    axs[2].plot(df0["t"], df0["yaw"], alpha=0.3)
-    axs[2].plot(df1["t"], df1["yaw"], alpha=0.3)
-    axs[2].plot(df2["t"], df2["yaw"], alpha=0.3)
-    axs[2].legend()
+        # yaw
+        axs[2].scatter(df0["t"], df0["yaw"], label="Laces", alpha=0.3)
+        axs[2].scatter(df1["t"], df1["yaw"], label="Heel", alpha=0.3)
+        axs[2].scatter(df2["t"], df2["yaw"], label="Shin", alpha=0.3)
+        axs[2].plot(df0["t"], df0["yaw"], alpha=0.3)
+        axs[2].plot(df1["t"], df1["yaw"], alpha=0.3)
+        axs[2].plot(df2["t"], df2["yaw"], alpha=0.3)
+        axs[2].legend()
 
-    # Customize the plot
-    fig.suptitle("Angles by Bus Line over Time")
-    axs[2].set_xlabel("Time (s)")
-    axs[0].set_ylabel("Angle (deg)")
-    axs[1].set_ylabel("Angle (deg)")
-    axs[2].set_ylabel("Angle (deg)")
-    axs[0].set_title("Roll")
-    axs[1].set_title("Pitch")
-    axs[2].set_title("Yaw")
-    plt.show()
+        # Customize the plot
+        fig.suptitle("Angles by Bus Line over Time")
+        axs[2].set_xlabel("Time (s)")
+        axs[0].set_ylabel("Angle (deg)")
+        axs[1].set_ylabel("Angle (deg)")
+        axs[2].set_ylabel("Angle (deg)")
+        axs[0].set_title("Roll")
+        axs[1].set_title("Pitch")
+        axs[2].set_title("Yaw")
+        plt.show()
 
 
 plot_airplane(df)
