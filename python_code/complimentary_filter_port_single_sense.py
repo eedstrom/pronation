@@ -32,6 +32,7 @@ compPitch0s=[]
 rollInt0s=[]
 pitchInt0s=[]
 
+B=0.93          #Filter coefficient. See https://www.diva-portal.org/smash/get/diva2:1146723/FULLTEXT01.pdf page 10 for more detials.
 compRoll0=0     #Hold the to be corrected value
 compPitch0=0
 rollInt0=0
@@ -51,9 +52,9 @@ for i in range(len(t0)):
     dt0i = t0[i]
 
     # Calculate the angle using a Complimentary filter
-    compRoll0 = 0.93 * (compRoll0 + gyroXrate0[i] * dt0) + 0.07 * roll0 
+    compRoll0 = B * (compRoll0 + (gyroXrate0[i] * dt0)) + (1-B) * roll0 
     compRoll0s.append(compRoll0)
-    compPitch0 = 0.93 * (compPitch0 + gyroYrate0[i] * dt0) + 0.07 * pitch0
+    compPitch0 = B * (compPitch0 + gyroYrate0[i] * dt0) + (1-B) * pitch0
     compPitch0s.append(compPitch0)
 
     #Find roll and pitch via integration
