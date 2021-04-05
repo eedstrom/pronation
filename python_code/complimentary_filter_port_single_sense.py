@@ -59,35 +59,29 @@ for i in range(len(t0)):
     pitchInt0 += gyroYrate0[i] * dt0
     pitchInt0s.append(pitchInt0)
 
+    #This fixes the transition problem when the accelerometer angle jumps between -180 and 180 degrees
+    if (roll0 < -90 and compRoll0 > 90) or (roll0 > 90 and compRoll0 < -90):
+        compRoll0 = roll0
+        rollInt0 = roll0
 
+    if abs(compRoll0) > 90:
+        gyroYrate0[i] = -(gyroYrate0[i])       #Invert rate, so it fits the restriced accelerometer reading
+
+    #Reset the gyro angle when it has drifted too much
+    if (rollInt0 < -180 or rollInt0 > 180):
+        rollInt0 = compRoll0
+    if (pitchInt0 < -180 or pitchInt0 > 180):
+        pitchInt0 = compPitch0
 
 
 # Calculate the angle using a Complimentary filter
 # compAngleX0 = 0.93 * (compAngleX0 + gyroXrate0 * dt0) + 0.07 * roll0 
 # compAngleY0 = 0.93 * (compAngleY0 + gyroYrate0 * dt0) + 0.07 * pitch0
 
-# print(compAngleX0)
-#This fixes the transition problem when the accelerometer angle jumps between -180 and 180 degrees
-# for roll in roll0
-#     if roll < -90 and compAngleX0 > 90 or (roll0 > 90 and compAngleX0 < -90):
-#         compAngleX0 = roll0
-#         gyroXangle0 = roll0
 
-#     if abs(compAngleX0) > 90:
-#         gyroYrate0 = -gyroYrate0 #Invert rate, so it fits the restriced accelerometer reading
-
-
-#Reset the gyro angle when it has drifted too much
-# if (gyroXangle0 < -180 or gyroXangle0 > 180):
-#     gyroXangle0 = compAngleX0
-# if (gyroYangle0 < -180 or gyroYangle0 > 180):
-#     gyroYangle0 = compAngleY0
-
-# plt.plot(df0['t'], compAngleX0, label='Complintary Filter Roll0')
 plt.plot(t0, compRoll0s, label='Roll filterd by complimentary filter')
 plt.plot(t0, roll0s, label='Roll unfiltered')
 plt.plot(t0, rollInt0s, label='Roll calc. by integration')
 
-# plt.plot(df0['t'], gyroXangle0, label='Only intergrating gyroX, Roll0')
 plt.legend()
 plt.show()
