@@ -18,9 +18,8 @@ df2 = df[df["channel"]==2]
 # Using the restric pitch setting only from the arduino example
 #Only calc.ing df0 for now
 
-gyroXrate0 = df0['gx'].values.tolist()
-# print(gyroXrate0)
-gyroYrate0 = df0['gy'].values.tolist()
+gyroXrate0 = (df0['gx']/10).values.tolist()
+gyroYrate0 = (df0['gy']/10).values.tolist()
 t0 = (df0['t']/1000).values.tolist()     #Put into seconds
 ax0 = df0['ax'].values.tolist()
 ay0 = df0['ay'].values.tolist()
@@ -37,6 +36,7 @@ compRoll0=0     #Hold the to be corrected value
 compPitch0=0
 rollInt0=0
 pitchInt0=0
+dt0i=0
 # rollInt0=gyroXrate0*(t0[1]-t0[0])
 # pitchInt0=gyroYrate0*(t0[1]-t0[0])
 
@@ -47,7 +47,9 @@ for i in range(len(t0)):
     pitch0=np.degrees(np.arctan(-(ax0[i] / np.sqrt((ay0[i])**2 +(az0[i]**2)))))
     pitch0s.append(pitch0)
 
-    dt0 = t0[i]-t0[i-1]       #Find time interval between measurements
+    dt0 = t0[i]-dt0i       #Find time interval between measurements
+    dt0i = t0[i]
+
     # Calculate the angle using a Complimentary filter
     compRoll0 = 0.93 * (compRoll0 + gyroXrate0[i] * dt0) + 0.07 * roll0 
     compRoll0s.append(compRoll0)
@@ -84,5 +86,11 @@ plt.plot(t0, compRoll0s, label='Roll filterd by complimentary filter')
 plt.plot(t0, roll0s, label='Roll unfiltered')
 plt.plot(t0, rollInt0s, label='Roll calc. by integration')
 
+plt.xlabel("Time (s)")
+plt.ylabel("Angular Displacement (degrees)")
+plt.yticks(np.arange(-180, 180, 10))
+
 plt.legend()
+plt.grid(linestyle = '--', linewidth = 0.5)
+
 plt.show()
