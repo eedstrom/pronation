@@ -200,9 +200,9 @@ def plot_air_and_fsr(df_ind):
     fig, axs = plt.subplots(3, 1, sharex=True)
     
     # Get dataframes from tuple
-    df0, df1, df2, *_ = df_tup
+    df0, df1, df2, df3, df4, df5, df6 = df_tup
     
-    # Calculate roll, pitch, and yaw for all 3 & get min time 
+    # Calculate roll, pitch, and yaw for all
     for d in [df0, df1, df2]:
         d["roll"] = np.arctan2(d["ay"], d["az"]) * 180 / np.pi
         d["pitch"] = np.arctan2(-1 * d["ax"],
@@ -216,7 +216,14 @@ def plot_air_and_fsr(df_ind):
         bfy = bfy.to_numpy()
         bfx = bfx.to_numpy()
 
-        d['yaw'] = np.arctan(-bfy, bfx) * 180 / np.pi
+        d["yaw"] = np.arctan(-bfy, bfx) * 180 / np.pi
+
+        # TODO: Standardize the values after scaling by specific rest data
+        #       Still needs to be collected
+        
+        # d["roll"] = d["roll"] / np.abs(d["roll"]).max()
+        # d["pitch"] = d["pitch"] / np.abs(d["pitch"]).max()
+        # d["yaw"] = d["yaw"] / np.abs(d["yaw"]).max()
 
     # roll
     axs[0].scatter(df0["t"], df0["roll"], label="Laces", alpha=0.3)
