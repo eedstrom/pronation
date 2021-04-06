@@ -5,12 +5,11 @@ import os
 from pathlib import Path
 import pandas as pd
 
-filenames = ['df0.csv', 'df1.csv', 'df2.csv', 'df3.csv', 'df4.csv']
-for filename in filenames:
-
-    # Load in the data
+def create_df(filename):
     df = pd.read_csv(Path(os.getcwd()) / "python_code/data/3.31_Loomis_Data_Ind/" / filename, skiprows=1, header=None)      
+    return df
 
+def separate_df(df):
     # Give it a header
     df.columns = ["channel", 'time', 'dtime', "ax/cond", "ay", "az", "gx", "gy", "gz", "mx", "my", "mz"]
     df = df.drop(columns=["dtime", "ay", "az", "gx", "gy", "gz", "mx", "my", "mz"])
@@ -28,9 +27,11 @@ for filename in filenames:
     df5 = df[df["channel"]==5]
     df6 = df[df["channel"]==6]
 
-    # print(df3.head())
+    return (df3, df4, df5, df6)
 
-    # Plot the fsr data
+def plot_fsr(filename):
+    df3, df4, df5, df6 = separate_df(create_df(filename))
+
     plt.plot(df3["time"], df3["force"], label="FSR 0")
     plt.plot(df4["time"], df4["force"], label="FSR 1")
     plt.plot(df5["time"], df5["force"], label="FSR 2")
@@ -41,3 +42,7 @@ for filename in filenames:
     plt.grid()
     plt.legend()
     plt.show()
+
+filenames = ['df0.csv', 'df1.csv', 'df2.csv', 'df3.csv', 'df4.csv']
+for filename in filenames:
+    plot_fsr(filename)
