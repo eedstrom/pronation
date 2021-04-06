@@ -86,7 +86,9 @@ for i in range(len(t0)):
     if (roll0 < -90 and compRoll0 > 90) or (roll0 > 90 and compRoll0 < -90):
         compRoll0 = roll0
         rollInt0 = roll0
-
+    if (yaw0 < -90 and compYaw0 > 90 ) or (yaw0 > 90 and compYaw0 <-90):
+        compYaw0 = yaw0
+        yawInt0 = yaw0
     if abs(compRoll0) > 90:
         gyroYrate0[i] = -(gyroYrate0[i])       #Invert rate, so it fits the restriced accelerometer reading
 
@@ -95,6 +97,10 @@ for i in range(len(t0)):
         rollInt0 = compRoll0
     if (pitchInt0 < -180 or pitchInt0 > 180):
         pitchInt0 = compPitch0
+    if (yawInt0 < -180 or yawInt0 > 180):
+        yawInt0 = compYaw0
+
+
 
 
 #Plot Roll 
