@@ -10,7 +10,14 @@ names = ["id", "t", "dt", "ax", "ay", "az",
          "gx", "gy", "gz", "mx", "my", "mz"]
 
 # Load in the Loomis data
-df = pd.read_csv("data/3.31_Loomis_2nd.csv", names=names)
+df = pd.read_csv("data/3.31_Loomis_5th.csv", names=names)
+
+# Get rid of the info row
+info_row = df.loc[df["id"] == -1]
+df = df.drop(index = 0)
+
+# Change `my` to float
+df = df.astype({"my": "float64"})
 
 
 def separate_files(df):
@@ -58,11 +65,6 @@ def split_df(df):
     # Clean the acceleration data
     for df_iter in (df0, df1, df2):
         _clean_df_acc(df_iter)
-
-    # Reset the time variable for each dataframe
-    # df0["t"] = df0["t"] - df0["t"].min()
-    # df1["t"] = df1["t"] - df1["t"].min()
-    # df2["t"] = df2["t"] - df2["t"].min()
 
     return (df0, df1, df2, df3, df4, df5, df6)
 
@@ -118,71 +120,150 @@ def plot_acc(df_ind):
 
 
 def plot_airplane(df_ind):
+    # Make time start at 0
+    df_ind["t"] = df_ind["t"] - df_ind["t"].min()
+
     # Clean and split the data
     df_tup = split_df(df_ind)
 
-    # Plot accelerations over time by bus line
+    # Set up the figure
     style.use("ggplot")
     fig, axs = plt.subplots(3, 1, sharex=True)
-
+    
     # Get dataframes from tuple
     df0, df1, df2, *_ = df_tup
-    i = 0
-    # Calculate roll, pitch, and yaw for all 3
+    
+    # Calculate roll, pitch, and yaw for all 3 & get min time 
     for d in [df0, df1, df2]:
         d["roll"] = np.arctan2(d["ay"], d["az"]) * 180 / np.pi
         d["pitch"] = np.arctan2(-1 * d["ax"],
                                 np.sqrt(d["ay"] ** 2 + d["az"] ** 2)) * 180 / np.pi
-
-        # Convert to float
-        # d["my"] = d["my"].astype(float)
-
         
         bfy = d["mz"] * np.sin(d["roll"]) - d["my"] * np.cos(d["roll"])
         bfx = d["mx"] * np.cos(d["pitch"]) + d["my"] * \
             np.sin(d["pitch"]) * np.sin(d["roll"]) + d["mz"] * \
             np.sin(d["pitch"]) * np.cos(d["roll"])
+        # Convert to numpy arrays
+        bfy = bfy.to_numpy()
+        bfx = bfx.to_numpy()
+
+        d['yaw'] = np.arctan(-bfy, bfx) * 180 / np.pi
+
+    # roll
+    axs[0].scatter(df0["t"], df0["roll"], label="Laces", alpha=0.3)
+    axs[0].scatter(df1["t"], df1["roll"], label="Heel", alpha=0.3)
+    axs[0].scatter(df2["t"], df2["roll"], label="Shin", alpha=0.3)
+    axs[0].plot(df0["t"], df0["roll"], alpha=0.3)
+    axs[0].plot(df1["t"], df1["roll"], alpha=0.3)
+    axs[0].plot(df2["t"], df2["roll"], alpha=0.3)
+    axs[0].legend()
+
+    # pitch
+    axs[1].scatter(df0["t"], df0["pitch"], label="Laces", alpha=0.3)
+    axs[1].scatter(df1["t"], df1["pitch"], label="Heel", alpha=0.3)
+    axs[1].scatter(df2["t"], df2["pitch"], label="Shin", alpha=0.3)
+    axs[1].plot(df0["t"], df0["pitch"], alpha=0.3)
+    axs[1].plot(df1["t"], df1["pitch"], alpha=0.3)
+    axs[1].plot(df2["t"], df2["pitch"], alpha=0.3)
+    axs[1].legend()
+
+    # yaw
+    axs[2].scatter(df0["t"], df0["yaw"], label="Laces", alpha=0.3)
+    axs[2].scatter(df1["t"], df1["yaw"], label="Heel", alpha=0.3)
+    axs[2].scatter(df2["t"], df2["yaw"], label="Shin", alpha=0.3)
+    axs[2].plot(df0["t"], df0["yaw"], alpha=0.3)
+    axs[2].plot(df1["t"], df1["yaw"], alpha=0.3)
+    axs[2].plot(df2["t"], df2["yaw"], alpha=0.3)
+    axs[2].legend()
+
+    # Customize the plot
+    fig.suptitle("Angles by Bus Line over Time")
+    axs[2].set_xlabel("Time (s)")
+    axs[0].set_ylabel("Angle (deg)")
+    axs[1].set_ylabel("Angle (deg)")
+    axs[2].set_ylabel("Angle (deg)")
+    axs[0].set_title("Roll")
+    axs[1].set_title("Pitch")
+    axs[2].set_title("Yaw")
+    plt.show()
+
+
+def plot_air_and_fsr(df_ind):
+    # Make time start at 0
+    df_ind["t"] = df_ind["t"] - df_ind["t"].min()
+
+    # Clean and split the data
+    df_tup = split_df(df_ind)
+
+    # Set up the figure
+    style.use("ggplot")
+    fig, axs = plt.subplots(3, 1, sharex=True)
+    
+    # Get dataframes from tuple
+    df0, df1, df2, df3, df4, df5, df6 = df_tup
+    
+    # Calculate roll, pitch, and yaw for all
+    for d in [df0, df1, df2]:
+        d["roll"] = np.arctan2(d["ay"], d["az"]) * 180 / np.pi
+        d["pitch"] = np.arctan2(-1 * d["ax"],
+                                np.sqrt(d["ay"] ** 2 + d["az"] ** 2)) * 180 / np.pi
+        
+        bfy = d["mz"] * np.sin(d["roll"]) - d["my"] * np.cos(d["roll"])
+        bfx = d["mx"] * np.cos(d["pitch"]) + d["my"] * \
+            np.sin(d["pitch"]) * np.sin(d["roll"]) + d["mz"] * \
+            np.sin(d["pitch"]) * np.cos(d["roll"])
+        # Convert to numpy arrays
+        bfy = bfy.to_numpy()
+        bfx = bfx.to_numpy()
 
         d["yaw"] = np.arctan(-bfy, bfx) * 180 / np.pi
 
-    if False:
-        # roll
-        axs[0].scatter(df0["t"], df0["roll"], label="Laces", alpha=0.3)
-        axs[0].scatter(df1["t"], df1["roll"], label="Heel", alpha=0.3)
-        axs[0].scatter(df2["t"], df2["roll"], label="Shin", alpha=0.3)
-        axs[0].plot(df0["t"], df0["roll"], alpha=0.3)
-        axs[0].plot(df1["t"], df1["roll"], alpha=0.3)
-        axs[0].plot(df2["t"], df2["roll"], alpha=0.3)
-        axs[0].legend()
+        # TODO: Standardize the values after scaling by specific rest data
+        #       Still needs to be collected
+        
+        # d["roll"] = d["roll"] / np.abs(d["roll"]).max()
+        # d["pitch"] = d["pitch"] / np.abs(d["pitch"]).max()
+        # d["yaw"] = d["yaw"] / np.abs(d["yaw"]).max()
 
-        # pitch
-        axs[1].scatter(df0["t"], df0["pitch"], label="Laces", alpha=0.3)
-        axs[1].scatter(df1["t"], df1["pitch"], label="Heel", alpha=0.3)
-        axs[1].scatter(df2["t"], df2["pitch"], label="Shin", alpha=0.3)
-        axs[1].plot(df0["t"], df0["pitch"], alpha=0.3)
-        axs[1].plot(df1["t"], df1["pitch"], alpha=0.3)
-        axs[1].plot(df2["t"], df2["pitch"], alpha=0.3)
-        axs[1].legend()
+    # roll
+    axs[0].scatter(df0["t"], df0["roll"], label="Laces", alpha=0.3)
+    axs[0].scatter(df1["t"], df1["roll"], label="Heel", alpha=0.3)
+    axs[0].scatter(df2["t"], df2["roll"], label="Shin", alpha=0.3)
+    axs[0].plot(df0["t"], df0["roll"], alpha=0.3)
+    axs[0].plot(df1["t"], df1["roll"], alpha=0.3)
+    axs[0].plot(df2["t"], df2["roll"], alpha=0.3)
+    axs[0].legend()
 
-        # yaw
-        axs[2].scatter(df0["t"], df0["yaw"], label="Laces", alpha=0.3)
-        axs[2].scatter(df1["t"], df1["yaw"], label="Heel", alpha=0.3)
-        axs[2].scatter(df2["t"], df2["yaw"], label="Shin", alpha=0.3)
-        axs[2].plot(df0["t"], df0["yaw"], alpha=0.3)
-        axs[2].plot(df1["t"], df1["yaw"], alpha=0.3)
-        axs[2].plot(df2["t"], df2["yaw"], alpha=0.3)
-        axs[2].legend()
+    # pitch
+    axs[1].scatter(df0["t"], df0["pitch"], label="Laces", alpha=0.3)
+    axs[1].scatter(df1["t"], df1["pitch"], label="Heel", alpha=0.3)
+    axs[1].scatter(df2["t"], df2["pitch"], label="Shin", alpha=0.3)
+    axs[1].plot(df0["t"], df0["pitch"], alpha=0.3)
+    axs[1].plot(df1["t"], df1["pitch"], alpha=0.3)
+    axs[1].plot(df2["t"], df2["pitch"], alpha=0.3)
+    axs[1].legend()
 
-        # Customize the plot
-        fig.suptitle("Angles by Bus Line over Time")
-        axs[2].set_xlabel("Time (s)")
-        axs[0].set_ylabel("Angle (deg)")
-        axs[1].set_ylabel("Angle (deg)")
-        axs[2].set_ylabel("Angle (deg)")
-        axs[0].set_title("Roll")
-        axs[1].set_title("Pitch")
-        axs[2].set_title("Yaw")
-        plt.show()
+    # yaw
+    axs[2].scatter(df0["t"], df0["yaw"], label="Laces", alpha=0.3)
+    axs[2].scatter(df1["t"], df1["yaw"], label="Heel", alpha=0.3)
+    axs[2].scatter(df2["t"], df2["yaw"], label="Shin", alpha=0.3)
+    axs[2].plot(df0["t"], df0["yaw"], alpha=0.3)
+    axs[2].plot(df1["t"], df1["yaw"], alpha=0.3)
+    axs[2].plot(df2["t"], df2["yaw"], alpha=0.3)
+    axs[2].legend()
 
+    # Customize the plot
+    fig.suptitle("Angles by Bus Line over Time")
+    axs[2].set_xlabel("Time (s)")
+    axs[0].set_ylabel("Angle (deg)")
+    axs[1].set_ylabel("Angle (deg)")
+    axs[2].set_ylabel("Angle (deg)")
+    axs[0].set_title("Roll")
+    axs[1].set_title("Pitch")
+    axs[2].set_title("Yaw")
+    plt.show()
+
+
+            
 
 plot_airplane(df)

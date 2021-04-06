@@ -1,73 +1,48 @@
 #!/usr/bin/env python3
 
-import csv
 import matplotlib.pyplot as plt
 import os
 from pathlib import Path
+import pandas as pd
 
-path = Path(os.getcwd()) / "python_code/data/"
+def create_df(filename):
+    df = pd.read_csv(Path(os.getcwd()) / "python_code/data/3.31_Loomis_Data_Ind/" / filename, skiprows=1, header=None)      
+    return df
 
-# filenames = ['QuietStance.CSV', 'Walking.CSV', 'Running.CSV']
-filenames = ['3.31_Loomis_1st.csv', '3.31_Loomis_2nd.csv', '3.31_Loomis_3rd.csv', '3.31_Loomis_4th.csv', '3.31_Loomis_5th.csv']
+def separate_df(df):
+    # Give it a header
+    df.columns = ["channel", 'time', 'dtime', "ax/cond", "ay", "az", "gx", "gy", "gz", "mx", "my", "mz"]
+    df = df.drop(columns=["dtime", "ay", "az", "gx", "gy", "gz", "mx", "my", "mz"])
 
-for filename in filenames:
-    # Read in data
-    with open(path / filename) as csvfile:
-        reader = csv.reader(csvfile)
-        data = list(reader)
-        data = data[1:] # Remove the first row
-        data = [[float(val) for val in row] for row in data]
+    df['time'] = df['time'] - df['time'][0]     # Set first time to zero
+    df['time'] = df['time']*(1/1000)            # Convert ms to s
 
-    # Column information for fsr_data
-    # fsr (0-3), time_taken, uncertainty_in_time, conductance in micro-mhos
+    # Convert conductance to force in lbs (ignore ax values)
+    df["ax/cond"] = 10 * df["ax/cond"] * (1.0/6.0) + (1.0/6.0)
+    df = df.rename(columns={"ax/cond": "force"})
 
-    fsr0, fsr1, fsr2, fsr3 = [], [], [], []
-    t0, t1, t2, t3 = [], [], [], []
-    start = 0
+    # Seperating data from each fsr into data frames
+    df3 = df[df["channel"]==3]
+    df4 = df[df["channel"]==4]
+    df5 = df[df["channel"]==5]
+    df6 = df[df["channel"]==6]
 
-    # Formula for converting conductance (mhos) to force (lbs)
-    # conductance = 6*10^(-7)*force - 1*10^(-7)
-    # force = (1/6)*10^7*conductance + (1/6)
+    return (df3, df4, df5, df6)
 
-    # Separate fsr data from accel data and convert
-    for i in range(len(data)):
-        row = data[i]
+def plot_fsr(filename):
+    df3, df4, df5, df6 = separate_df(create_df(filename))
 
-        if i == 0:  # find the starting time
-            start = row[1] / 1000.0
-
-        if row[0] > 2:
-            bus, t, dt, cond = row
-            fsr = bus - 3           # bus line 3 = fsr 0
-            t = t / 1000.0 - start  # convert ms to s and set start to 0
-        # accel data rows (bus lines 0-2)
-        else:
-            continue
-        
-        cond = cond * 10**(-6)   # convert micro mhos to mhos
-        force = 10**7 * cond * (1.0/6.0) + (1.0/6.0) # convert conductance to force
-
-        if fsr == 0:
-            fsr0.append(force)
-            t0.append(t)
-        elif fsr == 1:
-            fsr1.append(force)
-            t1.append(t)
-        elif fsr == 2:
-            fsr2.append(force)
-            t2.append(t)
-        else:
-            fsr3.append(force)
-            t3.append(t)
-
-    # Plot the fsr data
-    plt.plot(t0, fsr0, label="FSR0")
-    plt.plot(t1, fsr1, label="FSR1")
-    plt.plot(t2, fsr2, label="FSR2")
-    plt.plot(t3, fsr3, label="FSR3")
+    plt.plot(df3["time"], df3["force"], label="FSR 0")
+    plt.plot(df4["time"], df4["force"], label="FSR 1")
+    plt.plot(df5["time"], df5["force"], label="FSR 2")
+    plt.plot(df6["time"], df6["force"], label="FSR 3")
     plt.xlabel("Time (seconds)")
     plt.ylabel("Force (lbs)")
     plt.title(filename)
     plt.grid()
     plt.legend()
     plt.show()
+
+filenames = ['df0.csv', 'df1.csv', 'df2.csv', 'df3.csv', 'df4.csv']
+for filename in filenames:
+    plot_fsr(filename)
