@@ -21,23 +21,32 @@ df2 = df[df["channel"]==2]
 #Correct values and set bins
 gyroXrate0 = (df0['gx']/10).values.tolist()
 gyroYrate0 = (df0['gy']/10).values.tolist()
+gyroZrate0 = (df0['gz']/10).values.tolist()
 t0 = (df0['t']/1000).values.tolist()     #Converted to seconds
 ax0 = df0['ax'].values.tolist()
 ay0 = df0['ay'].values.tolist()
 az0 = df0['az'].values.tolist()
+mx0 = df0['mx'].values. tolist()
+my0 = df0['my'].values. tolist()
+mz0 = df0['mz'].values. tolist()
 
 roll0s=[]
 pitch0s=[]
+yaw0s=[]
 compRoll0s=[]
 compPitch0s=[]
+compYaw0s=[]
 rollInt0s=[]
 pitchInt0s=[]
+yawInt0s=[]
 
 B=0.93          #Filter coefficient. See https://www.diva-portal.org/smash/get/diva2:1146723/FULLTEXT01.pdf page 10 for more detials.
 compRoll0=0     #Hold the to be calc.ed values
 compPitch0=0
+compYaw0=0
 rollInt0=0
 pitchInt0=0
+yawInt0=0
 
 #Calulate estimaions for each point
 for i in range(len(t0)):
@@ -45,10 +54,14 @@ for i in range(len(t0)):
     roll0s.append(roll0)    
     pitch0=np.degrees(np.arctan(-(ax0[i] / np.sqrt((ay0[i])**2 +(az0[i]**2)))))
     pitch0s.append(pitch0)
+    #Calc. Yaw (around the z-axis)
+    Bfy0=mz0[i]*np.sin(np.radians(roll0)) - my0[i]*np.cos(np.radians(roll0))
+    Bfx0=mx0[i]*np.cos(np.radians(pitch0)) + my0[i]*np.sin(np.radians(pitch0))*np.sin(np.radians(roll0)) + mz0[i]*np.sin(np.radians(pitch0))*np.cos(np.radians(roll0))
+    yaw0=(-1)*np.degrees(np.arctan2(-Bfy0,Bfx0))        #Not sure if this should be inverted
+    yaw0s.append(yaw0)
 
     if i == 0:          #First data point is instantanoues
         dt0 = 0     
-        # dt0i = t0[i]
     else:
         dt0 = t0[i]-t0[i-1]      #Find time interval between measurements
 
@@ -57,12 +70,17 @@ for i in range(len(t0)):
     compRoll0s.append(compRoll0)
     compPitch0 = B * (compPitch0 + gyroYrate0[i] * dt0) + (1-B) * pitch0
     compPitch0s.append(compPitch0)
+    compYaw0 = B * (compYaw0 + gyroZrate0[i] * dt0) + (1-B) * yaw0
+    compYaw0s.append(compYaw0)
 
-    #Find roll and pitch via integration
+    #Find roll, pitch, and yaw via integration
     rollInt0 += gyroXrate0[i] * dt0
     rollInt0s.append(rollInt0)
     pitchInt0 += gyroYrate0[i] * dt0
     pitchInt0s.append(pitchInt0)
+    yawInt0 += gyroZrate0[i] * dt0
+    yawInt0s.append(yawInt0)
+
 
     #This fixes the transition problem when the accelerometer angle jumps between -180 and 180 degrees
     if (roll0 < -90 and compRoll0 > 90) or (roll0 > 90 and compRoll0 < -90):
@@ -79,10 +97,15 @@ for i in range(len(t0)):
         pitchInt0 = compPitch0
 
 
+#Plot Roll 
+# plt.plot(t0, compRoll0s, label='Roll filterd by complimentary filter', color='#af0000')
+# plt.plot(t0, roll0s, label='Roll unfiltered', color='#5fd787')
+# plt.plot(t0, rollInt0s, label='Roll calc. by integration', color='#87d7ff')
 
-plt.plot(t0, compRoll0s, label='Roll filterd by complimentary filter')
-plt.plot(t0, roll0s, label='Roll unfiltered')
-plt.plot(t0, rollInt0s, label='Roll calc. by integration')
+#Plot Yaw
+plt.plot(t0, compYaw0s, label='Yaw filterd by complimentary filter', color='#af0000')
+plt.plot(t0, yaw0s, label='Yaw unfiltered', color='#5fd787')
+plt.plot(t0, yawInt0s, label='Yaw calc. by integration', color='#87d7ff')
 
 plt.xlabel("Time (s)")
 plt.ylabel("Angular Displacement (degrees)")
