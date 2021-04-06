@@ -69,9 +69,65 @@ def split_df(df):
     return (df0, df1, df2, df3, df4, df5, df6)
 
 
-def plot_acc(df_ind):
-    # Clean and split the data
-    df_tup = split_df(df_ind)
+def calc_airplane(df_tup):
+    # Get dataframes from tuple
+    df0, df1, df2, *_ = df_tup
+    
+    # Calculate roll, pitch, and yaw for all
+    for d in [df0, df1, df2]:
+        d["roll"] = np.arctan2(d["ay"], d["az"]) * 180 / np.pi
+        d["pitch"] = np.arctan2(-1 * d["ax"],
+                                np.sqrt(d["ay"] ** 2 + d["az"] ** 2)) * 180 / np.pi
+        
+        bfy = d["mz"] * np.sin(d["roll"]) - d["my"] * np.cos(d["roll"])
+        bfx = d["mx"] * np.cos(d["pitch"]) + d["my"] * \
+            np.sin(d["pitch"]) * np.sin(d["roll"]) + d["mz"] * \
+            np.sin(d["pitch"]) * np.cos(d["roll"])
+        # Convert to numpy arrays
+        bfy = bfy.to_numpy()
+        bfx = bfx.to_numpy()
+
+        d['yaw'] = np.arctan(-bfy, bfx) * 180 / np.pi
+
+
+def make_df_full(df):
+    """
+    Funciton to prepare for all plotting in later functions. This should be run
+    prior to any other plotting function.
+    """
+    df["t"] = df["t"] - df["t"].min()  # Set start time to 0
+    df_tup = split_df(df)              # Split the data by each bus line
+    calc_airplane(df_tup)              # Calculate roll, pitch, and yaw
+    return df_tup
+
+
+def comp_filter(df_tup, BETA=0.93):
+    """
+    Implementation of the complimentary filter
+    """
+    # Get the datasets to be filtered
+    df0, df1, df2, *_ = df_tup
+    
+    # Iterate over each bus line
+    for df in [df0, df1, df2]:
+        # Get the number of data points in the dataframe
+        n = df.shape[0]
+        
+        # Create containers for each comp_angle
+        comp_roll = np.zeros(n)
+        comp_pitch = np.zeros9(n)
+        comp_yaw = np.zeros(n)
+
+        # Calculate the dt vector
+        dt = df["t"].to_numpy() - np.roll(df["t"].to_numpy(), 1)
+        dt[0] = 0
+
+        # Iterate over each data point
+        for i in range(1, n):
+            comp_roll[i] = BETA * (comp_roll[i - 1] + (df["gx"].to_numpy()[i] * dt[i]) ) + (1 - BETA) * df["roll"].to_numpy()[i])
+            
+
+def plot_acc(df_tup):
 
     # Plot accelerations over time by bus line
     style.use("ggplot")
@@ -119,36 +175,14 @@ def plot_acc(df_ind):
     plt.show()
 
 
-def plot_airplane(df_ind):
-    # Make time start at 0
-    df_ind["t"] = df_ind["t"] - df_ind["t"].min()
-
-    # Clean and split the data
-    df_tup = split_df(df_ind)
+def plot_airplane(df_tup):
+    # Split the data
+    df0, df1, df2, *_ = df_tup
 
     # Set up the figure
     style.use("ggplot")
     fig, axs = plt.subplots(3, 1, sharex=True)
     
-    # Get dataframes from tuple
-    df0, df1, df2, *_ = df_tup
-    
-    # Calculate roll, pitch, and yaw for all 3 & get min time 
-    for d in [df0, df1, df2]:
-        d["roll"] = np.arctan2(d["ay"], d["az"]) * 180 / np.pi
-        d["pitch"] = np.arctan2(-1 * d["ax"],
-                                np.sqrt(d["ay"] ** 2 + d["az"] ** 2)) * 180 / np.pi
-        
-        bfy = d["mz"] * np.sin(d["roll"]) - d["my"] * np.cos(d["roll"])
-        bfx = d["mx"] * np.cos(d["pitch"]) + d["my"] * \
-            np.sin(d["pitch"]) * np.sin(d["roll"]) + d["mz"] * \
-            np.sin(d["pitch"]) * np.cos(d["roll"])
-        # Convert to numpy arrays
-        bfy = bfy.to_numpy()
-        bfx = bfx.to_numpy()
-
-        d['yaw'] = np.arctan(-bfy, bfx) * 180 / np.pi
-
     # roll
     axs[0].scatter(df0["t"], df0["roll"], label="Laces", alpha=0.3)
     axs[0].scatter(df1["t"], df1["roll"], label="Heel", alpha=0.3)
@@ -188,13 +222,7 @@ def plot_airplane(df_ind):
     plt.show()
 
 
-def plot_air_and_fsr(df_ind):
-    # Make time start at 0
-    df_ind["t"] = df_ind["t"] - df_ind["t"].min()
-
-    # Clean and split the data
-    df_tup = split_df(df_ind)
-
+def plot_air_and_fsr(df_tup):
     # Set up the figure
     style.use("ggplot")
     fig, axs = plt.subplots(3, 1, sharex=True)
@@ -202,29 +230,6 @@ def plot_air_and_fsr(df_ind):
     # Get dataframes from tuple
     df0, df1, df2, df3, df4, df5, df6 = df_tup
     
-    # Calculate roll, pitch, and yaw for all
-    for d in [df0, df1, df2]:
-        d["roll"] = np.arctan2(d["ay"], d["az"]) * 180 / np.pi
-        d["pitch"] = np.arctan2(-1 * d["ax"],
-                                np.sqrt(d["ay"] ** 2 + d["az"] ** 2)) * 180 / np.pi
-        
-        bfy = d["mz"] * np.sin(d["roll"]) - d["my"] * np.cos(d["roll"])
-        bfx = d["mx"] * np.cos(d["pitch"]) + d["my"] * \
-            np.sin(d["pitch"]) * np.sin(d["roll"]) + d["mz"] * \
-            np.sin(d["pitch"]) * np.cos(d["roll"])
-        # Convert to numpy arrays
-        bfy = bfy.to_numpy()
-        bfx = bfx.to_numpy()
-
-        d["yaw"] = np.arctan(-bfy, bfx) * 180 / np.pi
-
-        # TODO: Standardize the values after scaling by specific rest data
-        #       Still needs to be collected
-        
-        # d["roll"] = d["roll"] / np.abs(d["roll"]).max()
-        # d["pitch"] = d["pitch"] / np.abs(d["pitch"]).max()
-        # d["yaw"] = d["yaw"] / np.abs(d["yaw"]).max()
-
     # roll
     axs[0].scatter(df0["t"], df0["roll"], label="Laces", alpha=0.3)
     axs[0].scatter(df1["t"], df1["roll"], label="Heel", alpha=0.3)
@@ -263,7 +268,10 @@ def plot_air_and_fsr(df_ind):
     axs[2].set_title("Yaw")
     plt.show()
 
+def main():
+    df_tup = make_df_full(df)
+    comp_filter(df_tup)
 
-            
-
-plot_airplane(df)
+# Run main
+if __name__ == "__main__":
+    main()
