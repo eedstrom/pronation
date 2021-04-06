@@ -10,7 +10,7 @@ names = ["id", "t", "dt", "ax", "ay", "az",
          "gx", "gy", "gz", "mx", "my", "mz"]
 
 # Load in the Loomis data
-df = pd.read_csv("data/3.31_Loomis_1st.csv", names=names)
+df = pd.read_csv("data/3.31_Loomis_2nd.csv", names=names)
 
 # Get rid of the info row
 info_row = df.loc[df["id"] == -1]
