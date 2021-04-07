@@ -324,10 +324,156 @@ def plot_air_and_fsr(df_tup):
     axs[2].set_title("Yaw")
     plt.show()
 
+def plot_airplane_with_comp_filter(df_tup):
+    # Run the complimentary filter
+    comp_filter(df_tup)
+
+    # Split the data
+    df0, df1, df2, *_ = df_tup
+    
+    # Set up the figure
+    style.use("ggplot")
+    fig, axs = plt.subplots(3, 1, sharex=True)
+
+    # complimentary roll
+    axs[0].scatter(df0["t"], df0["comp_roll"], label="Laces", alpha=0.3)
+    axs[0].scatter(df1["t"], df1["comp_roll"], label="Heel", alpha=0.3)
+    axs[0].scatter(df2["t"], df2["comp_roll"], label="Shin", alpha=0.3)
+    axs[0].plot(df0["t"], df0["comp_roll"], alpha=0.3)
+    axs[0].plot(df1["t"], df1["comp_roll"], alpha=0.3)
+    axs[0].plot(df2["t"], df2["comp_roll"], alpha=0.3)
+    axs[0].legend()
+
+    # complimentary pitch
+    axs[1].scatter(df0["t"], df0["comp_pitch"], label="Laces", alpha=0.3)
+    axs[1].scatter(df1["t"], df1["comp_pitch"], label="Heel", alpha=0.3)
+    axs[1].scatter(df2["t"], df2["comp_pitch"], label="Shin", alpha=0.3)
+    axs[1].plot(df0["t"], df0["comp_pitch"], alpha=0.3)
+    axs[1].plot(df1["t"], df1["comp_pitch"], alpha=0.3)
+    axs[1].plot(df2["t"], df2["comp_pitch"], alpha=0.3)
+    axs[1].legend()
+
+    # complimentary yaw
+    axs[2].scatter(df0["t"], df0["comp_yaw"], label="Laces", alpha=0.3)
+    axs[2].scatter(df1["t"], df1["comp_yaw"], label="Heel", alpha=0.3)
+    axs[2].scatter(df2["t"], df2["comp_yaw"], label="Shin", alpha=0.3)
+    axs[2].plot(df0["t"], df0["comp_yaw"], alpha=0.3)
+    axs[2].plot(df1["t"], df1["comp_yaw"], alpha=0.3)
+    axs[2].plot(df2["t"], df2["comp_yaw"], alpha=0.3)
+    axs[2].legend()
+
+    # Customize the plot
+    fig.suptitle("Angles by Bus Line over Time")
+    axs[2].set_xlabel("Time (s)")
+    axs[0].set_ylabel("Angle (deg)")
+    axs[1].set_ylabel("Angle (deg)")
+    axs[2].set_ylabel("Angle (deg)")
+    axs[0].set_title("Roll")
+    axs[1].set_title("Pitch")
+    axs[2].set_title("Yaw")
+    plt.show()
+
+
+def plot_airplane_with_integration(df_tup):
+    # Run the complimentary filter
+    comp_filter(df_tup)
+
+    # Split the data
+    df0, df1, df2, *_ = df_tup
+    
+    # Set up the figure
+    style.use("ggplot")
+    fig, axs = plt.subplots(3, 1, sharex=True)
+
+    # integrallimentary roll
+    axs[0].scatter(df0["t"], df0["integral_roll"], label="Laces", alpha=0.3)
+    axs[0].scatter(df1["t"], df1["integral_roll"], label="Heel", alpha=0.3)
+    axs[0].scatter(df2["t"], df2["integral_roll"], label="Shin", alpha=0.3)
+    axs[0].plot(df0["t"], df0["integral_roll"], alpha=0.3)
+    axs[0].plot(df1["t"], df1["integral_roll"], alpha=0.3)
+    axs[0].plot(df2["t"], df2["integral_roll"], alpha=0.3)
+    axs[0].legend()
+
+    # integrallimentary pitch
+    axs[1].scatter(df0["t"], df0["integral_pitch"], label="Laces", alpha=0.3)
+    axs[1].scatter(df1["t"], df1["integral_pitch"], label="Heel", alpha=0.3)
+    axs[1].scatter(df2["t"], df2["integral_pitch"], label="Shin", alpha=0.3)
+    axs[1].plot(df0["t"], df0["integral_pitch"], alpha=0.3)
+    axs[1].plot(df1["t"], df1["integral_pitch"], alpha=0.3)
+    axs[1].plot(df2["t"], df2["integral_pitch"], alpha=0.3)
+    axs[1].legend()
+
+    # integrallimentary yaw
+    axs[2].scatter(df0["t"], df0["integral_yaw"], label="Laces", alpha=0.3)
+    axs[2].scatter(df1["t"], df1["integral_yaw"], label="Heel", alpha=0.3)
+    axs[2].scatter(df2["t"], df2["integral_yaw"], label="Shin", alpha=0.3)
+    axs[2].plot(df0["t"], df0["integral_yaw"], alpha=0.3)
+    axs[2].plot(df1["t"], df1["integral_yaw"], alpha=0.3)
+    axs[2].plot(df2["t"], df2["integral_yaw"], alpha=0.3)
+    axs[2].legend()
+
+    # Customize the plot
+    fig.suptitle("Angles by Bus Line over Time")
+    axs[2].set_xlabel("Time (s)")
+    axs[0].set_ylabel("Angle (deg)")
+    axs[1].set_ylabel("Angle (deg)")
+    axs[2].set_ylabel("Angle (deg)")
+    axs[0].set_title("Roll")
+    axs[1].set_title("Pitch")
+    axs[2].set_title("Yaw")
+    plt.show()
+
+
+# def plot_air_and_fsr(df_tup):
+    # # Set up the figure
+    # style.use("ggplot")
+    # fig, axs = plt.subplots(3, 1, sharex=True)
+
+    # # Get dataframes from tuple
+    # df0, df1, df2, df3, df4, df5, df6 = df_tup
+
+    # # roll
+    # axs[0].scatter(df0["t"], df0["roll"], label="Laces", alpha=0.3)
+    # axs[0].scatter(df1["t"], df1["roll"], label="Heel", alpha=0.3)
+    # axs[0].scatter(df2["t"], df2["roll"], label="Shin", alpha=0.3)
+    # axs[0].plot(df0["t"], df0["roll"], alpha=0.3)
+    # axs[0].plot(df1["t"], df1["roll"], alpha=0.3)
+    # axs[0].plot(df2["t"], df2["roll"], alpha=0.3)
+    # axs[0].legend()
+
+    # # pitch
+    # axs[1].scatter(df0["t"], df0["pitch"], label="Laces", alpha=0.3)
+    # axs[1].scatter(df1["t"], df1["pitch"], label="Heel", alpha=0.3)
+    # axs[1].scatter(df2["t"], df2["pitch"], label="Shin", alpha=0.3)
+    # axs[1].plot(df0["t"], df0["pitch"], alpha=0.3)
+    # axs[1].plot(df1["t"], df1["pitch"], alpha=0.3)
+    # axs[1].plot(df2["t"], df2["pitch"], alpha=0.3)
+    # axs[1].legend()
+
+    # # yaw
+    # axs[2].scatter(df0["t"], df0["yaw"], label="Laces", alpha=0.3)
+    # axs[2].scatter(df1["t"], df1["yaw"], label="Heel", alpha=0.3)
+    # axs[2].scatter(df2["t"], df2["yaw"], label="Shin", alpha=0.3)
+    # axs[2].plot(df0["t"], df0["yaw"], alpha=0.3)
+    # axs[2].plot(df1["t"], df1["yaw"], alpha=0.3)
+    # axs[2].plot(df2["t"], df2["yaw"], alpha=0.3)
+    # axs[2].legend()
+
+    # # Customize the plot
+    # fig.suptitle("Angles by Bus Line over Time")
+    # axs[2].set_xlabel("Time (s)")
+    # axs[0].set_ylabel("Angle (deg)")
+    # axs[1].set_ylabel("Angle (deg)")
+    # axs[2].set_ylabel("Angle (deg)")
+    # axs[0].set_title("Roll")
+    # axs[1].set_title("Pitch")
+    # axs[2].set_title("Yaw")
+    # plt.show()
+
 
 def main():
     df_tup = make_df_full(df)
-    comp_filter(df_tup)
+    plot_airplane_with_integration(df_tup)
 
 # Run main
 if __name__ == "__main__":
