@@ -14,7 +14,7 @@ df = pd.read_csv("data/3.31_Loomis_5th.csv", names=names)
 
 # Get rid of the info row
 info_row = df.loc[df["id"] == -1]
-df = df.drop(index = 0)
+df = df.drop(index=0)
 
 # Change `my` to float
 df = df.astype({"my": "float64"})
@@ -72,13 +72,13 @@ def split_df(df):
 def calc_airplane(df_tup):
     # Get dataframes from tuple
     df0, df1, df2, *_ = df_tup
-    
+
     # Calculate roll, pitch, and yaw for all
     for d in [df0, df1, df2]:
         d["roll"] = np.arctan2(d["ay"], d["az"]) * 180 / np.pi
         d["pitch"] = np.arctan2(-1 * d["ax"],
                                 np.sqrt(d["ay"] ** 2 + d["az"] ** 2)) * 180 / np.pi
-        
+
         bfy = d["mz"] * np.sin(d["roll"]) - d["my"] * np.cos(d["roll"])
         bfx = d["mx"] * np.cos(d["pitch"]) + d["my"] * \
             np.sin(d["pitch"]) * np.sin(d["roll"]) + d["mz"] * \
@@ -101,22 +101,37 @@ def make_df_full(df):
     return df_tup
 
 
-def comp_filter(df_tup, BETA=0.93):
+def comp_filter(df_tup, beta=0.93):
     """
     Implementation of the complimentary filter
     """
     # Get the datasets to be filtered
     df0, df1, df2, *_ = df_tup
-    
+
     # Iterate over each bus line
     for df in [df0, df1, df2]:
         # Get the number of data points in the dataframe
         n = df.shape[0]
-        
+
         # Create containers for each comp_angle
         comp_roll = np.zeros(n)
-        comp_pitch = np.zeros9(n)
+        comp_pitch = np.zeros(n)
         comp_yaw = np.zeros(n)
+
+        # TODO: Add support for non-zero starting values
+
+        # Create containers for the integration angles
+        integral_roll = np.zeros(n)
+        integral_pitch = np.zeros(n)
+        integral_yaw = np.zeros(n)
+
+        # Change to numpy arrays for convinience
+        roll = df["roll"].to_numpy()
+        pitch = df["roll"].to_numpy()
+        yaw = df["yaw"].to_numpy()
+        gx = df["gx"].to_numpy()
+        gy = df["gy"].to_numpy()
+        gz = df["gz"].to_numpy()
 
         # Calculate the dt vector
         dt = df["t"].to_numpy() - np.roll(df["t"].to_numpy(), 1)
@@ -124,8 +139,49 @@ def comp_filter(df_tup, BETA=0.93):
 
         # Iterate over each data point
         for i in range(1, n):
-            comp_roll[i] = BETA * (comp_roll[i - 1] + (df["gx"].to_numpy()[i] * dt[i]) ) + (1 - BETA) * df["roll"].to_numpy()[i])
-            
+            # Calculate the angle from the complimentary filter
+            comp_roll[i] = beta * (comp_roll[i - 1] + (gx[i] * dt[i]) ) + ( (1 - beta) * roll[i] )
+            comp_pitch[i] = beta * (comp_pitch[i - 1] + (gy[i] * dt[i]) ) + ( (1 - beta) * pitch[i] )
+            comp_yaw[i] =  beta * (comp_yaw[i - 1] + (gz[i] * dt[i]) ) + ( (1 - beta) * yaw[i] )
+
+            # Calculate the angle from the integration
+            integral_roll[i] = gx[i] * dt[i] + integral_roll[i - 1]
+            integral_pitch[i] = gy[i] * dt[i] + integral_pitch[i - 1]
+            integral_yaw[i] = gz[i] * dt[i] + integral_yaw[i - 1]
+
+            ## Checks on the values (Make sure we are within our constraints
+
+            # This fixes the transition problem when the accelerometer angle jumps between -180 and 180 degrees
+            if (roll[i] < -90 and comp_roll[i] > 90) or (roll[i] > 90 and comp_roll[i] < -90):
+                comp_roll[i] = roll[i]
+                integral_roll[i] = roll[i]
+            if (yaw[i] < -90 and comp_yaw[i] > 90 ) or (yaw[i] > 90 and comp_yaw[i] <-90):
+                comp_yaw[i] = yaw[i]
+                integral_yaw[i] = yaw[i]
+            if abs(comp_roll[i]) > 90:
+                gy[i] = -(gy[i])       #Invert rate, so it fits the restriced accelerometer reading
+
+            #Reset the gyro angle when it has drifted too much
+            if (integral_roll[i] < -180 or integral_roll[i] > 180):
+                integral_roll[i] = comp_roll[i]
+            if (integral_pitch[i] < -180 or integral_pitch[i] > 180):
+                integral_pitch[i] = comp_pitch[i]
+            if (integral_yaw[i] < -180 or integral_yaw[i] > 180):
+                integral_yaw[i] = comp_yaw[i]
+
+        # Add these columns to the dataframe
+        df["comp_roll"] = comp_roll
+        df["comp_pitch"] = comp_pitch
+        df["comp_yaw"] = comp_yaw
+        df["integral_roll"] = integral_roll
+        df["integral_pitch"] = integral_pitch
+        df["integral_yaw"] = integral_yaw
+    
+    print("---------------------BEGIN------------------------")
+    print(df0.head())
+    print(df1.head())
+    print(df2.head())
+    
 
 def plot_acc(df_tup):
 
@@ -182,7 +238,7 @@ def plot_airplane(df_tup):
     # Set up the figure
     style.use("ggplot")
     fig, axs = plt.subplots(3, 1, sharex=True)
-    
+
     # roll
     axs[0].scatter(df0["t"], df0["roll"], label="Laces", alpha=0.3)
     axs[0].scatter(df1["t"], df1["roll"], label="Heel", alpha=0.3)
@@ -226,10 +282,10 @@ def plot_air_and_fsr(df_tup):
     # Set up the figure
     style.use("ggplot")
     fig, axs = plt.subplots(3, 1, sharex=True)
-    
+
     # Get dataframes from tuple
     df0, df1, df2, df3, df4, df5, df6 = df_tup
-    
+
     # roll
     axs[0].scatter(df0["t"], df0["roll"], label="Laces", alpha=0.3)
     axs[0].scatter(df1["t"], df1["roll"], label="Heel", alpha=0.3)
@@ -267,6 +323,7 @@ def plot_air_and_fsr(df_tup):
     axs[1].set_title("Pitch")
     axs[2].set_title("Yaw")
     plt.show()
+
 
 def main():
     df_tup = make_df_full(df)
