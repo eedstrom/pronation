@@ -10,7 +10,15 @@ names = ["id", "t", "dt", "ax", "ay", "az",
          "gx", "gy", "gz", "mx", "my", "mz"]
 
 # Load in the Loomis data
+rest_df = pd.read_csv('data/3.31_Loomis_1st.csv', names=names)
 df = pd.read_csv("data/3.31_Loomis_5th.csv", names=names)
+
+# Get rid of the info row for rest df
+rest_info_row = rest_df.loc[rest_df["id"] == -1]
+rest_df = rest_df.drop(index=0)
+
+# Change `my` to float
+rest_df = rest_df.astype({"my": "float64"})
 
 # Get rid of the info row
 info_row = df.loc[df["id"] == -1]
@@ -91,25 +99,48 @@ def calc_airplane(df_tup):
 
 
 def make_df_full(df):
-    """
-    Funciton to prepare for all plotting in later functions. This should be run
-    prior to any other plotting function.
-    """
+    """Function to prepare for all plotting in later functions. This should be run
+    prior to any other plotting function."""
     df["t"] = df["t"] - df["t"].min()  # Set start time to 0
     df_tup = split_df(df)              # Split the data by each bus line
     calc_airplane(df_tup)              # Calculate roll, pitch, and yaw
     return df_tup
 
+def get_initial_airplane(rest_df):
+    """Function returns the initial values of roll, pitch, and yaw""" 
+    # Load in the rest data and separate by bus line
+    df_rest_tup = make_df_full(rest_df)
+    df0, df1, df2, *_ = df_rest_tup
+    
+    # Dict for storage
+    airplane_initial = {
+        "roll":  [],
+        "pitch": [],
+        "yaw":   []
+    }
 
-def comp_filter(df_tup, beta=0.93):
+    # Take the average of the rest data
+    for df_iter in [df0, df1, df2]:
+        airplane_initial["roll"].append(df_iter["roll"].mean())
+        airplane_initial["pitch"].append(df_iter["pitch"].mean())
+        airplane_initial["yaw"].append(df_iter["yaw"].mean())
+
+    return airplane_initial
+
+def comp_filter(df_tup, beta=0.93, airplane_initial=None):
     """
     Implementation of the complimentary filter
     """
     # Get the datasets to be filtered
     df0, df1, df2, *_ = df_tup
+    
+    # Check if initial values were passed
+    have_values = False
+    if airplane_initial is not None:
+        have_values = True
 
     # Iterate over each bus line
-    for df in [df0, df1, df2]:
+    for df_idx, df in enumerate([df0, df1, df2]):
         # Get the number of data points in the dataframe
         n = df.shape[0]
 
@@ -118,13 +149,24 @@ def comp_filter(df_tup, beta=0.93):
         comp_pitch = np.zeros(n)
         comp_yaw = np.zeros(n)
 
-        # TODO: Add support for non-zero starting values
-
         # Create containers for the integration angles
         integral_roll = np.zeros(n)
         integral_pitch = np.zeros(n)
         integral_yaw = np.zeros(n)
 
+
+        # Set non-zero starting values if passed
+        if have_values:
+            # Set initial values for the complimentary filter
+            comp_roll[0] = airplane_initial["roll"][df_idx]
+            comp_pitch[0] = airplane_initial["pitch"][df_idx]
+            comp_yaw[0] = airplane_initial["yaw"][df_idx]
+
+            # Set initial values for the integral method
+            integral_roll[0] = airplane_initial["roll"][df_idx]
+            integral_pitch[0] = airplane_initial["pitch"][df_idx]
+            integral_yaw[0] = airplane_initial["yaw"][df_idx]
+         
         # Change to numpy arrays for convinience
         roll = df["roll"].to_numpy()
         pitch = df["roll"].to_numpy()
@@ -176,12 +218,7 @@ def comp_filter(df_tup, beta=0.93):
         df["integral_roll"] = integral_roll
         df["integral_pitch"] = integral_pitch
         df["integral_yaw"] = integral_yaw
-    
-    print("---------------------BEGIN------------------------")
-    print(df0.head())
-    print(df1.head())
-    print(df2.head())
-    
+   
 
 def plot_acc(df_tup):
 
@@ -324,9 +361,9 @@ def plot_air_and_fsr(df_tup):
     axs[2].set_title("Yaw")
     plt.show()
 
-def plot_airplane_with_comp_filter(df_tup):
+def plot_airplane_with_comp_filter(df_tup, beta=0.93, airplane_initial=None):
     # Run the complimentary filter
-    comp_filter(df_tup)
+    comp_filter(df_tup, beta=beta, airplane_initial=airplane_initial)
 
     # Split the data
     df0, df1, df2, *_ = df_tup
@@ -374,10 +411,9 @@ def plot_airplane_with_comp_filter(df_tup):
     plt.show()
 
 
-def plot_airplane_with_integration(df_tup):
+def plot_airplane_with_integration(df_tup, beta=0.93, airplane_initial=None):
     # Run the complimentary filter
-    comp_filter(df_tup)
-
+    comp_filter(df_tup, beta=beta, airplane_initial=airplane_initial)
     # Split the data
     df0, df1, df2, *_ = df_tup
     
@@ -385,7 +421,7 @@ def plot_airplane_with_integration(df_tup):
     style.use("ggplot")
     fig, axs = plt.subplots(3, 1, sharex=True)
 
-    # integrallimentary roll
+    # integral roll
     axs[0].scatter(df0["t"], df0["integral_roll"], label="Laces", alpha=0.3)
     axs[0].scatter(df1["t"], df1["integral_roll"], label="Heel", alpha=0.3)
     axs[0].scatter(df2["t"], df2["integral_roll"], label="Shin", alpha=0.3)
@@ -394,7 +430,7 @@ def plot_airplane_with_integration(df_tup):
     axs[0].plot(df2["t"], df2["integral_roll"], alpha=0.3)
     axs[0].legend()
 
-    # integrallimentary pitch
+    # integral pitch
     axs[1].scatter(df0["t"], df0["integral_pitch"], label="Laces", alpha=0.3)
     axs[1].scatter(df1["t"], df1["integral_pitch"], label="Heel", alpha=0.3)
     axs[1].scatter(df2["t"], df2["integral_pitch"], label="Shin", alpha=0.3)
@@ -403,7 +439,7 @@ def plot_airplane_with_integration(df_tup):
     axs[1].plot(df2["t"], df2["integral_pitch"], alpha=0.3)
     axs[1].legend()
 
-    # integrallimentary yaw
+    # integral yaw
     axs[2].scatter(df0["t"], df0["integral_yaw"], label="Laces", alpha=0.3)
     axs[2].scatter(df1["t"], df1["integral_yaw"], label="Heel", alpha=0.3)
     axs[2].scatter(df2["t"], df2["integral_yaw"], label="Shin", alpha=0.3)
@@ -472,8 +508,33 @@ def plot_airplane_with_integration(df_tup):
 
 
 def main():
+    # Load in all 3 datasets from Loomis
+    names = ["id", "t", "dt", "ax", "ay", "az",
+             "gx", "gy", "gz", "mx", "my", "mz"]
+
+    # Load in the Loomis data
+    rest_df = pd.read_csv('data/3.31_Loomis_1st.csv', names=names)
+    df = pd.read_csv("data/3.31_Loomis_5th.csv", names=names)
+
+    # Get rid of the info row for rest df
+    rest_info_row = rest_df.loc[rest_df["id"] == -1]
+    rest_df = rest_df.drop(index=0)
+
+    # Change `my` to float
+    rest_df = rest_df.astype({"my": "float64"})
+
+    # Get rid of the info row
+    info_row = df.loc[df["id"] == -1]
+    df = df.drop(index=0)
+
+    # Change `my` to float
+    df = df.astype({"my": "float64"})
+
+    # Set up the dataframe for analysis
     df_tup = make_df_full(df)
-    plot_airplane_with_integration(df_tup)
+
+    initial_airplane = get_initial_airplane(rest_df)
+    plot_airplane_with_comp_filter(df_tup, airplane_initial=initial_airplane)
 
 # Run main
 if __name__ == "__main__":
