@@ -4,29 +4,8 @@ import matplotlib.pyplot as plt
 from matplotlib import style
 import numpy as np
 import pandas as pd
-
-# Load in all 3 datasets from Loomis
-names = ["id", "t", "dt", "ax", "ay", "az",
-         "gx", "gy", "gz", "mx", "my", "mz"]
-
-# Load in the Loomis data
-rest_df = pd.read_csv('python_code/data/4.7_Loomis_Data/Teagan/df0.csv', header=0)
-df = pd.read_csv("python_code/data/4.7_Loomis_Data/Teagan/df3.csv", header=0)
-
-# Get rid of the info row for rest df
-rest_info_row = rest_df.loc[rest_df["id"] == -1]
-rest_df = rest_df.drop(index=0)
-
-# Change `my` to float
-rest_df = rest_df.astype({"my": "float64"})
-
-# Get rid of the info row
-info_row = df.loc[df["id"] == -1]
-df = df.drop(index=0)
-
-# Change `my` to float
-df = df.astype({"my": "float64"})
-
+from pathlib import Path
+import sys
 
 def _clean_df_acc(df):
     """ Standardizes the units
@@ -91,7 +70,6 @@ def calc_airplane(df_tup):
         bfx = bfx.to_numpy()
 
         d['yaw'] = np.arctan(-bfy, bfx) * 180 / np.pi
-
 
 def make_df_full(df):
     """Function to prepare for all plotting in later functions. This should be run
@@ -213,7 +191,6 @@ def comp_filter(df_tup, beta=0.93, airplane_initial=None):
         df["integral_roll"] = integral_roll
         df["integral_pitch"] = integral_pitch
         df["integral_yaw"] = integral_yaw
-   
 
 def plot_acc(df_tup):
 
@@ -262,7 +239,6 @@ def plot_acc(df_tup):
     axs[2].set_title("Acceleration z")
     plt.show()
 
-
 def plot_airplane(df_tup):
     # Split the data
     df0, df1, df2, *_ = df_tup
@@ -309,54 +285,7 @@ def plot_airplane(df_tup):
     axs[2].set_title("Yaw")
     plt.show()
 
-
-def plot_air_and_fsr(df_tup):
-    # Set up the figure
-    style.use("ggplot")
-    fig, axs = plt.subplots(3, 1, sharex=True)
-
-    # Get dataframes from tuple
-    df0, df1, df2, df3, df4, df5, df6 = df_tup
-
-    # roll
-    axs[0].scatter(df0["t"], df0["roll"], label="Laces", alpha=0.3)
-    axs[0].scatter(df1["t"], df1["roll"], label="Heel", alpha=0.3)
-    axs[0].scatter(df2["t"], df2["roll"], label="Shin", alpha=0.3)
-    axs[0].plot(df0["t"], df0["roll"], alpha=0.3)
-    axs[0].plot(df1["t"], df1["roll"], alpha=0.3)
-    axs[0].plot(df2["t"], df2["roll"], alpha=0.3)
-    axs[0].legend()
-
-    # pitch
-    axs[1].scatter(df0["t"], df0["pitch"], label="Laces", alpha=0.3)
-    axs[1].scatter(df1["t"], df1["pitch"], label="Heel", alpha=0.3)
-    axs[1].scatter(df2["t"], df2["pitch"], label="Shin", alpha=0.3)
-    axs[1].plot(df0["t"], df0["pitch"], alpha=0.3)
-    axs[1].plot(df1["t"], df1["pitch"], alpha=0.3)
-    axs[1].plot(df2["t"], df2["pitch"], alpha=0.3)
-    axs[1].legend()
-
-    # yaw
-    axs[2].scatter(df0["t"], df0["yaw"], label="Laces", alpha=0.3)
-    axs[2].scatter(df1["t"], df1["yaw"], label="Heel", alpha=0.3)
-    axs[2].scatter(df2["t"], df2["yaw"], label="Shin", alpha=0.3)
-    axs[2].plot(df0["t"], df0["yaw"], alpha=0.3)
-    axs[2].plot(df1["t"], df1["yaw"], alpha=0.3)
-    axs[2].plot(df2["t"], df2["yaw"], alpha=0.3)
-    axs[2].legend()
-
-    # Customize the plot
-    fig.suptitle("Angles by Bus Line over Time")
-    axs[2].set_xlabel("Time (s)")
-    axs[0].set_ylabel("Angle (deg)")
-    axs[1].set_ylabel("Angle (deg)")
-    axs[2].set_ylabel("Angle (deg)")
-    axs[0].set_title("Roll")
-    axs[1].set_title("Pitch")
-    axs[2].set_title("Yaw")
-    plt.show()
-
-def plot_airplane_with_comp_filter(df_tup, beta=0.93, airplane_initial=None, scale_fsr=False):
+def plot_air_and_fsr_with_comp(df_tup, beta=0.93, airplane_initial=None, scale_fsr=False):
     # Run the complimentary filter
     comp_filter(df_tup, beta=beta, airplane_initial=airplane_initial)
 
@@ -422,7 +351,6 @@ def plot_airplane_with_comp_filter(df_tup, beta=0.93, airplane_initial=None, sca
     axs[3].set_title("FSR Force")
     plt.show()
 
-
 def plot_airplane_with_integration(df_tup, beta=0.93, airplane_initial=None):
     # Run the complimentary filter
     comp_filter(df_tup, beta=beta, airplane_initial=airplane_initial)
@@ -471,11 +399,19 @@ def plot_airplane_with_integration(df_tup, beta=0.93, airplane_initial=None):
     axs[2].set_title("Yaw")
     plt.show()
 
-
 def main():
+    # Grab the desired datafile and rest file from args
+    if len(sys.argv) < 3:
+        print("Data csv and Rest csv relatives paths must be specified")
+        quit()
+    
+    work_dir = Path('.').absolute()
+    data_path = work_dir / sys.argv[1]
+    rest_path = work_dir / sys.argv[2]
+
     # Load in the Loomis data
-    rest_df = pd.read_csv('python_code/data/4.7_Loomis_Data/Teagan/df0.csv', header=0)
-    df = pd.read_csv("python_code/data/4.7_Loomis_Data/Teagan/df3.csv", header=0)
+    rest_df = pd.read_csv(rest_path, header=0)
+    df = pd.read_csv(data_path, header=0)
 
     # Get rid of the info row for rest df
     rest_info_row = rest_df.loc[rest_df["id"] == -1]
@@ -495,7 +431,7 @@ def main():
     df_tup = make_df_full(df)
 
     initial_airplane = get_initial_airplane(rest_df)
-    plot_airplane_with_comp_filter(df_tup, airplane_initial=initial_airplane, scale_fsr=True)
+    plot_air_and_fsr_with_comp(df_tup, airplane_initial=initial_airplane, scale_fsr=True)
 
 # Run main
 if __name__ == "__main__":
