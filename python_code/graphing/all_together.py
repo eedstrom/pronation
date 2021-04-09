@@ -11,6 +11,8 @@ names = ["id", "t", "dt", "ax", "ay", "az",
 
 # Load in the Loomis data
 df = pd.read_csv("data/3.31_Loomis_5th.csv", names=names)
+# df = pd.read_csv("C:/Users/Brian/OneDrive/_documents_one/_PHYS 398 DLP/Git Ripository/pronation/python_code/data/3.31_Loomis_5th.csv", names=names)
+
 
 # Get rid of the info row
 info_row = df.loc[df["id"] == -1]
@@ -473,7 +475,7 @@ def plot_airplane_with_integration(df_tup):
 
 def main():
     df_tup = make_df_full(df)
-    plot_airplane_with_integration(df_tup)
+    plot_airplane_with_comp_filter(df_tup)
 
 # Run main
 if __name__ == "__main__":
