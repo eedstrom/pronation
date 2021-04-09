@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#! usr/bin.env python3
 
 import matplotlib.pyplot as plt
 from matplotlib import style
@@ -10,10 +10,8 @@ names = ["id", "t", "dt", "ax", "ay", "az",
          "gx", "gy", "gz", "mx", "my", "mz"]
 
 # Load in the Loomis data
-rest_df = pd.read_csv('data/3.31_Loomis_1st.csv', names=names)
-df = pd.read_csv("data/3.31_Loomis_5th.csv", names=names)
-# df = pd.read_csv("C:/Users/Brian/OneDrive/_documents_one/_PHYS 398 DLP/Git Ripository/pronation/python_code/data/3.31_Loomis_5th.csv", names=names)
-
+rest_df = pd.read_csv('python_code/data/4.7_Loomis_Data/Teagan/df0.csv', header=0)
+df = pd.read_csv("python_code/data/4.7_Loomis_Data/Teagan/df3.csv", header=0)
 
 # Get rid of the info row for rest df
 rest_info_row = rest_df.loc[rest_df["id"] == -1]
@@ -30,22 +28,6 @@ df = df.drop(index=0)
 df = df.astype({"my": "float64"})
 
 
-def separate_files(df):
-    # Separate the file using the headers
-    idxs = df[df["id"] == -1].index.to_numpy()
-
-    df_list = []
-
-    for i in range(1, len(idxs)):
-        df_list.append(df[idxs[i - 1]: idxs[i]])
-    df_list.append(df[idxs[-1]:])
-
-    # Write to csv
-    for i in range(len(df_list)):
-        df_list[i].to_csv(
-            f'data/3.31_Loomis_Data_Ind/df{i}.csv', index=False, names=False)
-
-
 def _clean_df_acc(df):
     """ Standardizes the units
         CALL FROM split_df NOT BY ITSELF
@@ -59,6 +41,12 @@ def _clean_df_acc(df):
     df["gy"] = df["gy"] / 10
     df["gz"] = df["gz"] / 10
 
+def _clean_df_fsr(df):
+    """ Standardizes the units
+        CALL FROM split_df NOT BY ITSELF
+    """
+    df["t"] = df["t"] / 1000
+    df["dt"] = df["dt"] / 1000
 
 def split_df(df):
     # Separate the data by bus line
@@ -75,6 +63,10 @@ def split_df(df):
     # Clean the acceleration data
     for df_iter in (df0, df1, df2):
         _clean_df_acc(df_iter)
+
+    # Clean the FSR data
+    for df_iter in (df3, df4, df5, df6):
+        _clean_df_fsr(df_iter)
 
     return (df0, df1, df2, df3, df4, df5, df6)
 
@@ -368,11 +360,11 @@ def plot_airplane_with_comp_filter(df_tup, beta=0.93, airplane_initial=None):
     comp_filter(df_tup, beta=beta, airplane_initial=airplane_initial)
 
     # Split the data
-    df0, df1, df2, *_ = df_tup
+    df0, df1, df2, df3, df4, df5, df6 = df_tup
     
     # Set up the figure
     style.use("ggplot")
-    fig, axs = plt.subplots(3, 1, sharex=True)
+    fig, axs = plt.subplots(4, 1, sharex=True)
 
     # complimentary roll
     axs[0].scatter(df0["t"], df0["comp_roll"], label="Laces", alpha=0.3)
@@ -401,15 +393,29 @@ def plot_airplane_with_comp_filter(df_tup, beta=0.93, airplane_initial=None):
     axs[2].plot(df2["t"], df2["comp_yaw"], alpha=0.3)
     axs[2].legend()
 
+    # plot fsr data
+    axs[3].scatter(df3["t"], df3["val"], label=0, alpha=0.3)
+    axs[3].scatter(df4["t"], df4["val"], label=1, alpha=0.3)
+    axs[3].scatter(df5["t"], df5["val"], label=2, alpha=0.3)
+    axs[3].scatter(df6["t"], df6["val"], label=3, alpha=0.3)
+    
+    axs[3].plot(df3["t"], df3["val"], alpha=0.3)
+    axs[3].plot(df4["t"], df4["val"], alpha=0.3)
+    axs[3].plot(df5["t"], df5["val"], alpha=0.3)
+    axs[3].plot(df6["t"], df6["val"], alpha=0.3)
+    axs[3].legend()
+
     # Customize the plot
     fig.suptitle("Angles by Bus Line over Time")
-    axs[2].set_xlabel("Time (s)")
+    axs[3].set_xlabel("Time (s)")
     axs[0].set_ylabel("Angle (deg)")
     axs[1].set_ylabel("Angle (deg)")
     axs[2].set_ylabel("Angle (deg)")
+    axs[3].set_ylabel("Force (lbs)")
     axs[0].set_title("Roll")
     axs[1].set_title("Pitch")
     axs[2].set_title("Yaw")
+    axs[3].set_title("Force")
     plt.show()
 
 
@@ -462,79 +468,30 @@ def plot_airplane_with_integration(df_tup, beta=0.93, airplane_initial=None):
     plt.show()
 
 
-# def plot_air_and_fsr(df_tup):
-    # # Set up the figure
-    # style.use("ggplot")
-    # fig, axs = plt.subplots(3, 1, sharex=True)
-
-    # # Get dataframes from tuple
-    # df0, df1, df2, df3, df4, df5, df6 = df_tup
-
-    # # roll
-    # axs[0].scatter(df0["t"], df0["roll"], label="Laces", alpha=0.3)
-    # axs[0].scatter(df1["t"], df1["roll"], label="Heel", alpha=0.3)
-    # axs[0].scatter(df2["t"], df2["roll"], label="Shin", alpha=0.3)
-    # axs[0].plot(df0["t"], df0["roll"], alpha=0.3)
-    # axs[0].plot(df1["t"], df1["roll"], alpha=0.3)
-    # axs[0].plot(df2["t"], df2["roll"], alpha=0.3)
-    # axs[0].legend()
-
-    # # pitch
-    # axs[1].scatter(df0["t"], df0["pitch"], label="Laces", alpha=0.3)
-    # axs[1].scatter(df1["t"], df1["pitch"], label="Heel", alpha=0.3)
-    # axs[1].scatter(df2["t"], df2["pitch"], label="Shin", alpha=0.3)
-    # axs[1].plot(df0["t"], df0["pitch"], alpha=0.3)
-    # axs[1].plot(df1["t"], df1["pitch"], alpha=0.3)
-    # axs[1].plot(df2["t"], df2["pitch"], alpha=0.3)
-    # axs[1].legend()
-
-    # # yaw
-    # axs[2].scatter(df0["t"], df0["yaw"], label="Laces", alpha=0.3)
-    # axs[2].scatter(df1["t"], df1["yaw"], label="Heel", alpha=0.3)
-    # axs[2].scatter(df2["t"], df2["yaw"], label="Shin", alpha=0.3)
-    # axs[2].plot(df0["t"], df0["yaw"], alpha=0.3)
-    # axs[2].plot(df1["t"], df1["yaw"], alpha=0.3)
-    # axs[2].plot(df2["t"], df2["yaw"], alpha=0.3)
-    # axs[2].legend()
-
-    # # Customize the plot
-    # fig.suptitle("Angles by Bus Line over Time")
-    # axs[2].set_xlabel("Time (s)")
-    # axs[0].set_ylabel("Angle (deg)")
-    # axs[1].set_ylabel("Angle (deg)")
-    # axs[2].set_ylabel("Angle (deg)")
-    # axs[0].set_title("Roll")
-    # axs[1].set_title("Pitch")
-    # axs[2].set_title("Yaw")
-    # plt.show()
-
-
 def main():
-    # Load in all 3 datasets from Loomis
-    names = ["id", "t", "dt", "ax", "ay", "az",
-             "gx", "gy", "gz", "mx", "my", "mz"]
-
     # Load in the Loomis data
-    rest_df = pd.read_csv('data/3.31_Loomis_1st.csv', names=names)
-    df = pd.read_csv("data/3.31_Loomis_5th.csv", names=names)
+    rest_df = pd.read_csv('python_code/data/4.7_Loomis_Data/Teagan/df0.csv', header=0)
+    df = pd.read_csv("python_code/data/4.7_Loomis_Data/Teagan/df3.csv", header=0)
 
     # Get rid of the info row for rest df
     rest_info_row = rest_df.loc[rest_df["id"] == -1]
     rest_df = rest_df.drop(index=0)
 
     # Change `my` to float
-    rest_df = rest_df.astype({"my": "float64"})
+    rest_df = rest_df.astype({"my": "float64", "mz": "float64"})
 
     # Get rid of the info row
     info_row = df.loc[df["id"] == -1]
     df = df.drop(index=0)
 
     # Change `my` to float
-    df = df.astype({"my": "float64"})
+    df = df.astype({"my": "float64", "mz": "float64"})
 
     # Set up the dataframe for analysis
     df_tup = make_df_full(df)
-    plot_airplane_with_comp_filter(df_tup)
+
+    initial_airplane = get_initial_airplane(rest_df)
+    plot_airplane_with_comp_filter(df_tup, airplane_initial=initial_airplane)
 
 # Run main
 if __name__ == "__main__":
