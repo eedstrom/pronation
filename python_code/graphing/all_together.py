@@ -47,6 +47,7 @@ def _clean_df_fsr(df):
     """
     df["t"] = df["t"] / 1000
     df["dt"] = df["dt"] / 1000
+    df["stand_val"] = df["val"] / df["val"].max()
 
 def split_df(df):
     # Separate the data by bus line
@@ -355,7 +356,7 @@ def plot_air_and_fsr(df_tup):
     axs[2].set_title("Yaw")
     plt.show()
 
-def plot_airplane_with_comp_filter(df_tup, beta=0.93, airplane_initial=None):
+def plot_airplane_with_comp_filter(df_tup, beta=0.93, airplane_initial=None, scale_fsr=False):
     # Run the complimentary filter
     comp_filter(df_tup, beta=beta, airplane_initial=airplane_initial)
 
@@ -394,15 +395,17 @@ def plot_airplane_with_comp_filter(df_tup, beta=0.93, airplane_initial=None):
     axs[2].legend()
 
     # plot fsr data
-    axs[3].scatter(df3["t"], df3["val"], label=0, alpha=0.3)
-    axs[3].scatter(df4["t"], df4["val"], label=1, alpha=0.3)
-    axs[3].scatter(df5["t"], df5["val"], label=2, alpha=0.3)
-    axs[3].scatter(df6["t"], df6["val"], label=3, alpha=0.3)
+    col = 'stand_val' if scale_fsr else 'val'
+
+    axs[3].scatter(df3["t"], df3[col], label=0, alpha=0.3)
+    axs[3].scatter(df4["t"], df4[col], label=1, alpha=0.3)
+    axs[3].scatter(df5["t"], df5[col], label=2, alpha=0.3)
+    axs[3].scatter(df6["t"], df6[col], label=3, alpha=0.3)
     
-    axs[3].plot(df3["t"], df3["val"], alpha=0.3)
-    axs[3].plot(df4["t"], df4["val"], alpha=0.3)
-    axs[3].plot(df5["t"], df5["val"], alpha=0.3)
-    axs[3].plot(df6["t"], df6["val"], alpha=0.3)
+    axs[3].plot(df3["t"], df3[col], alpha=0.3)
+    axs[3].plot(df4["t"], df4[col], alpha=0.3)
+    axs[3].plot(df5["t"], df5[col], alpha=0.3)
+    axs[3].plot(df6["t"], df6[col], alpha=0.3)
     axs[3].legend()
 
     # Customize the plot
@@ -411,11 +414,12 @@ def plot_airplane_with_comp_filter(df_tup, beta=0.93, airplane_initial=None):
     axs[0].set_ylabel("Angle (deg)")
     axs[1].set_ylabel("Angle (deg)")
     axs[2].set_ylabel("Angle (deg)")
-    axs[3].set_ylabel("Force (lbs)")
+    fsr_ylabel = "Relative Force (dimensionless)" if scale_fsr else "Force (lbs)"
+    axs[3].set_ylabel(fsr_ylabel)
     axs[0].set_title("Roll")
     axs[1].set_title("Pitch")
     axs[2].set_title("Yaw")
-    axs[3].set_title("Force")
+    axs[3].set_title("FSR Force")
     plt.show()
 
 
@@ -491,7 +495,7 @@ def main():
     df_tup = make_df_full(df)
 
     initial_airplane = get_initial_airplane(rest_df)
-    plot_airplane_with_comp_filter(df_tup, airplane_initial=initial_airplane)
+    plot_airplane_with_comp_filter(df_tup, airplane_initial=initial_airplane, scale_fsr=True)
 
 # Run main
 if __name__ == "__main__":
