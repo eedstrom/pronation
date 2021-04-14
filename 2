@@ -1,0 +1,147 @@
+import sys
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib import style
+import pandas as pd
+from pathlib import Path
+from all_together import make_df_full, plot_air_and_fsr_with_comp, plot_airplane, comp_filter, get_initial_airplane
+
+
+def plot_airplane_with_avg(df_tup):
+    # Split the data
+    df0, df1, df2, *_ = df_tup
+
+    # Set up the figure
+    style.use("ggplot")
+    fig, axs = plt.subplots(3, 1, sharex=True)
+    
+    # Get the size of each df
+    n0 = df0.shape[0]
+    n1 = df1.shape[0]
+    n2 = df2.shape[0]
+
+    # Run the comp (or not)
+    if filter == 'comp':
+        # Set the initial values to be the initial values from the dataset
+        initial_airplane = { "roll": [], "pitch": [], yaw: [] }
+        for df_iter in [df0, df1, df2]:
+            initial_airplane["roll"].append(df_iter["roll"].iloc[0])
+            initial_airplane["pitch"].append(df_iter["pitch"].iloc[0])
+            initial_airplane["yaw"].append(df_iter["yaw"].iloc[0])
+        comp_filter(df_tup, airplane_initial=initial_airplane)
+
+    # roll
+    axs[0].scatter(df0["t"], df0["roll"], label="Laces", alpha=0.1)
+    axs[0].scatter(df1["t"], df1["roll"], label="Heel", alpha=0.1)
+    axs[0].scatter(df2["t"], df2["roll"], label="Shin", alpha=0.1)
+    axs[0].plot(df0["t"], np.repeat(df0["roll"].mean(), n0))
+    axs[0].plot(df1["t"], np.repeat(df1["roll"].mean(), n1))
+    axs[0].plot(df2["t"], np.repeat(df2["roll"].mean(), n2))
+    axs[0].legend()
+
+    # pitch
+    axs[1].scatter(df0["t"], df0["pitch"], label="Laces", alpha=0.3)
+    axs[1].scatter(df1["t"], df1["pitch"], label="Heel", alpha=0.3)
+    axs[1].scatter(df2["t"], df2["pitch"], label="Shin", alpha=0.3)
+    axs[1].plot(df0["t"], np.repeat(df0["pitch"].mean(), n0))
+    axs[1].plot(df1["t"], np.repeat(df1["pitch"].mean(), n1))
+    axs[1].plot(df2["t"], np.repeat(df2["pitch"].mean(), n2))
+    axs[1].legend()
+
+    # yaw
+    axs[2].scatter(df0["t"], df0["yaw"], label="Laces", alpha=0.3)
+    axs[2].scatter(df1["t"], df1["yaw"], label="Heel", alpha=0.3)
+    axs[2].scatter(df2["t"], df2["yaw"], label="Shin", alpha=0.3)
+    axs[2].plot(df0["t"], np.repeat(df0["yaw"].mean(), n0), alpha=0.3)
+    axs[2].plot(df1["t"], np.repeat(df1["yaw"].mean(), n1), alpha=0.3)
+    axs[2].plot(df2["t"], np.repeat(df2["yaw"].mean(), n2), alpha=0.3)
+    axs[2].legend()
+
+    # Customize the plot
+    fig.suptitle("Angles by Bus Line over Time")
+    axs[2].set_xlabel("Time (s)")
+    axs[0].set_ylabel("Angle (deg)")
+    axs[1].set_ylabel("Angle (deg)")
+    axs[2].set_ylabel("Angle (deg)")
+    axs[0].set_title("Roll")
+    axs[1].set_title("Pitch")
+    axs[2].set_title("Yaw")
+    plt.show()
+
+def plot_airplane_with_avg(df_tup):
+    # Split the data
+    df0, df1, df2, *_ = df_tup
+
+    # Set up the figure
+    style.use("ggplot")
+    fig, axs = plt.subplots(3, 1, sharex=True)
+    
+    # Get the size of each df
+    n0 = df0.shape[0]
+    n1 = df1.shape[0]
+    n2 = df2.shape[0]
+
+    # roll
+    axs[0].scatter(df0["t"], df0["roll"], label="Laces", alpha=0.1)
+    axs[0].scatter(df1["t"], df1["roll"], label="Heel", alpha=0.1)
+    axs[0].scatter(df2["t"], df2["roll"], label="Shin", alpha=0.1)
+    axs[0].plot(df0["t"], np.repeat(df0["roll"].mean(), n0))
+    axs[0].plot(df1["t"], np.repeat(df1["roll"].mean(), n1))
+    axs[0].plot(df2["t"], np.repeat(df2["roll"].mean(), n2))
+    axs[0].legend()
+
+    # pitch
+    axs[1].scatter(df0["t"], df0["pitch"], label="Laces", alpha=0.3)
+    axs[1].scatter(df1["t"], df1["pitch"], label="Heel", alpha=0.3)
+    axs[1].scatter(df2["t"], df2["pitch"], label="Shin", alpha=0.3)
+    axs[1].plot(df0["t"], np.repeat(df0["pitch"].mean(), n0))
+    axs[1].plot(df1["t"], np.repeat(df1["pitch"].mean(), n1))
+    axs[1].plot(df2["t"], np.repeat(df2["pitch"].mean(), n2))
+    axs[1].legend()
+
+    # yaw
+    axs[2].scatter(df0["t"], df0["yaw"], label="Laces", alpha=0.3)
+    axs[2].scatter(df1["t"], df1["yaw"], label="Heel", alpha=0.3)
+    axs[2].scatter(df2["t"], df2["yaw"], label="Shin", alpha=0.3)
+    axs[2].plot(df0["t"], np.repeat(df0["yaw"].mean(), n0), alpha=0.3)
+    axs[2].plot(df1["t"], np.repeat(df1["yaw"].mean(), n1), alpha=0.3)
+    axs[2].plot(df2["t"], np.repeat(df2["yaw"].mean(), n2), alpha=0.3)
+    axs[2].legend()
+
+    # Customize the plot
+    fig.suptitle("Angles by Bus Line over Time")
+    axs[2].set_xlabel("Time (s)")
+    axs[0].set_ylabel("Angle (deg)")
+    axs[1].set_ylabel("Angle (deg)")
+    axs[2].set_ylabel("Angle (deg)")
+    axs[0].set_title("Roll")
+    axs[1].set_title("Pitch")
+    axs[2].set_title("Yaw")
+    plt.show()
+
+
+
+
+def main():
+    # Check for filetype arg
+    if len(sys.argv) < 2:
+        print("Need a path to file")
+        quit()
+    
+    # Load file
+    filepath = Path('.').absolute() / sys.argv[1]
+    # Read as csv
+    df = pd.read_csv(filepath, index_col=False, header=0)
+
+    # Remove info row
+    info_row = df.loc[df['id'] == -1]
+    df = df.drop(index = 0)
+    df = df.astype({"my": "float64", "mz": "float64"})
+    df_tup = make_df_full(df)
+    
+    # Plot airplane
+    plot_airplane_with_avg(df_tup)
+
+
+if __name__ == '__main__':
+    main()
