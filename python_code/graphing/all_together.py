@@ -399,55 +399,112 @@ def plot_airplane_with_integration(df_tup, beta=0.93, airplane_initial=None):
     axs[2].set_title("Yaw")
     plt.show()
 
-def plot_ind_airplane(df_tup, df_rest_tup, air_col='roll', use_filter=True):
+def plot_ind_airplane(df_tup, df_rest_tup, air_col='roll', use_filter=True, scale_fsr=False):
     if use_filter:
         initial_airplane = get_initial_airplane(df_rest_tup)
         comp_filter(df_tup, airplane_initial=initial_airplane)
         air_col = f'comp_{air_col}'
 
     # Split the data
-    df0, df1, df2, *_ = df_tup
+    df0, df1, df2, df3, df4, df5, df6 = df_tup
 
     # Set up the figure
     style.use("ggplot")
-    fig, axs = plt.subplots(3, 1, sharex=True)
+    fig, axs = plt.subplots(4, 1, sharex=True)
 
     # Laces
     axs[0].scatter(df0["t"], df0[air_col], alpha=0.3)
     axs[0].plot(df0["t"], df0[air_col], alpha=0.3)
 
-    # Heel
-    axs[1].scatter(df1["t"], df0[air_col], alpha=0.3)
-    axs[1].plot(df1["t"], df0[air_col], alpha=0.3)
-
     # Shin
-    axs[2].scatter(df2["t"], df0[air_col], alpha=0.3)
-    axs[2].plot(df2["t"], df0[air_col], alpha=0.3)
+    axs[2].scatter(df1["t"], df0[air_col], alpha=0.3)
+    axs[2].plot(df1["t"], df0[air_col], alpha=0.3)
+
+    # Heel
+    axs[1].scatter(df2["t"], df0[air_col], alpha=0.3)
+    axs[1].plot(df2["t"], df0[air_col], alpha=0.3)
+
+    # plot fsr data
+    col = 'stand_val' if scale_fsr else 'val'
+    fsr_tit = 'Scaled FSR' if scale_fsr else 'FSR (lbs)'
+    axs[3].plot(df3["t"], df3[col], alpha=0.3)
+    axs[3].plot(df4["t"], df4[col], alpha=0.3)
+    axs[3].plot(df5["t"], df5[col], alpha=0.3)
+    axs[3].plot(df6["t"], df6[col], alpha=0.3)
+    axs[3].legend()
 
     # Customize the plot
     fig.suptitle(f"{air_col.title()} by Location over Time")
-    axs[2].set_xlabel("Time (s)")
+    axs[3].set_xlabel("Time (s)")
     axs[0].set_ylabel("Angle (deg)")
     axs[1].set_ylabel("Angle (deg)")
     axs[2].set_ylabel("Angle (deg)")
+    axs[3].set_ylabel(fsr_tit)
     axs[0].set_title("Laces")
     axs[1].set_title("Heel")
     axs[2].set_title("Shin")
     plt.show()
 
+def plot_brian(df_tup, df_rest_tup, use_filter=True, scale_fsr=False):
+    pre = ''
+    if use_filter:
+        initial_airplane = get_initial_airplane(df_rest_tup)
+        comp_filter(df_tup, airplane_initial=initial_airplane)
+        pre = 'comp_'
+
+    # Split the data
+    df0, df1, df2, df3, df4, df5, df6 = df_tup
+
+    # Set up the figure
+    style.use("ggplot")
+    fig, axs = plt.subplots(4, 1, sharex=True)
+
+    # Bus 0
+    axs[0].scatter(df0["t"], df0[f"{pre}pitch"], alpha=0.3)
+    axs[0].plot(df0["t"], df0[f"{pre}pitch"], alpha=0.3)
+
+    # Bus 1
+    axs[2].scatter(df1["t"], df1[f"{pre}yaw"], alpha=0.3)
+    axs[2].plot(df1["t"], df1[f"{pre}yaw"], alpha=0.3)
+
+    # Bus 2
+    axs[1].scatter(df2["t"], df2[f"{pre}yaw"], alpha=0.3)
+    axs[1].plot(df2["t"], df2[f"{pre}yaw"], alpha=0.3)
+
+    # plot fsr data
+    col = 'stand_val' if scale_fsr else 'val'
+    fsr_tit = 'Scaled FSR' if scale_fsr else 'FSR (lbs)'
+    axs[3].plot(df3["t"], df3[col], alpha=0.3, label="Bus 3")
+    axs[3].plot(df4["t"], df4[col], alpha=0.3, label="Bus 4")
+    axs[3].plot(df5["t"], df5[col], alpha=0.3, label="Bus 5")
+    axs[3].plot(df6["t"], df6[col], alpha=0.3, label="Bus 6")
+    axs[3].legend()
+
+    # Customize the plot
+    fig.suptitle(f"Airplane Angles and FSR Data over Time")
+    axs[3].set_xlabel("Time (s)")
+    axs[0].set_ylabel("Angle (deg)")
+    axs[1].set_ylabel("Angle (deg)")
+    axs[2].set_ylabel("Angle (deg)")
+    axs[3].set_ylabel(fsr_tit)
+    axs[0].set_title("Bus 0 - Pitch")
+    axs[1].set_title("Bus 2 - Yaw")
+    axs[2].set_title("Bus 1 - Yaw")
+    plt.show()
+
 def main():
     # Grab the desired datafile and rest file from args
-    if len(sys.argv) < 4:
+    if len(sys.argv) < 3:
         print("Data csv and Rest csv relatives paths must be specified")
-        print('Optionally, airplane angle can be specified as well')
         quit()
     
     work_dir = Path('.').absolute()
     data_path = work_dir / sys.argv[1]
     rest_path = work_dir / sys.argv[2]
-    air_ang = 'roll' 
-    if len(sys.argv) > 3:
-        air_ang = sys.argv[3]
+
+    # if len(sys.argv) > 3:
+        # air_ang = sys.argv[3]
+
     # Load in the Loomis data
     rest_df = pd.read_csv(rest_path, header=0)
     df = pd.read_csv(data_path, header=0)
@@ -469,7 +526,7 @@ def main():
     # Set up the dataframe for analysis
     df_tup = make_df_full(df)
 
-    plot_ind_airplane(df_tup, rest_df, air_col=air_ang, use_filter=True)
+    plot_brian(df_tup, rest_df, use_filter=False, scale_fsr=True)
 
 # Run main
 if __name__ == "__main__":
