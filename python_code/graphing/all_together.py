@@ -399,29 +399,68 @@ def plot_airplane_with_integration(df_tup, beta=0.93, airplane_initial=None):
     axs[2].set_title("Yaw")
     plt.show()
 
+def plot_ind_airplane(df_tup, df_rest_tup, air_col='roll', use_filter=True):
+    if use_filter:
+        initial_airplane = get_initial_airplane(df_rest_tup)
+        comp_filter(df_tup, airplane_initial=initial_airplane)
+        air_col = f'comp_{air_col}'
+
+    # Split the data
+    df0, df1, df2, *_ = df_tup
+
+    # Set up the figure
+    style.use("ggplot")
+    fig, axs = plt.subplots(3, 1, sharex=True)
+
+    # Laces
+    axs[0].scatter(df0["t"], df0[air_col], alpha=0.3)
+    axs[0].plot(df0["t"], df0[air_col], alpha=0.3)
+
+    # Heel
+    axs[1].scatter(df1["t"], df0[air_col], alpha=0.3)
+    axs[1].plot(df1["t"], df0[air_col], alpha=0.3)
+
+    # Shin
+    axs[2].scatter(df2["t"], df0[air_col], alpha=0.3)
+    axs[2].plot(df2["t"], df0[air_col], alpha=0.3)
+
+    # Customize the plot
+    fig.suptitle(f"{air_col.title()} by Location over Time")
+    axs[2].set_xlabel("Time (s)")
+    axs[0].set_ylabel("Angle (deg)")
+    axs[1].set_ylabel("Angle (deg)")
+    axs[2].set_ylabel("Angle (deg)")
+    axs[0].set_title("Laces")
+    axs[1].set_title("Heel")
+    axs[2].set_title("Shin")
+    plt.show()
+
 def main():
     # Grab the desired datafile and rest file from args
-    if len(sys.argv) < 3:
+    if len(sys.argv) < 4:
         print("Data csv and Rest csv relatives paths must be specified")
+        print('Optionally, airplane angle can be specified as well')
         quit()
     
     work_dir = Path('.').absolute()
     data_path = work_dir / sys.argv[1]
     rest_path = work_dir / sys.argv[2]
-
+    air_ang = 'roll' 
+    if len(sys.argv) > 3:
+        air_ang = sys.argv[3]
     # Load in the Loomis data
     rest_df = pd.read_csv(rest_path, header=0)
     df = pd.read_csv(data_path, header=0)
 
     # Get rid of the info row for rest df
-    rest_info_row = rest_df.loc[rest_df["id"] == -1]
+    # rest_info_row = rest_df.loc[rest_df["id"] == -1]
     rest_df = rest_df.drop(index=0)
 
     # Change `my` to float
     rest_df = rest_df.astype({"my": "float64", "mz": "float64"})
 
     # Get rid of the info row
-    info_row = df.loc[df["id"] == -1]
+    # info_row = df.loc[df["id"] == -1]
     df = df.drop(index=0)
 
     # Change `my` to float
@@ -430,8 +469,7 @@ def main():
     # Set up the dataframe for analysis
     df_tup = make_df_full(df)
 
-    initial_airplane = get_initial_airplane(rest_df)
-    plot_air_and_fsr_with_comp(df_tup, airplane_initial=initial_airplane, scale_fsr=True)
+    plot_ind_airplane(df_tup, rest_df, air_col=air_ang, use_filter=True)
 
 # Run main
 if __name__ == "__main__":
