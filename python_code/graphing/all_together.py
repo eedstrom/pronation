@@ -569,7 +569,7 @@ def main():
     # Set up the dataframe for analysis
     df_tup = make_df_full(df)
 
-    plot_area(df_tup, rest_df, use_filter=True)
+    plot_brian(df_tup, rest_df, use_filter=True, scale_fsr=False)
 
 # Run main
 if __name__ == "__main__":

@@ -144,17 +144,21 @@ def plot_air_with_ref(df_tup, df_rest, df_pron, df_sup):
     style.use("ggplot")
     fig, axs = plt.subplots(3, 3, sharex=True)
     
+    # Get the size of each df
+    n = df0.shape[0]
+    
+    initial_airplane = airplane_initial(rest_df)
+    
     # Run the use_filter
-    initial_airplane = get_initial_airplane(df_rest)
     comp_filter(df_tup, airplane_initial=initial_airplane)
     
     # Create the plots
     loc = ["Laces", "Heel", "Shin"]
-    for col, (df_iter, df_pron_iter, df_sup_iter) in enumerate(zip((df0, df1, df2), df_pron[:3], df_sup[:3])):
+    for col, df_iter in enumerate((df0, df1, df2)):
         for row, air in enumerate(("roll", "pitch", "yaw")):
-            axs[row][col].plot(df_iter["t"], df_iter[air], alpha=0.3, label="Observed")
-            axs[row][col].plot(df_pron_iter["t"], df_pron_iter[air], alpha=0.3, label="Pronation Range")
-            axs[row][col].plot(df_sup_iter["t"], df_sup_iter[air], alpha=0.3, label="Supination Range")
+            axs[row][col].plot(df_iter["t"], df_iter[air], alpha=0.3, label = "Observed")
+            axs[row][col].plot(df_iter["t"], df_pron, label = "Pronation Range")
+            axs[row][col].plot(df_iter["t"], df_sup, label = "Supination Range")
             axs[row][col].legend()
 
             if col == 0:
@@ -163,36 +167,42 @@ def plot_air_with_ref(df_tup, df_rest, df_pron, df_sup):
         axs[row][col].set_xlabel("Time(s)")
 
     # Customize the plot
-    fig.suptitle("Airplane by Location Relative to Known Pronation and Supination")
+    fig.suptitle("Airplane by Location")
     plt.show()
+
     
 
 def main():
+    # # Set initial filter to None
+    # uf = None
+
+    skip = 0
     # Check for filetype arg
-    if len(sys.argv) < 3:
-        print('Need a path to data(1) and rest data(2)')
+    if len(sys.argv) < 2:
+        print('Need a file path and optionally a skip number')
         quit()
+    if len(sys.argv) >= 3:
+        try:
+            skip = int(sys.argv[2])
+
+        except ValueError:
+            skip = sys.argv[2]
 
     # Load file
     filepath = Path('.').absolute() / sys.argv[1]
-    restpath = Path('.').absolute() / sys.argv[2]
-    suppath = Path('python_code/data/wilma_intentional/standing_sup.csv').absolute()
-    pronpath = Path('python_code/data/wilma_intentional/standing_pron.csv').absolute()
+    sup_path = Path('python_code/data/wilma_intentional/standing_sup.csv').absolute()
+    pron_path = Path('python_code/data/wilma_intentional/standing_pron.csv').absolute()
 
     # Read as csv
+    df_sup = pd.read_csv(sup_path, index_col=False,header=0)
+    df_pron = pd.read_csv(pron_path, index_col=False,header=0)
     df = pd.read_csv(filepath, index_col=False, header=0)
-    df_rest = pd.read_csv(restpath, index_col=False, header=0)
-    df_sup = pd.read_csv(suppath, index_col=False,header=0)
-    df_pron = pd.read_csv(pronpath, index_col=False,header=0)
 
     # Remove info row
     # info_row = df.loc[df['id'] == -1]
     df = df.drop(index = 0)
     df = df.astype({"my": "float64", "mz": "float64"})
     df_tup = make_df_full(df)
-
-    df_rest = df_rest.drop(index = 0)
-    df_rest = df_rest.astype({"my": "float64", "mz": "float64"})
 
     df_pron = df_pron.drop(index = 0)
     df_pron = df_pron.astype({"my": "float64", "mz": "float64"})
@@ -201,8 +211,6 @@ def main():
     df_sup = df_sup.drop(index = 0)
     df_sup = df_sup.astype({"my": "float64", "mz": "float64"})
     df_sup = make_df_full(df_sup)
-
-    plot_air_with_ref(df_tup, df_rest, df_pron, df_sup)
 
 if __name__ == '__main__':
     main()
