@@ -445,6 +445,49 @@ def plot_ind_airplane(df_tup, df_rest_tup, air_col='roll', use_filter=True, scal
     axs[2].set_title("Shin")
     plt.show()
 
+
+def plot_area(df_tup, df_rest_tup, sup_diff=3, pron_diff=9, use_filter=True):
+    pre = ''
+    if use_filter:
+        initial_airplane = get_initial_airplane(df_rest_tup)
+        comp_filter(df_tup, airplane_initial=initial_airplane)
+        pre = 'comp_'
+
+    # Split the data
+    _, df1, df2, *_ = df_tup
+    
+    # Get the diff in yaw between buses 2 and 1
+    yaw_diff = df2[f"{pre}yaw"].to_numpy() - df1[f"{pre}yaw"].to_numpy()
+
+    # Set up the figure
+    style.use("ggplot")
+    _ , axs = plt.subplots(2, 1, sharex=True)
+    
+    # Plot the difference in yaw and the cutoffs
+    n = df1.shape[0]
+    axs[1].plot(df1["t"], yaw_diff, label = "Observed Difference" )
+    axs[1].plot(df1["t"], np.repeat(sup_diff, n), label="Supination Cutoff")
+    axs[1].fill_between(df1['t'], yaw_diff, np.repeat(sup_diff, n) ,label="Observed Supination", alpha=0.3, where = yaw_diff < np.repeat(sup_diff, n), interpolate=True)
+    axs[1].legend()
+    axs[1].set_xlabel("Time (s)")
+    axs[1].set_ylabel("Difference in Angle (deg)")
+    axs[1].set_title("Regions of Supination")
+    axs[1].legend()
+
+    # Plot Pronation
+    axs[0].plot(df1["t"], yaw_diff, label = "Observed Difference" )
+    axs[0].plot(df1["t"], np.repeat(pron_diff, n), label="Pronation Cutoff")
+    axs[0].fill_between(df1['t'], yaw_diff, np.repeat(pron_diff, n) ,label="Observed Pronation", alpha=0.3, where = yaw_diff > np.repeat(pron_diff, n), interpolate=True)
+    axs[0].legend()
+    axs[0].set_xlabel("Time (s)")
+    axs[0].set_ylabel("Difference in Angle (deg)")
+    axs[0].set_title("Regions of Pronation")
+    axs[0].legend()
+    
+
+    plt.show()
+
+
 def plot_brian(df_tup, df_rest_tup, use_filter=True, scale_fsr=False):
     pre = ''
     if use_filter:
@@ -526,7 +569,7 @@ def main():
     # Set up the dataframe for analysis
     df_tup = make_df_full(df)
 
-    plot_brian(df_tup, rest_df, use_filter=False, scale_fsr=True)
+    plot_area(df_tup, rest_df, use_filter=True)
 
 # Run main
 if __name__ == "__main__":
