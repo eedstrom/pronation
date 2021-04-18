@@ -1,0 +1,215 @@
+\section{Overview}
+We used an Arduino Mega 2560 with the Atmel ATmega 2560 microcontroller to create our data logger for the main data collection.
+The Arduino Mega2560 microcontroller uses I2C protocol to connect all the devices.
+I2C, or inter-integrated circuit, is a simple digital communication protocol using two wires for each connection, and emphasizes ease-of-use over raw performance.
+Arduino uses C/C++ dialect coding to integrate and execute the different programs.
+Communicating with the Arduino wasa  4x keypad, Real-Time Clock (DS3231), ultimate GPS breakout v3, 16x2 Liquid Crystal display, micro-SD breakout board+, three accelerometers (LSM9DS1), four force-sensitive resistors, and a TCA9548A multiplexer.
+The Arduino used a battery pack and 5V power supply to run the devices.\par
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.5]{figure_4.png}
+  \caption[DAC]{Arduino data acquisition device}
+  \label{fig:x dac}
+\end{figure}
+
+The GPS receives data from up to 22 satellites and provides data on location, speed, date, and time.
+The RTC was synched with the GPS in our data logger to create accurate timing for our data set.
+It was also used to get the date and time of when the data was collected for easy synchronization with video data taken from a separate device.\par
+
+The three accelerometers had 9-DOF and can gather acceleration, gyroscopic, and magnetic field data.
+The accelerometer had ±16 \textit{g} range, the magnetometer ±12 Gauss range, and the gyroscope ±2000 deg/s range.
+The data was able to be read, across each device, about once every four milliseconds.
+The rate to collect the data was 83 Hz for the three devices or about 1/12 ms \parencite{adafruit}.
+This would allow for accurate orientation and the level of precision required to measure the angles for pronation and supination.\par
+
+Since the three LSM9DS1 had to be read simultaneously, to separate between the three incoming input lines the multiplexer was utilized.
+This gave a unique bus line to each accelerometer that could be distinguished when the data was written to a CSV file on the SD card.
+The SD card contained the accelerometer data, the time read using the Arduino millis function, and the real-time and date from the RTC.
+To monitor the data collection and to aid in offline analysis, an LED was blinked at the beginning to signal the start of the program, and then every half second to allow for a visual marker in the video taken of the runner.
+The LED was connected to each accelerometer separately, but blinked synchronized.\par
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.4]{figure_5.png}
+  \caption[Accelerometer LEDs]{The 3 accelerometers and their respective LEDs}
+  \label{fig:x 3-leds}
+\end{figure}
+
+One main issue we predicted was the difficulty in classifying the accelerometer data.
+There would be a lot of data, but it was unclear if we would easily find a trend.
+Also, at what point would we be able to know when to look for pronation or supination.
+We thought force-sensitive resistors (FSR) could be used to help us visualize where a person was in the gait cycle.\par
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.35]{figure_6.png}
+  \caption[Gait cycle]{Phases of the human gait cycle \parencite{tekscan-cycle}}
+  \label{fig:x gait cycle}
+\end{figure}
+
+\ref{fig:x gait cycle} shows us the different phases in a gait cycle.
+We can see that specifically placed FSRs would be able to show us where someone is in the gait cycle.
+For example, an FSR on the heel would likely get the most force during the heel strike phase.\par
+
+We found it quite common to use FSRs with human gait.
+FSRs come in many different shapes as well.
+As seen in \ref{fig:x fsr designs}, they come as strips, squares and circles, all with different sized sensing areas and ranges.\par
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.5]{figure_7.png}
+  \caption[FSR designs]{Differing force-sensitive designs \parencite{mouser}}
+  \label{fig:x fsr designs}
+\end{figure}
+
+After some brainstorming, we decided to use the circular FSRs.
+These would provide us with ease in designing the layout of the sensors on the sole of the shoe.
+After some more research, we chose sensors with a 100 lb maximum as we would be using these to measure walking and running.\par
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.3]{figure_8.png}
+  \caption[FlexiForce A201]{The FlexiForce A201 force-sensitive resistors used in our study with max 100 lb sensing \parencite{tekscan-sensor}}
+  \label{fig:x flexiforce}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.15]{figure_9.png}
+  \caption[FSR layout]{Layout of the set of 4 FSRs to use in our study. The numbers correspsond to the different ADC (Analog to Digital Converter) channels used in the DAC}
+  \label{fig:x fsr layout}
+\end{figure}
+
+After some analysis on where to place FSRs on the sole of the shoe, we decide on the layout shown in \ref{fig:x fsr layout}.
+The FSRs that we chose to use come in a set of 4.
+With this placement, we can also add to our knowledge of pronation and supination by comparing the forces at 2 and 3 during the footflat, midstance, and push off phases of the gait cycle.\par
+
+The next step was to convert the raw ADC value that the sensors output to a useful metric.
+If we know the maximum ADC value, the ADC reference voltage, and the series resistance in the circuit, we can calculate the conductance of the FSR, GFSR.
+These equations are seen below.
+
+$$V=\frac{V^{ref}_{ADC}\cdot ADC_{count}}{ADC_{max count}+1}\qquad R_{FSR}=\frac{V^{ref}_{ADC}}{V-1}\cdot R_{series}\qquad G_{FSR}=\frac{1}{R_{FSR}}$$
+
+Now that we have the conductance of the FSR, we can convert this into force using some calibration of the sensor.
+Interestingly, the relationship between conductance and force is linear.
+This is why we use conductance and not resistance when converting.\par
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.5]{figure_10.png}
+  \caption[Conductance vs. force]{Conductance vs. force graph \parencite{tekscan-convert}}
+  \label{fig:x cond. vs force}
+\end{figure}
+
+Every sensor is different and needs to be calibrated appropriately.
+The easiest way to find the equation that converts conductance to force is using experimental data.
+We placed multiple known-weight objects on the FSRs and recorded the known weight and the conductance read after converting the ADC count.
+Each object was weighted multiple times and for an extended period of time to get the most accurate data.
+We then used Excel to produce a graph and then a line of best fit.
+The equation for this line was the linear relationship between conductance and force for that sensor.\par
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.3]{figure_11.png}
+  \caption[Best fit for conductance vs. force]{Line of best fit for experimental data relationship between conductance and force in pounds}
+  \label{fig:x best fit}
+\end{figure}
+
+We can see in \ref{fig:x best fit} that the equation found relating conductance in mhos, G, to force in pounds, $F$ is $G = 6\cdot10^7\cdot F - 10^{-7}$.
+This equation can be reorganized to solve for force since that is how we will be using it.
+
+$$F=\frac{3}{5}G+\frac{1}{6}$$
+
+While the data collection was entirely handled by the Arduino written in C code, Python was chosen as the language to handle the offline analysis of this data.
+Python is an interpreted language written by Guido van Rossum.
+Part of the philosophy behind Python’s creation was that ``simple is better than complex'' \parencite{peters}.
+Following this mantra, Python has straightforward syntax which makes developing programs much faster than developing those same programs using other languages.
+This simplicity often results in programs that take longer to run than in other languages; however, given the nature of offline analysis, this tradeoff did not present any issues to this project.
+The reduction in time to write code vastly exceeded the time that would have been saved by writing the same code in another language.
+In addition to simple syntax, Python has one of the most rigorous yet free third-party code libraries.\par
+
+For data analysis, these libraries include Matplotlib, NumPy, and Pandas.
+They allow for data loading, data cleaning, and data visualization in only a few lines of code.
+The availability of such libraries greatly contributed to using Python for the offline analysis.
+Python was used to graph the yaw, pitch, and roll (nautical angles) with respect to time.
+It allowed us to find trends and patterns in someone’s stride, and compare with resting data to look for PR and SP.
+A force-map of the FSR data was created to visually show the distribution of forces during a trial.
+To gauge the reliability of the sensors we found the average angles and accelerations from a resting frame using simple calculations.\par
+
+\section{Making and Using the Parts}
+
+The thought process behind the design was mainly figuring out a way to create a system that would be sensitive enough to changes in an angle but also maintain a degree of rigidity when in a jogging motion.
+The part that was focused on first was the orientation of the accelerometers on a person.
+As discussed prior, the angles of interest were those created from the rotation of the vertical lines down the heel and the lower calf with the Achilles tendon as their pivot point.
+The other was a change in angle of the surface of the top of the foot with a perpendicular line to the main post of the lower leg.
+See the background section for visual reference.
+To capture these angles accelerometers were placed on the lower calf region, on the heel, and on top of the foot.\par
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.5]{figure_12.png}
+  \caption[Accelerometer placement]{Accelerometer placement on foot and calf}
+  \label{fig:x foot and calf}
+\end{figure}
+
+Each accelerometer had a strong back to secure our individual accelerometers.
+The holes exist to secure our accelerometers with screws and ridges to account for the soldered pins coming out from the bottom of our accelerometers.
+These backs would also prevent possible shorting from these pins.\par
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.5]{figure_13.png}
+  \caption[CAD file]{Computer aided design file for the strong accelerometer back}
+  \label{fig:x cad file}
+\end{figure}
+
+After placing the accelerometers, we choose the placement of the FSRs on the pads of the feet.
+Their placement was straightforward as we followed Hylton B. Menz et al. study’s force maps, see background’s figure of their work.
+The placement of the FSRs was also chosen after some subject testing in different shoes.
+A foam insert of the running shoe was used to attach the FSRs as shown in the image.\par
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.3]{figure_14.png}
+  \caption[FSR placement in shoe]{Force-sensitive resistor placement on sole of shoe}
+  \label{fig:x fsr placement}
+\end{figure}
+
+Now with all the data sensors in place, they needed to be connected to a data acquisition device (DAC) to mainly read and record the data to a digital file to be read later by processing software in Python.\par
+
+\section{DAC Casing}
+
+The design of the DAC had a movable lid so we can insert and draw the lid through the groves on each side of the case.
+We also made openings on the lid to make the numpad, LCD and ribbon cable connections visible, which convene the setup of the devices, and enable the monitoring of the system when collecting data.
+There was an opening on the bottom of the case below the battery pack in order to quickly remove and reinstall the batteries so the system could be reset between trials.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.2]{figure_15.png}
+  \caption[3D-printed case]{3D-printed case for the data logger}
+  \label{fig:x 3d print}
+\end{figure}
+
+\section{Field Tests}
+
+Once the data acquisition program was loaded into the PCB, the LCD verified that the SD card was working properly, and the LED lights blinked for three seconds to indicate the setup was complete and the program was ready to collect data.
+Additionally, an LCD display was programmed to display any error messages when the other devices were initializing, indicating when the program was ready to start collecting data, and when it was complete.
+This allowed us to monitor if the program was initializing all the devices and to spot issues before running trials.\par
+
+To start data collection, the person being tested pressed the “star” key (*) on the keypad, and then the datalogger started collecting the accelerometer and FSR data.
+Once the person has completed running or walking, they will press the “pound” key (\#) to stop data collection.
+Doing so allowed for multiple trials to be taken without extra unneeded data points being taken in between trials.\par
+
+Supplemental video was taken to cross correlate what the data was showing when graphed to what was happening in the real world.
+Video recording was performed by having another person follow alongside the runner while the camera was on a rolling cart.
+The video along with the time the DAC program started taking data was timestamped to synchronize the time scales of the data and the video.\par
+
+Three types of field tests were performed.
+The first test had the subject standing still in a neutral position to acquire data on pronation and supination in a static case.
+It would also allow for comparison with dynamic cases that followed, providing a base to compare the data with.
+The second test had the subject walking, and the third lightly jogging.
+The goal of the different tests was to have a variety of data, and to see if pronation or supination would be more obvious in a dynamic vs. static case.\par
+
+Since we did not have subjects who had a known medical history of PR or SP in their limbs we choose to have one of our subjects emulate PR and SP to the best of their ability and then do the three tests again.
+These tests will be referred to as their number first then SP or PN.
