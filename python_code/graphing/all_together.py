@@ -52,11 +52,10 @@ def split_df(df):
 
 
 def calc_airplane(df_tup):
-    # Get dataframes from tuple
     df0, df1, df2, *_ = df_tup
 
     # Calculate roll, pitch, and yaw for all
-    for d in [df0, df1, df2]:
+    for d in (df0, df1, df2):
         d["roll"] = np.arctan2(d["ay"], d["az"]) * 180 / np.pi
         d["pitch"] = np.arctan2(-1 * d["ax"],
                                 np.sqrt(d["ay"] ** 2 + d["az"] ** 2)) * 180 / np.pi
@@ -74,15 +73,22 @@ def calc_airplane(df_tup):
 def make_df_full(df):
     """Function to prepare for all plotting in later functions. This should be run
     prior to any other plotting function."""
+    # Get rid of the info row
+    # info_row = df.loc[df["id"] == -1]
+    df = df.drop(index=0)
+
+    # Change `my` to float
+    df = df.astype({"my": "float64", "mz": "float64"})
+
     df["t"] = df["t"] - df["t"].min()  # Set start time to 0
     df_tup = split_df(df)              # Split the data by each bus line
     calc_airplane(df_tup)              # Calculate roll, pitch, and yaw
     return df_tup
 
-def get_initial_airplane(rest_df):
+def get_initial_airplane(df_rest_tup):
     """Function returns the initial values of roll, pitch, and yaw""" 
     # Load in the rest data and separate by bus line
-    df_rest_tup = make_df_full(rest_df)
+    # df_rest_tup = make_df_full(rest_df)
     df0, df1, df2, *_ = df_rest_tup
     
     # Dict for storage
@@ -507,20 +513,20 @@ def plot_brian(df_tup, df_rest_tup, use_filter=True, scale_fsr=False):
     axs[0].plot(df0["t"], df0[f"{pre}pitch"], alpha=0.3)
 
     # Bus 1
-    axs[2].scatter(df1["t"], df1[f"{pre}yaw"], alpha=0.3)
-    axs[2].plot(df1["t"], df1[f"{pre}yaw"], alpha=0.3)
+    axs[2].scatter(df1["t"], df1[f"{pre}roll"], alpha=0.3)
+    axs[2].plot(df1["t"], df1[f"{pre}roll"], alpha=0.3)
 
     # Bus 2
-    axs[1].scatter(df2["t"], df2[f"{pre}yaw"], alpha=0.3)
-    axs[1].plot(df2["t"], df2[f"{pre}yaw"], alpha=0.3)
+    axs[1].scatter(df2["t"], df2[f"{pre}roll"], alpha=0.3)
+    axs[1].plot(df2["t"], df2[f"{pre}roll"], alpha=0.3)
 
     # plot fsr data
     col = 'stand_val' if scale_fsr else 'val'
     fsr_tit = 'Scaled FSR' if scale_fsr else 'FSR (lbs)'
-    axs[3].plot(df3["t"], df3[col], alpha=0.3, label="Bus 3")
-    axs[3].plot(df4["t"], df4[col], alpha=0.3, label="Bus 4")
-    axs[3].plot(df5["t"], df5[col], alpha=0.3, label="Bus 5")
-    axs[3].plot(df6["t"], df6[col], alpha=0.3, label="Bus 6")
+    axs[3].plot(df3["t"], df3[col], alpha=0.3, label="FSR 0")
+    axs[3].plot(df4["t"], df4[col], alpha=0.3, label="FSR 1")
+    axs[3].plot(df5["t"], df5[col], alpha=0.3, label="FSR 2")
+    axs[3].plot(df6["t"], df6[col], alpha=0.3, label="FSR 3")
     axs[3].legend()
 
     # Customize the plot
@@ -530,9 +536,9 @@ def plot_brian(df_tup, df_rest_tup, use_filter=True, scale_fsr=False):
     axs[1].set_ylabel("Angle (deg)")
     axs[2].set_ylabel("Angle (deg)")
     axs[3].set_ylabel(fsr_tit)
-    axs[0].set_title("Bus 0 - Pitch")
-    axs[1].set_title("Bus 2 - Yaw")
-    axs[2].set_title("Bus 1 - Yaw")
+    axs[0].set_title("Laces - Pitch")
+    axs[1].set_title("Lower Calf - Roll")
+    axs[2].set_title("Heel - Roll")
     plt.show()
 
 def main():
