@@ -558,24 +558,11 @@ def main():
     rest_df = pd.read_csv(rest_path, header=0)
     df = pd.read_csv(data_path, header=0)
 
-    # Get rid of the info row for rest df
-    # rest_info_row = rest_df.loc[rest_df["id"] == -1]
-    rest_df = rest_df.drop(index=0)
-
-    # Change `my` to float
-    rest_df = rest_df.astype({"my": "float64", "mz": "float64"})
-
-    # Get rid of the info row
-    # info_row = df.loc[df["id"] == -1]
-    df = df.drop(index=0)
-
-    # Change `my` to float
-    df = df.astype({"my": "float64", "mz": "float64"})
-
     # Set up the dataframe for analysis
     df_tup = make_df_full(df)
+    df_rest_tup = make_df_full(rest_df)
 
-    plot_brian(df_tup, rest_df, use_filter=True, scale_fsr=False)
+    plot_brian(df_tup, df_rest_tup, use_filter=True)
 
 # Run main
 if __name__ == "__main__":
