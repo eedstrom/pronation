@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import matplotlib.pyplot as plt
 from matplotlib import style
 import numpy as np
@@ -13,22 +14,22 @@ def extract_steps(df_tup, df_rest_tup, standardize_fsr=False):
     """Plots the fsr data and extracts individual steps"""
     # Get dataframes by bus line
     *_, df3, df4, df5, df6 = df_tup
-    df3 = df3.reset_index(drop=True) 
-    df4 = df4.reset_index(drop=True) 
-    df5 = df5.reset_index(drop=True) 
-    df6 = df6.reset_index(drop=True) 
+    df3 = df3.reset_index(drop=True)
+    df4 = df4.reset_index(drop=True)
+    df5 = df5.reset_index(drop=True)
+    df6 = df6.reset_index(drop=True)
 
     # Calculate the peaks for each dataframe
     idx3 = find_peaks(df3['val'])
     idx4 = find_peaks(df4['val'])
     idx5 = find_peaks(df5['val'])
     idx6 = find_peaks(df6['val'])
-    
+
     # Get the peaks ready to be plotted
     print(df3.head())
     # Set up the figure
     fig, axs = plt.subplots(4, 1, sharex=True)
-    
+
     # plot fsr data
     col = 'stand_val' if standardize_fsr else 'val'
 
@@ -55,19 +56,19 @@ def extract_steps(df_tup, df_rest_tup, standardize_fsr=False):
     axs[3].legend()
     axs[3].set_xlabel("Time (s)")
     axs[3].set_ylabel("Force (lbs)")
-    
+
     # Final customization
     fig.suptitle("FSR Readings over Time")
 
     # Show the figure
     plt.show()
-    
+
 
 def main():
     # Get system args
     if (len(sys.argv)) < 3:
         raise Exception("Path to data and path to rest data must be provided")
-    
+
     # Define paths to the data
     WORKDIR = Path('.')
     DATAPATH = WORKDIR / sys.argv[1]
