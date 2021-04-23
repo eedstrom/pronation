@@ -58,7 +58,7 @@ def calc_airplane(df_tup):
     # Calculate roll, pitch, and yaw for all
     for d in [df0, df1, df2]:
         d["roll"] = np.arctan2(d["ay"], d["az"]) * 180 / np.pi
-        d["pitch"] = np.arctan2(-1 * d["ax"],
+        d["pitch"] = np.arctan(-1 * d["ax"]/
                                 np.sqrt(d["ay"] ** 2 + d["az"] ** 2)) * 180 / np.pi
 
         bfy = d["mz"] * np.sin(d["roll"]) - d["my"] * np.cos(d["roll"])
