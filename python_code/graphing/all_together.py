@@ -453,17 +453,19 @@ def plot_ind_airplane(df_tup, df_rest_tup, air_col='roll', use_filter=True, scal
 
 
 def plot_area(df_tup, df_rest_tup, sup_diff=3, pron_diff=9, use_filter=True):
-    pre = ''
-    if use_filter:
-        initial_airplane = get_initial_airplane(df_rest_tup)
-        comp_filter(df_tup, airplane_initial=initial_airplane)
-        pre = 'comp_'
+    # Run the comp filter
+    comp_filter(df_tup, airplane_initial=get_initial_airplane(df_rest_tup))
 
     # Split the data
     _, df1, df2, *_ = df_tup
-    
+    _, rest1, rest2, *_, = df_rest_tup    
+
+    # Get the average difference in roll
+    rest_diff = np.mean(rest2['roll'].to_numpy() - rest1['roll'].to_numpy())
+
     # Get the diff in yaw between buses 2 and 1
-    yaw_diff = df2[f"{pre}yaw"].to_numpy() - df1[f"{pre}yaw"].to_numpy()
+    roll_diff = df2["comp_roll"].to_numpy() - df1[f"comp_roll"].to_numpy()
+    roll_diff = roll_diff - rest_diff
 
     # Set up the figure
     style.use("ggplot")
@@ -471,9 +473,9 @@ def plot_area(df_tup, df_rest_tup, sup_diff=3, pron_diff=9, use_filter=True):
     
     # Plot the difference in yaw and the cutoffs
     n = df1.shape[0]
-    axs[1].plot(df1["t"], yaw_diff, label = "Observed Difference" )
+    axs[1].plot(df1["t"], roll_diff, label = "Observed Difference" )
     axs[1].plot(df1["t"], np.repeat(sup_diff, n), label="Supination Cutoff")
-    axs[1].fill_between(df1['t'], yaw_diff, np.repeat(sup_diff, n) ,label="Observed Supination", alpha=0.3, where = yaw_diff < np.repeat(sup_diff, n), interpolate=True)
+    axs[1].fill_between(df1['t'], roll_diff, np.repeat(sup_diff, n) ,label="Observed Supination", alpha=0.3, where = roll_diff < np.repeat(sup_diff, n), interpolate=True)
     axs[1].legend()
     axs[1].set_xlabel("Time (s)")
     axs[1].set_ylabel("Difference in Angle (deg)")
@@ -481,9 +483,9 @@ def plot_area(df_tup, df_rest_tup, sup_diff=3, pron_diff=9, use_filter=True):
     axs[1].legend()
 
     # Plot Pronation
-    axs[0].plot(df1["t"], yaw_diff, label = "Observed Difference" )
+    axs[0].plot(df1["t"], roll_diff, label = "Observed Difference" )
     axs[0].plot(df1["t"], np.repeat(pron_diff, n), label="Pronation Cutoff")
-    axs[0].fill_between(df1['t'], yaw_diff, np.repeat(pron_diff, n) ,label="Observed Pronation", alpha=0.3, where = yaw_diff > np.repeat(pron_diff, n), interpolate=True)
+    axs[0].fill_between(df1['t'], roll_diff, np.repeat(pron_diff, n) ,label="Observed Pronation", alpha=0.3, where = roll_diff > np.repeat(pron_diff, n), interpolate=True)
     axs[0].legend()
     axs[0].set_xlabel("Time (s)")
     axs[0].set_ylabel("Difference in Angle (deg)")
@@ -495,11 +497,8 @@ def plot_area(df_tup, df_rest_tup, sup_diff=3, pron_diff=9, use_filter=True):
 
 
 def plot_brian(df_tup, df_rest_tup, use_filter=True, scale_fsr=False):
-    pre = ''
-    if use_filter:
-        initial_airplane = get_initial_airplane(df_rest_tup)
-        comp_filter(df_tup, airplane_initial=initial_airplane)
-        pre = 'comp_'
+    initial_airplane = get_initial_airplane(df_rest_tup)
+    comp_filter(df_tup, airplane_initial=initial_airplane)
 
     # Split the data
     df0, df1, df2, df3, df4, df5, df6 = df_tup
@@ -509,16 +508,16 @@ def plot_brian(df_tup, df_rest_tup, use_filter=True, scale_fsr=False):
     fig, axs = plt.subplots(4, 1, sharex=True)
 
     # Bus 0
-    axs[0].scatter(df0["t"], df0[f"{pre}pitch"], alpha=0.3)
-    axs[0].plot(df0["t"], df0[f"{pre}pitch"], alpha=0.3)
+    axs[0].scatter(df0["t"], df0["comp_pitch"], alpha=0.3)
+    axs[0].plot(df0["t"], df0["comp_pitch"], alpha=0.3)
 
     # Bus 1
-    axs[2].scatter(df1["t"], df1[f"{pre}roll"], alpha=0.3)
-    axs[2].plot(df1["t"], df1[f"{pre}roll"], alpha=0.3)
+    axs[2].scatter(df1["t"], df1["comp_roll"], alpha=0.3)
+    axs[2].plot(df1["t"], df1["comp_roll"], alpha=0.3)
 
     # Bus 2
-    axs[1].scatter(df2["t"], df2[f"{pre}roll"], alpha=0.3)
-    axs[1].plot(df2["t"], df2[f"{pre}roll"], alpha=0.3)
+    axs[1].scatter(df2["t"], df2["comp_roll"], alpha=0.3)
+    axs[1].plot(df2["t"], df2["comp_roll"], alpha=0.3)
 
     # plot fsr data
     col = 'stand_val' if scale_fsr else 'val'
@@ -531,10 +530,11 @@ def plot_brian(df_tup, df_rest_tup, use_filter=True, scale_fsr=False):
 
     # Customize the plot
     fig.suptitle(f"Airplane Angles and FSR Data over Time")
-    axs[3].set_xlabel("Time (s)")
+    # axs[3].set_xlabel("Time (s)")
     axs[0].set_ylabel("Angle (deg)")
     axs[1].set_ylabel("Angle (deg)")
     axs[2].set_ylabel("Angle (deg)")
+    axs[2].set_xlabel("Time (s)")
     axs[3].set_ylabel(fsr_tit)
     axs[0].set_title("Laces - Pitch")
     axs[1].set_title("Lower Calf - Roll")
