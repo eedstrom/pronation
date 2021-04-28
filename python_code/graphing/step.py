@@ -101,6 +101,56 @@ def _get_idxs(df_tup, df_rest_tup):
 
     return heel_hits
 
+
+def plot_step(df_tup, df_rest_tup):
+    # Get the indexes for the peaks
+    heel_hits = _get_idxs(df_tup, df_rest_tup)
+
+    # Reset all the indecies
+    for df_iter in df_tup:
+        df_iter.reset_index(drop=True, inplace=True)
+
+    # Load in the dataframes
+    df0, df1, df2, df3, df4, df5, df6 = df_tup
+
+    # Create a dictionary for each df
+    step_dict = {
+        0: [],
+        1: [],
+        2: [],
+        3: [],
+        4: [],
+        5: [],
+        6: []
+    }
+    
+    # Separate the steps
+    for df_idx, df_iter in enumerate(df_tup):
+        for i in range(1, len(heel_hits)):
+            step_dict[df_idx].append(df_iter[heel_hits[i-1]:heel_hits[i]])
+        step_dict[df_idx].append(df3[heel_hits[-1]:])
+
+    # Create the figure
+    fig, ax = plt.subplots(1, 1)
+
+    # Reset the time indexes to be 0
+    for df_idx in range(3, 6 + 1):
+        step = step_dict[df_idx][0]
+        
+        # Reset time to 0
+        t = step['t'].to_numpy() - step['t'].min()
+
+        # Plot the FSR readings
+        ax.plot(t, step['val'], label = df_idx - 3)
+    
+    # Label the plots
+    ax.set_title('First Step')
+    ax.set_xlabel('Elapsed Time (s)')
+    ax.set_ylabel('Force (lbs)')
+    ax.legend()
+
+    plt.show()
+
 def find_steps(df_tup, df_rest_tup):
     # Get the indexes for the peaks
     heel_hits = _get_idxs(df_tup, df_rest_tup)
@@ -128,9 +178,14 @@ def find_steps(df_tup, df_rest_tup):
         for i in range(1, len(heel_hits)):
             step_dict[df_idx].append(df_iter[heel_hits[i-1]:heel_hits[i]])
         step_dict[df_idx].append(df3[heel_hits[-1]:])
-    
-    # Create the figure
-    fig, axs = plt.subplots(4, 1)
+
+    # Get the average value for the key points of each step
+    avg_dict = {
+            3: {'max': [], 'rel_max': []},
+            4: {'max': [], 'rel_max': []},
+            5: {'max': [], 'rel_max': []},
+            6: {'max': [], 'rel_max': []},
+    }
 
     # Reset all df times to 0
     for df_idx in range(6 + 1):
@@ -141,28 +196,9 @@ def find_steps(df_tup, df_rest_tup):
             if df_idx in (0, 1, 2):
                 continue
 
-            # Plot the FSR data
-            axs[df_idx - 3].plot(step['t'], step['val'])
-    # Title the plots
-    axs[0].set_title('0')
-    axs[1].set_title('1')
-    axs[2].set_title('2')
-    axs[3].set_title('3')
-
-    axs[0].set_ylabel('Force (lbs)')
-    axs[1].set_ylabel('Force (lbs)')
-    axs[2].set_ylabel('Force (lbs)')
-    axs[3].set_ylabel('Force (lbs)')
-    
-    axs[3].set_xlabel('Time (s)')
-
-    fig.suptitle('FSR Force By Step')
-    plt.show()
-    # Get the points as times
-    # heel_times = df3['t'][heel_hits].to_numpy()
-    
-    # # Make sure the times are not double counting (Slow data only)
-    # doubles = np.diff(heel_times) < 0.2
+            # Set the max value for the bus line
+            avg_dict[df_idx]['max'].append(step['val'].max())
+    print(avg_dict) 
 
 def main():
     # Get system args
