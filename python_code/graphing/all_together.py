@@ -51,6 +51,35 @@ def split_df(df):
     return (df0, df1, df2, df3, df4, df5, df6)
 
 
+def _get_idxs(df_tup, df_rest_tup):
+    # Unpack the dataframes
+    _, _, _, df3, *_ = df_tup
+    
+    # Reset the index
+    df3.reset_index(drop=True, inplace=True)
+
+    # Use the heel(Bus 0) data to find when the foot hits the ground
+    heel_hits = df3['val'].to_numpy() > 0
+    
+    # Only keep the first values of true in the list
+    prev = False
+    for idx, b in enumerate(heel_hits):
+        # If the current and past values were both true, we don't care about the second true
+        if b and prev:
+            heel_hits[idx] = False
+        
+        # Set previous to b before the next iteration
+        prev = b
+   
+    # Shift the index one left to start before the zero
+    heel_hits = np.delete(heel_hits, 0)
+    heel_hits = np.append(heel_hits, False)
+    
+    # Get to index values 
+    heel_hits = df3.index[heel_hits]
+
+    return heel_hits
+
 def calc_airplane(df_tup):
     df0, df1, df2, *_ = df_tup
 

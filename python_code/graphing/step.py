@@ -103,7 +103,7 @@ def _get_idxs(df_tup, df_rest_tup):
     return heel_hits
 
 
-def plot_step(df_tup, df_rest_tup):
+def plot_step(df_tup, df_rest_tup, step_idx=0):
     # Get the indexes for the peaks
     heel_hits = _get_idxs(df_tup, df_rest_tup)
 
@@ -132,14 +132,17 @@ def plot_step(df_tup, df_rest_tup):
         step_dict[df_idx].append(df3[heel_hits[-1]:])
 
     # Create the figure
-    fig, ax = plt.subplots(1, 1)
+    _, ax = plt.subplots(1, 1)
+
+    # Get the time right before the heel strikes the ground
+    heel_step = step_dict[3][step_idx]['t'].min()
 
     # Reset the time indexes to be 0
     for df_idx in range(3, 6 + 1):
-        step = step_dict[df_idx][0]
+        step = step_dict[df_idx][step_idx]
         
         # Reset time to 0
-        t = step['t'].to_numpy() - step['t'].min()
+        t = step['t'].to_numpy() - heel_step
 
         # Plot the FSR readings
         ax.plot(t, step['val'], label = df_idx - 3)
@@ -211,6 +214,11 @@ def main():
     DATAPATH = WORKDIR / sys.argv[1]
     RESTPATH = WORKDIR / sys.argv[2]
     
+    # Define the step to be plotted
+    step = 0
+    if len(sys.argv) > 4:
+        step = sys.argv[3]
+
     # Load in the data
     rest_df = pd.read_csv(RESTPATH, header=0)
     df = pd.read_csv(DATAPATH, header=0)
@@ -220,7 +228,7 @@ def main():
     df_tup = make_df_full(df)
 
     # Call function
-    find_steps(df_tup, df_rest_tup)     
+    plot_step(df_tup, df_rest_tup, step_idx=step)     
 
 if __name__ == '__main__':
     main()
