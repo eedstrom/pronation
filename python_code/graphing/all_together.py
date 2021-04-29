@@ -497,7 +497,7 @@ def plot_area(df_tup, df_rest_tup, sup_diff=3, pron_diff=9, use_filter=True):
     roll_diff = roll_diff - rest_diff
 
     # Set up the figure
-    style.use("ggplot")
+    style.use("seaborn-bright")
     _ , axs = plt.subplots(2, 1, sharex=True)
     
     # Plot the difference in yaw and the cutoffs
@@ -521,7 +521,26 @@ def plot_area(df_tup, df_rest_tup, sup_diff=3, pron_diff=9, use_filter=True):
     axs[0].set_title("Regions of Pronation")
     axs[0].legend()
     
+    # Get the step indicies
+    heel_hits = _get_idxs(df_tup, df_rest_tup)
 
+    # Reset all the indecies
+    for df_iter in df_tup:
+        df_iter.reset_index(drop=True, inplace=True)
+
+    # Load in the dataframes
+    df0, df1, df2, df3, df4, df5, df6 = df_tup
+
+    # Plot a vertical line for each step
+    step_times = df3[df3.index.isin(heel_hits)]['t'].to_numpy()
+
+    # Pronation
+    axs[0].vlines(x=step_times, ymin=roll_diff.min(), ymax=roll_diff.max(), alpha=0.8, colors='violet', linestyles='dashed')
+
+    # Supination
+    axs[1].vlines(x=step_times, ymin=roll_diff.min(), ymax=roll_diff.max(), alpha=0.8, colors='violet', linestyles='dashed')
+    
+    # Show the plot
     plt.show()
 
 
