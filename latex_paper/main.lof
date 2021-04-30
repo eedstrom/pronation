@@ -1,59 +1,34 @@
 \boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
-\defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {1.1}{\ignorespaces Pronation visualization}}{2}{figure.1.1}%
-\defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {2.1}{\ignorespaces Pronation angle}}{4}{figure.2.1}%
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {2.2}{\ignorespaces Foot pressure map}}{4}{figure.2.2}%
-\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Method of Genova and Gross}}{2}{figure.caption.2}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Pronation angle}}{3}{figure.caption.3}%
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Foot pressure map}}{4}{figure.caption.4}%
 \addvspace {10\p@ }
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {3.1}{\ignorespaces DAC}}{5}{figure.3.1}%
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {3.2}{\ignorespaces Accelerometer LEDs}}{6}{figure.3.2}%
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {3.3}{\ignorespaces Gait cycle}}{7}{figure.3.3}%
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {3.4}{\ignorespaces FSR designs}}{7}{figure.3.4}%
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {3.5}{\ignorespaces FlexiForce A201}}{8}{figure.3.5}%
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {3.6}{\ignorespaces FSR layout}}{9}{figure.3.6}%
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {3.7}{\ignorespaces Conductance vs. force}}{10}{figure.3.7}%
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {3.8}{\ignorespaces Best fit for conductance vs. force}}{11}{figure.3.8}%
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {3.9}{\ignorespaces Accelerometer placement}}{12}{figure.3.9}%
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {3.10}{\ignorespaces CAD file}}{13}{figure.3.10}%
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {3.11}{\ignorespaces FSR placement in shoe}}{13}{figure.3.11}%
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {3.12}{\ignorespaces 3D-printed case}}{14}{figure.3.12}%
-\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {3.1}{\ignorespaces DAC}}{6}{figure.caption.5}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Accelerometer LEDs}}{7}{figure.caption.6}%
+\contentsline {figure}{\numberline {3.3}{\ignorespaces FlexiForce A201}}{8}{figure.caption.7}%
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Accelerometer placement}}{9}{figure.caption.8}%
+\contentsline {figure}{\numberline {3.5}{\ignorespaces CAD file}}{9}{figure.caption.9}%
+\contentsline {figure}{\numberline {3.6}{\ignorespaces Nautical angle diagram}}{10}{figure.caption.10}%
+\contentsline {figure}{\numberline {3.7}{\ignorespaces Nautical angle photos}}{11}{figure.caption.11}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Yaw illustration with photo}}}{11}{subfigure.7.1}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Pitch illustration with photo}}}{11}{subfigure.7.2}%
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {Roll illustration with photo}}}{11}{subfigure.7.3}%
+\contentsline {figure}{\numberline {3.8}{\ignorespaces Angular displacement}}{12}{figure.caption.12}%
+\contentsline {figure}{\numberline {3.9}{\ignorespaces FSR Placement}}{14}{figure.caption.13}%
+\contentsline {figure}{\numberline {3.10}{\ignorespaces The Gait Cycle}}{14}{figure.caption.14}%
+\contentsline {figure}{\numberline {3.11}{\ignorespaces Conductance vs. force}}{15}{figure.caption.15}%
+\contentsline {figure}{\numberline {3.12}{\ignorespaces Conductance vs. force best-fit line}}{16}{figure.caption.16}%
+\contentsline {figure}{\numberline {3.13}{\ignorespaces DAC case}}{17}{figure.caption.17}%
 \addvspace {10\p@ }
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Neutral stance data}}{15}{figure.4.1}%
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {4.2}{\ignorespaces Neutral stance frame}}{16}{figure.4.2}%
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {4.3}{\ignorespaces Slow walking data}}{17}{figure.4.3}%
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {4.4}{\ignorespaces Slow walking frame}}{18}{figure.4.4}%
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {4.5}{\ignorespaces Brisk jogging data}}{19}{figure.4.5}%
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {4.6}{\ignorespaces Brisk jogging frame}}{20}{figure.4.6}%
-\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Stationary stance data}}{19}{figure.caption.18}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Stationary stance frame}}{20}{figure.caption.19}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Slow walking data}}{20}{figure.caption.20}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Slow walking frame}}{21}{figure.caption.21}%
+\contentsline {figure}{\numberline {4.5}{\ignorespaces FSR step values}}{21}{figure.caption.22}%
+\contentsline {figure}{\numberline {4.6}{\ignorespaces Brisk jogging data}}{22}{figure.caption.23}%
+\contentsline {figure}{\numberline {4.7}{\ignorespaces Brisk jogging frame}}{22}{figure.caption.24}%
 \addvspace {10\p@ }
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {5.1}{\ignorespaces Coordinate system}}{21}{figure.5.1}%
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {5.2}{\ignorespaces Pronation and supination data}}{24}{figure.5.2}%
-\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Pronation and supination data}}{25}{figure.caption.25}%
 \addvspace {10\p@ }

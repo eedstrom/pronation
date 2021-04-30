@@ -1,11 +1,13 @@
 % Remove header
-\thispagestyle{plain}
-
+\pagenumbering{roman}
+\setcounter{page}{2}
 \begin{abstract}
-Understanding how to measure pronation and supination can help us understand the causes of injuries in runners and dancers.
+\thispagestyle{plain}
+\noindent
+Understanding how to measure foot pronation and supination can help us understand the causes of injuries in runners and dancers.
 Currently, the methods of measuring these conditions are either unreliable or cannot provide concrete numerical data for deeper analysis.
-To create a device that is cheap and accessible for measuring the levels of pronation and supination, we used an Arduino-based data logger consisting predominantly of three accelerometers and four force-sensitive resistors.
+To create a device that is cheap and accessible for measuring levels of pronation and supination, we used an Arduino-based data logger consisting predominantly of three accelerometers and four force-sensitive resistors (FSRs).
 These were attached to a person’s leg on their lower back calf, heel, and upper foot to measure changes in the yaw, pitch, and roll as they moved.
-We looked at the person standing, walking, and running in order to collect acceleration, magnetic, gyroscopic, and conductance data. We then used Python to parse and interpret the data.
+We looked at the person standing, walking, and running in order to collect acceleration, magnetic, gyroscopic, and conductance data. We then used Python to parse and help interpret the data.
 Angles indicating pronation and supination were found by graphing the accelerometer data, supported by force maps of the FSR data.
 \end{abstract}

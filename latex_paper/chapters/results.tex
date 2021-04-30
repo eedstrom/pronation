@@ -1,48 +1,67 @@
-Data was collected from three varying tests from two subjects.
-Displayed below is data of the angular displacement and force graphs taken in each subject neutral standing stance.\par
+Data were collected from three varying tests from two subjects.
+Displayed below are data of the angular displacement and force graphs taken for Subject 1 in a neutral standing stance.
+The initial values differ because the filter is calibrating the data.\par
 
-\begin{figure}[h]
+\begin{figure}[p]
   \centering
-  \includegraphics[scale=0.3]{figure_16.png}
-  \caption[Neutral stance data]{Neutral standing stance data}
+  \includegraphics[scale=0.3]{still_data}
+  \caption[Stationary stance data]{Stationary stance data}
   \label{fig:x neutral data}
 \end{figure}
 
+The vertical violet lines represent when the subject’s heel strikes the ground.
+In other words, when a new step is taken.
+However, because these are stationary data, this line represents a slight shift of the subject’s body weight.
+That is why the plot’s values vary on either side of that line.\par
+
 \begin{figure}[h]
   \centering
-  \includegraphics[scale=0.3]{figure_17.png}
-  \caption[Neutral stance frame]{Video frame of neutral standing stance}
+  \includegraphics[scale=0.18]{neutral_stance_frame}
+  \caption[Stationary stance frame]{Video frame of stationary standing stance}
   \label{fig:x neutral frame}
 \end{figure}
 
-The next data set was of the subjects walking at a slow controlled pace.\par
+The next data were of the subjects walking at a slow, controlled pace.\par
 
-\begin{figure}[h]
+\begin{figure}[p]
   \centering
-  \includegraphics[scale=0.3]{figure_18.png}
+  \includegraphics[scale=0.3]{walk_color}
   \caption[Slow walking data]{Slow controlled walking data}
   \label{fig:x slow data}
 \end{figure}
 
 \begin{figure}[h]
   \centering
-  \includegraphics[scale=0.3]{figure_19.png}
+  \includegraphics[scale=0.18]{slow_walking_frame}
   \caption[Slow walking frame]{Video frame of slow controlled walking}
   \label{fig:x slow frame}
 \end{figure}
 
-The third trial was of each of the subjects jogging at light pace on a flat, indoor surface.\par
+The steps were isolated using the FSR data to solidify patterns in the data. A step begins when the heel (0) hits the ground.\par
 
 \begin{figure}[h]
   \centering
-  \includegraphics[scale=0.3]{figure_20.png}
+  \includegraphics[scale=0.25]{first_step}
+  \caption[FSR step values]{FSR values for an individual step in the walk}
+  \label{fig:x fsr step}
+\end{figure}
+
+The data collection rate for the FSRs is limited by the data collection rate of the LSM9DS1 accelerometers.
+Unfortunately, the rate at which they were taking data was slower than for other datasets; however, it is fast enough to be accurate in distinguishing between steps.
+\hyperref[{fig:x fsr_placement}]{Figure \ref*{fig:x fsr_placement}} maps the numeric labels of each FSR to its location in the subject’s shoe.\par
+
+The third trial was of each of the subjects jogging at light pace on a flat, indoor surface.\par
+
+\begin{figure}[p]
+  \centering
+  \includegraphics[scale=0.3]{brian_jog}
   \caption[Brisk jogging data]{Brisk jogging data}
   \label{fig:x brisk data}
 \end{figure}
 
 \begin{figure}[h]
   \centering
-  \includegraphics[scale=0.3]{figure_21.png}
+  \includegraphics[scale=0.18]{brisk_jogging_frame}
   \caption[Brisk jogging frame]{Video frame of brisk jogging contact point}
   \label{fig:x brisk frame}
 \end{figure}

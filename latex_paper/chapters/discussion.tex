@@ -1,75 +1,78 @@
-While each accelerometer could measure its angular displacement in all three spatial directions we were only interested in a few.
-The coordinate system that was used to define the angles of interest is shown in \ref{fig:x coords}.\par
+Beginning with \hyperref[{fig:x neutral data}]{Figure \ref*{fig:x neutral data}}, standing data were collected to develop a strong base line for each subject's neutral standing posture.
+Subject 1’s standing data show that the accelerometer on the lower calf is recording, on average, a $\SI{-6.8}{\degree}$ angle.
+Since a negative rotation corresponds to an angle made to the right of a reference axis and described in \hyperref[{fig:x AOP}]{Figure \ref*{fig:x AOP}}, this would be considered an angle of pronation.
+The heel accelerometer makes, on average, a positive 6.8 degree angle with reference axis but since the angle in \hyperref[{fig:x AOP}]{Figure \ref*{fig:x AOP}} of the heel is made by rotating in the opposite direction we are interested in the opposite vertical angle that the heel accelerometer makes.
+Since $\SI{6.8}{\degree}$ is made by the heel accelerometer to the right of the reference, Subject 1 is pronating.
+Since both angles do not not exceed $\SI{9}{\degree}$, Subject 1’s pronation does not go past safe normal values.
+While we established this baseline, it is not fully indicative of pronation or supination during motion like walking or running.
+The static cases were compared to the dynamic motion cases that followed.\par
 
-\begin{figure}[h]
-  \centering
-  \includegraphics[scale=0.15]{figure_22.png}
-  \caption[Coordinate system]{Definition of coordinate system}
-  \label{fig:x coords}
-\end{figure}
+\hyperref[{fig:x neutral data}]{Figure \ref*{fig:x neutral data}} was of Subject 1 walking slowly across the floor over the course of 30 seconds.
+The peaks of FSR 3 align with the yaw angle of accelerometer 2’s peaks.
+The peaks of the FSR data correspond to when that sensor is being depressed by the foot.
+FSR 3 is placed in the toe box, meaning at every peak that is detected, the subject would be at the end contact phase of their stride.
+This is mainly important because it helps identify frames of contact in the data, which is important when testing for PR and SP.
+At these peaks for the accelerometer 2, the average angular displacement is $\SI{50}{\degree}$.
+If we subtract that from our $\SI{90}{\degree}$ offset, we would get a change in angle of $\SI{40}{\degree}$ in the negative direction.
+We cannot assume that Subject 1 pronates $\SI{40}{\degree}$ just from this raw analysis alone, however.
+There was a significant amount of experimental error from the moving motion of the foot and the inconsistency of our magnetic sensor readings.\par
 
-Roll, pitch, and yaw are defined as the angles made by the acceleratometer’s axes relative to the Cartesian coordinate system.
-Roll, pitch, and yaw are calculated as the angles around the x, y, and z axes respectively.
-The angles of interest for the accelerometers on the back of the leg where the yaw and for the the accelerometer on the top of the foot was the pitch.
-These angular axises are what corresponded to the angles of pronation described in the background section.\par
-
-Starting with \ref{fig:x neutral data}, standing data was collected to develop a strong base line for each subject's natural standing posture.
-Since standing postures can vary widely among people, separate data for each person’s stance was necessary.
-While we established this baseline it is not fully indicative of pronation or supination during motion like walking or running.
-The static cases were compared to the dynamic motion cases that proceeded.
-Subject 1 shows no signs of pronation from the data collected in the standing stance.
-The yaw data for accelerometer 1 is averaging 90 degrees which is zero since we are subtracting 90 degrees because the accelerometer measures angle relative to the earth’s magnetic field.
-Accelerometer 2 averaged around the same value, 88.63 degrees, which makes sense since they were oriented the same way.\par
-
-\ref{fig:x neutral frame} was of subject 1 walking slowly across the floor over the course of 30 seconds.
-The peaks of force sensor 3 (bus 6 in graph) align with the yaw angle of accelerometer 2’s peaks.
-The peaks of the FSR data correspond to when that sensor is being pressed on by the foot.
-FSR 3 is placed in the toe box meaning then every peak that is detected, the subject would be at the end contact phase of their stride.
-This is mainly important because it helps identify frames of contact in the data which is most important when testing for PR and SP.
-At these peaks for the accel. 2, average angular displacement is 50 degrees.
-If we subtract that from our 90 offset then we would get a change in angle of 40 degrees in the negative direction.
-We cannot assume that subject 1 pronates 40 degrees just from this raw analysis though.
-There was a good amount of experimental error from the moving motion of the foot and the inconsistency of our magnetic sensor readings.\par
-
-This inconsistency in the magnetic sensors becomes very obvious when looking at \ref{fig:x slow frame}.
-The yaw data for both accelerometers jumps rapidly between its maximum and minimum values, much faster than any human could do.
+This inconsistency in the magnetic sensors becomes obvious when looking at \hyperref[{fig:x slow frame}]{Figure \ref*{fig:x slow frame}}.
+The yaw data for both accelerometers jump rapidly between their maximum and minimum values, much faster than any human could.
 The yaw data must be calculated with Earth's magnetic field because gravity points in the same direction whether upside down or right side up.
-The issue also has to with the type of motion; in this case it is jogging.
-This can be interpreted as any type of figures motion would result in a poor reading from the magnetometer.
-Another contributing factor could have been because of the limitation of hardware.
-We were not able to read out the magnetometer as quickly as the other sensors so we had to propagate the previous magnetic measurements to the new accelerometers reading until the magnetometer was ready again.
-These placeholder values could have caused outlier data to be propagated skewing the calculation of yaw.\par
-
-The data taken during these runs provide estimates of the quantities of interest, namely roll, pitch, and yaw; however, noise permeates these values.
-A complementary filter was written to be used after data collection.
-A complimentary filter essentially fuses together the readings from the on board gyroscopes and with the accelerometers.
-The gyroscope is used as a short term check by removing sudden increases of acceleration not due to gravity in the roll, pitch, and yaw calculations.
-While the complementary filter detects the signal well, the ideal filter for this situation is a Kalman filter.
-This filter is more difficult to implement; however, it would be more adaptable to this situation and thus could be more fine tuned than the complementary filter.\par
+The issue also has to do with the type of motion; in this case, jogging.
+This can be interpreted to say that any type of motion will result in a poor reading from the magnetometer.
+Another contributing factor could have been the limitations of the hardware.
+We were not able to read out the magnetometer as quickly as the other sensors, so we had to propagate the previous magnetic measurements to the new accelerometers reading until the magnetometer was ready again.
+These placeholder values could have caused outlier data to be propagated, skewing the calculation of yaw.\par
 
 From the filtered data, the peaks in the plots are much more consistent.
 However, they do not signify much without a reference.
-The original idea to determine whether one was pronating or supinating was to compare one’s roll, pitch, and yaw with those of one who has been determined already to be pronating or supinating.
-To attempt this, individuals intentionally pronated or supinated while standing and in motion.
+The original idea to determine whether one was pronating or supinating was to compare one’s roll, pitch, and yaw with those of one who had already been determined to be pronating or supinating.
+To attempt this, individuals intentionally pronated or supinated while standing, and while in motion.
 These angles could then be used for comparison, specifically at key moments in one’s stride.
-These moments include when one’s foot leaves the ground and when it touches back down.\par
-
+These moments include when one’s foot leaves the ground and when it touches back down.
 While this method could be utilized, it has several difficulties that prevented its use in this project.
-Firstly, defining supination and pronation angles by one intentionally supinating is inconsistent without a more definitive, objective measure.
+First, defining pronation and supination angles by one intentionally pronating and supinating is inconsistent without a more definitive, objective measure.
 The objective of this device is to determine this angle from a specific measurement; however, defining this measurement using the device carries uncertainties with it.
-With more fine-tuned control of the device along with instant access to the values, this is possible, and it is a path future researchers could benefit from exploring further.\par
+With more fine-tuned control of the device, along with instant access to the values, this is possible, and it is a path future researchers could benefit from exploring further.\par
 
 Instead, the method chosen was to assign values from previous studies on this topic.
 The pronating and supinating angles using those values and the positioning of the accelerometers, were determined.
-These became the cutoff values.
-An example of how these cutoff values were utilized is shown below:\par
+The values defined in \cite{genova}, became the cutoff values.
+An example of how these cutoff values were utilized is shown below.\par
 
-\begin{figure}[h]
+\begin{figure}[p]
   \centering
-  \includegraphics[scale=0.3]{figure_23.png}
+  \includegraphics[scale=0.4]{region_jog}
   \caption[Pronation and supination data]{Pronation and supination during motion}
   \label{fig:x pron. motion}
 \end{figure}
 
-The portions of the plot where the individual exceeds the pronation or supination cutoffs are highlighted.
-This is how we determined whether or not someone is pronating or supinating.
+The first plot shown in \hyperref[{fig:x pron. motion}]{Figure \ref*{fig:x pron. motion}} displays the times during which the subject is pronating for the jogging data.
+The green line represents the pronation cutoff determined by Genova and Gross.
+Any point above this line is defined as a point in which the subject is pronating.
+The second plot displays the same information for supinating; however, the time when the subject supinates is defined as the points below the green cutoff.
+
+\begin{itemize}
+  \item The standing plot suggests pronation. The angles subtract to around $\SI{14}{\degree}$.
+    \begin{itemize}
+      \item The accelerometers were not installed on the person parallel to the ground in the standing phase.
+    \end{itemize}
+  \item Foot to ground contact time compared to foot in air time.
+    \begin{itemize}
+      \item The peaks do not correspond to when her foot is on the ground
+      \item Separate the on-the-ground pronation from the non-impactful off-the-ground pronation.
+      \item On the ground data similar to rest data. Approximately $\SI{14}{\degree}$.
+      \item The reason for spike values while in air is because it is the greatest time of lateral acceleration.
+	\begin{itemize}
+	  \item Even with the complementary filter, too much lateral acceleration could greatly increase the $g$ vector into the $x$ or $y$ directions.
+	\end{itemize}
+    \end{itemize}
+  \item Running graph is similar to walking graph.
+    \begin{itemize}
+      \item But there does seem to be an increase in pronation from $\SI{14}{\degree}$ to $\SI{20}{\degree}$ on average.
+      \item For the running trial, the extreme data could have resulted from the refresh rate of the accelerometers being too slow.
+    \end{itemize}
+\end{itemize}
+

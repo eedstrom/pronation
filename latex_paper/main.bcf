@@ -2820,24 +2820,31 @@
     <bcf:citekey order="1">willems</bcf:citekey>
     <bcf:citekey order="2">griffiths</bcf:citekey>
     <bcf:citekey order="3">willems</bcf:citekey>
-    <bcf:citekey order="4">difference</bcf:citekey>
-    <bcf:citekey order="5">difference</bcf:citekey>
-    <bcf:citekey order="6">erickson</bcf:citekey>
-    <bcf:citekey order="7">erickson</bcf:citekey>
+    <bcf:citekey order="4">erickson</bcf:citekey>
+    <bcf:citekey order="5" nocite="1">genova</bcf:citekey>
+    <bcf:citekey order="6">tsai</bcf:citekey>
+    <bcf:citekey order="7">tsai</bcf:citekey>
     <bcf:citekey order="8">erickson</bcf:citekey>
-    <bcf:citekey order="9">menz</bcf:citekey>
+    <bcf:citekey order="9">erickson</bcf:citekey>
     <bcf:citekey order="10">menz</bcf:citekey>
-    <bcf:citekey order="11">neumann</bcf:citekey>
-    <bcf:citekey order="12">richards</bcf:citekey>
-    <bcf:citekey order="13">adafruit</bcf:citekey>
-    <bcf:citekey order="14">tekscan-cycle</bcf:citekey>
-    <bcf:citekey order="15">tekscan-cycle</bcf:citekey>
-    <bcf:citekey order="16">mouser</bcf:citekey>
+    <bcf:citekey order="11">menz</bcf:citekey>
+    <bcf:citekey order="12">menz</bcf:citekey>
+    <bcf:citekey order="13">neumann</bcf:citekey>
+    <bcf:citekey order="14">richards</bcf:citekey>
+    <bcf:citekey order="15">adafruit</bcf:citekey>
+    <bcf:citekey order="16">tekscan-sensor</bcf:citekey>
     <bcf:citekey order="17">tekscan-sensor</bcf:citekey>
-    <bcf:citekey order="18">tekscan-sensor</bcf:citekey>
-    <bcf:citekey order="19">tekscan-convert</bcf:citekey>
-    <bcf:citekey order="20">tekscan-convert</bcf:citekey>
-    <bcf:citekey order="21">peters</bcf:citekey>
+    <bcf:citekey order="18">psf</bcf:citekey>
+    <bcf:citekey order="19">newton</bcf:citekey>
+    <bcf:citekey order="20">newton</bcf:citekey>
+    <bcf:citekey order="21">pedley</bcf:citekey>
+    <bcf:citekey order="22">grahn</bcf:citekey>
+    <bcf:citekey order="23">menz</bcf:citekey>
+    <bcf:citekey order="24">tekscan-cycle</bcf:citekey>
+    <bcf:citekey order="25">tekscan-cycle</bcf:citekey>
+    <bcf:citekey order="26">tekscan-convert</bcf:citekey>
+    <bcf:citekey order="27">tekscan-convert</bcf:citekey>
+    <bcf:citekey order="28">genova</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="apa">

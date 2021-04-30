@@ -1,19 +1,18 @@
-% Set basic parameters
-\documentclass[11pt, letterpaper]{report}
+% Set basic parameters.  10-point Computer Modern is recommended by APA
+\documentclass[10pt, letterpaper, notitlepage]{report}
 
 % Add support for images and define path to image files
 \usepackage{graphicx}
 \graphicspath{ {images/} }
+\usepackage{wrapfig}
+\usepackage{subfig}
 
-% Make internal hyperlinks
-\usepackage[hidelinks]{hyperref}
-\hypersetup{
-  colorlinks,
-  citecolor=black,
-  filecolor=black,
-  linkcolor=black,
-  urlcolor=black
-}
+% Add support for better equation and unit typesetting
+\usepackage{amsmath, amssymb, amstext}
+\usepackage{array, xspace}
+\usepackage{xkeyval}
+\usepackage{siunitx}
+\DeclareSIUnit\gauss{G}
 
 % Indent first line of every paragraph
 \usepackage{indentfirst}
@@ -21,9 +20,6 @@
 % Set up bibliography using APA style
 \usepackage[backend=biber, style=apa, citestyle=apa]{biblatex}
 \addbibresource{references.bib}
-
-% Use quotation marks in the titles of short internet works
-\DeclareFieldFormat[online]{title}{\mkbibquote{#1}}
 
 % Gobble chapter numbers in body
 \usepackage{titlesec}
@@ -33,40 +29,49 @@
   {0pt}{10pt}{40pt}
 
 % Set margins
-\usepackage[headheight=14pt, margin=1in, paperwidth=8.5in, paperheight=11in]{geometry}
+\usepackage[headheight=12pt, margin=1in, paperwidth=8.5in, paperheight=11in]{geometry}
 
 % Add support for changing line spacing
 \usepackage{setspace}
+
+% Add support for re-justification
+\usepackage{ragged2e}
 
 % Add header
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 
-% Uncomment the following two lines to use Times New Roman
-%\usepackage{fontspec}
-%\setmainfont[Ligatures=Rare]{Times New Roman}
-
-% Increase length of paragraph indents
-\setlength{\parindent}{4em}
+% Make internal hyperlinks
+\usepackage[hidelinks]{hyperref}
+\hypersetup{
+  colorlinks,
+  citecolor=black,
+  filecolor=black,
+  linkcolor=black,
+  urlcolor=black,
+  bookmarksopen=true,
+  pdftitle={Measuring Pronation and Supination}
+}
 
 \begin{document}
 
 % Include title page
 \input{titlepage}
 
-% Uncomment the following line to prevent justification of the right margin
-%\raggedright
-
-% Double space entire document
+% Double space the entire document
 \doublespacing
 
-% Pre-table of contents pages
+% Justify left margin only
+\raggedright
 
 % Include abstract
 \input{abstract}
 
 % Make table of contents
  \tableofcontents
+
+% Re-enable paragraph indentation and increase length of indents
+\setlength{\parindent}{4em}
 
  \chapter{Introduction}
  \input{chapters/introduction}
@@ -95,6 +100,9 @@
 \chapter*{Acknowledgements}
 \noindent
  We would like to thank Professor George Gollin and Ivan Velkovsky for their guidance and the Physics Department of the University of Illinois at Urbana-Champaign for providing the materials to create our project.
+
+% Full justify again before end matter
+\justify
 
  % Include list of figures in table of contents
  \clearpage
