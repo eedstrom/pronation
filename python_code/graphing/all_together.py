@@ -279,7 +279,7 @@ def plot_airplane(df_tup):
     df0, df1, df2, *_ = df_tup
 
     # Set up the figure
-    style.use("ggplot")
+    style.use("seaborn-bright")
     fig, axs = plt.subplots(3, 1, sharex=True)
 
     # roll
@@ -386,52 +386,59 @@ def plot_air_and_fsr_with_comp(df_tup, beta=0.93, airplane_initial=None, scale_f
     axs[3].set_title("FSR Force")
     plt.show()
 
-def plot_airplane_with_integration(df_tup, beta=0.93, airplane_initial=None):
-    # Run the complimentary filter
-    comp_filter(df_tup, beta=beta, airplane_initial=airplane_initial)
+def plot_brian_air(df_tup, df_rest_tup, use_filter=True, scale_fsr=False, chosen_style='default'):
+    initial_airplane = get_initial_airplane(df_rest_tup)
+    comp_filter(df_tup, airplane_initial=initial_airplane)
+
     # Split the data
-    df0, df1, df2, *_ = df_tup
-    
+    df0, df1, df2, df3, *_ = df_tup
+
     # Set up the figure
-    style.use("ggplot")
+    style.use(chosen_style)
     fig, axs = plt.subplots(3, 1, sharex=True)
 
-    # integral roll
-    axs[0].scatter(df0["t"], df0["integral_roll"], label="Laces", alpha=0.3)
-    axs[0].scatter(df1["t"], df1["integral_roll"], label="Heel", alpha=0.3)
-    axs[0].scatter(df2["t"], df2["integral_roll"], label="Shin", alpha=0.3)
-    axs[0].plot(df0["t"], df0["integral_roll"], alpha=0.3)
-    axs[0].plot(df1["t"], df1["integral_roll"], alpha=0.3)
-    axs[0].plot(df2["t"], df2["integral_roll"], alpha=0.3)
-    axs[0].legend()
+    # Bus 0
+    axs[0].scatter(df0["t"], df0["comp_pitch"], alpha=0.3)
+    axs[0].plot(df0["t"], df0["comp_pitch"], alpha=0.3)
 
-    # integral pitch
-    axs[1].scatter(df0["t"], df0["integral_pitch"], label="Laces", alpha=0.3)
-    axs[1].scatter(df1["t"], df1["integral_pitch"], label="Heel", alpha=0.3)
-    axs[1].scatter(df2["t"], df2["integral_pitch"], label="Shin", alpha=0.3)
-    axs[1].plot(df0["t"], df0["integral_pitch"], alpha=0.3)
-    axs[1].plot(df1["t"], df1["integral_pitch"], alpha=0.3)
-    axs[1].plot(df2["t"], df2["integral_pitch"], alpha=0.3)
-    axs[1].legend()
+    # Bus 1
+    axs[2].scatter(df1["t"], df1["comp_roll"], alpha=0.3)
+    axs[2].plot(df1["t"], df1["comp_roll"], alpha=0.3)
 
-    # integral yaw
-    axs[2].scatter(df0["t"], df0["integral_yaw"], label="Laces", alpha=0.3)
-    axs[2].scatter(df1["t"], df1["integral_yaw"], label="Heel", alpha=0.3)
-    axs[2].scatter(df2["t"], df2["integral_yaw"], label="Shin", alpha=0.3)
-    axs[2].plot(df0["t"], df0["integral_yaw"], alpha=0.3)
-    axs[2].plot(df1["t"], df1["integral_yaw"], alpha=0.3)
-    axs[2].plot(df2["t"], df2["integral_yaw"], alpha=0.3)
-    axs[2].legend()
+    # Bus 2
+    axs[1].scatter(df2["t"], df2["comp_roll"], alpha=0.3)
+    axs[1].plot(df2["t"], df2["comp_roll"], alpha=0.3)
 
     # Customize the plot
-    fig.suptitle("Angles by Bus Line over Time")
-    axs[2].set_xlabel("Time (s)")
+    fig.suptitle(f"Airplane Angles over Time")
     axs[0].set_ylabel("Angle (deg)")
     axs[1].set_ylabel("Angle (deg)")
     axs[2].set_ylabel("Angle (deg)")
-    axs[0].set_title("Roll")
-    axs[1].set_title("Pitch")
-    axs[2].set_title("Yaw")
+    axs[2].set_xlabel("Time (s)")
+    axs[0].set_title("Laces - Pitch")
+    axs[1].set_title("Lower Calf - Roll")
+    axs[2].set_title("Heel - Roll")
+    
+    # Get the step indicies
+    heel_hits = _get_idxs(df_tup, df_rest_tup)
+
+    # Reset all the indecies
+    for df_iter in df_tup:
+        df_iter.reset_index(drop=True, inplace=True)
+
+    # Plot a vertical line for each step
+    step_times = df3[df3.index.isin(heel_hits)]['t'].to_numpy()
+
+    # Bus 0
+    axs[0].vlines(x=step_times, ymin=df0['comp_pitch'].min(), ymax=df0['comp_pitch'].max(), alpha=0.8, colors='violet', linestyles='dashed')
+
+    # Bus 1
+    axs[2].vlines(x=step_times, ymin=df1['comp_roll'].min(), ymax=df1['comp_roll'].max(), alpha=0.8, colors='violet', linestyles='dashed')
+
+    # Bus 2
+    axs[1].vlines(x=step_times, ymin=df2['comp_roll'].min(), ymax=df2['comp_roll'].max(), alpha=0.8, colors='violet', linestyles='dashed')
+    
+    # FSRS
     plt.show()
 
 def plot_ind_airplane(df_tup, df_rest_tup, air_col='roll', use_filter=True, scale_fsr=False):
@@ -481,20 +488,19 @@ def plot_ind_airplane(df_tup, df_rest_tup, air_col='roll', use_filter=True, scal
     plt.show()
 
 
-def plot_area(df_tup, df_rest_tup, sup_diff=3, pron_diff=9, use_filter=True):
+def plot_area(df_tup, df_rest_tup, sup_diff=3, pron_diff=10, use_filter=True):
     # Run the comp filter
     comp_filter(df_tup, airplane_initial=get_initial_airplane(df_rest_tup))
 
     # Split the data
     _, df1, df2, *_ = df_tup
-    _, rest1, rest2, *_, = df_rest_tup    
+    # _, rest1, rest2, *_, = df_rest_tup    
 
     # Get the average difference in roll
-    rest_diff = np.mean(rest2['roll'].to_numpy() - rest1['roll'].to_numpy())
+    # rest_diff = np.mean(rest2['roll'].to_numpy() - rest1['roll'].to_numpy())
 
     # Get the diff in yaw between buses 2 and 1
-    roll_diff = df2["comp_roll"].to_numpy() - df1[f"comp_roll"].to_numpy()
-    roll_diff = roll_diff - rest_diff
+    roll_diff = df1["comp_roll"].to_numpy() - df2[f"comp_roll"].to_numpy()
 
     # Set up the figure
     style.use("seaborn-bright")
@@ -544,7 +550,7 @@ def plot_area(df_tup, df_rest_tup, sup_diff=3, pron_diff=9, use_filter=True):
     plt.show()
 
 
-def plot_brian(df_tup, df_rest_tup, use_filter=True, scale_fsr=False):
+def plot_brian(df_tup, df_rest_tup, use_filter=True, scale_fsr=False, chosen_style='default'):
     initial_airplane = get_initial_airplane(df_rest_tup)
     comp_filter(df_tup, airplane_initial=initial_airplane)
 
@@ -552,7 +558,7 @@ def plot_brian(df_tup, df_rest_tup, use_filter=True, scale_fsr=False):
     df0, df1, df2, df3, df4, df5, df6 = df_tup
 
     # Set up the figure
-    style.use("ggplot")
+    style.use(chosen_style)
     fig, axs = plt.subplots(4, 1, sharex=True)
 
     # Bus 0
@@ -610,7 +616,7 @@ def main():
     df_tup = make_df_full(df)
     df_rest_tup = make_df_full(rest_df)
 
-    plot_brian(df_tup, df_rest_tup, use_filter=True)
+    plot_brian_air(df_tup, df_rest_tup, chosen_style='seaborn-bright')
 
 # Run main
 if __name__ == "__main__":
