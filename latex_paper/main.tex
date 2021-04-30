@@ -1,0 +1,122 @@
+% Set basic parameters.  10-point Computer Modern is recommended by APA
+\documentclass[10pt, letterpaper, notitlepage]{report}
+
+% Add support for images and define path to image files
+\usepackage{graphicx}
+\graphicspath{ {images/} }
+\usepackage{wrapfig}
+\usepackage{subfig}
+
+% Add support for better equation and unit typesetting
+\usepackage{amsmath, amssymb, amstext}
+\usepackage{array, xspace}
+\usepackage{xkeyval}
+\usepackage{siunitx}
+\DeclareSIUnit\gauss{G}
+
+% Indent first line of every paragraph
+\usepackage{indentfirst}
+
+% Set up bibliography using APA style
+\usepackage[backend=biber, style=apa, citestyle=apa]{biblatex}
+\addbibresource{references.bib}
+
+% Gobble chapter numbers in body
+\usepackage{titlesec}
+\titleformat{\chapter}[display]
+	{\normalfont\huge\bfseries}{}{0pt}{\Huge}
+\titlespacing*{\chapter}
+  {0pt}{10pt}{40pt}
+
+% Set margins
+\usepackage[headheight=12pt, margin=1in, paperwidth=8.5in, paperheight=11in]{geometry}
+
+% Add support for changing line spacing
+\usepackage{setspace}
+
+% Add support for re-justification
+\usepackage{ragged2e}
+
+% Add header
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+% Make internal hyperlinks
+\usepackage[hidelinks]{hyperref}
+\hypersetup{
+  colorlinks,
+  citecolor=black,
+  filecolor=black,
+  linkcolor=black,
+  urlcolor=black,
+  bookmarksopen=true,
+  pdftitle={Measuring Pronation and Supination}
+}
+
+\begin{document}
+
+% Include title page
+\input{titlepage}
+
+% Double space the entire document
+\doublespacing
+
+% Justify left margin only
+\raggedright
+
+% Include abstract
+\input{abstract}
+
+% Make table of contents
+ \tableofcontents
+
+% Re-enable paragraph indentation and increase length of indents
+\setlength{\parindent}{4em}
+
+ \chapter{Introduction}
+ \input{chapters/introduction}
+
+ \chapter{Background}
+ \input{chapters/background}
+
+ \chapter{Methods}
+ \input{chapters/methods}
+
+ \chapter{Results}
+ \input{chapters/results}
+
+ \chapter{Discussion}
+ \input{chapters/discussion}
+
+ \chapter{Conclusion}
+ \input{chapters/conclusion}
+
+ % Include acknowledgements in table of contents
+ \clearpage
+ \phantomsection
+ \addcontentsline{toc}{chapter}{Acknowledgements}
+
+ % Include acknowledgements
+\chapter*{Acknowledgements}
+\noindent
+ We would like to thank Professor George Gollin and Ivan Velkovsky for their guidance and the Physics Department of the University of Illinois at Urbana-Champaign for providing the materials to create our project.
+
+% Full justify again before end matter
+\justify
+
+ % Include list of figures in table of contents
+ \clearpage
+ \phantomsection
+ \addcontentsline{toc}{chapter}{List of Figures}
+
+ %Include list of figures for convenience
+ \listoffigures
+
+ % Include references in table of contents
+ \clearpage
+ \phantomsection
+ \addcontentsline{toc}{chapter}{References}
+
+ % Include APA list of references
+ \printbibliography[title={References}]
+\end{document}

@@ -1,0 +1,742 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.1 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{apa/global//global/global}
+    \entry{adafruit}{online}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=b65705aa9f138bcc5db4617809413e90}{%
+           family={{Adafruit Industries}},
+           familyi={A\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {Adafruit Industries}%
+      }
+      \strng{namehash}{b65705aa9f138bcc5db4617809413e90}
+      \strng{fullhash}{b65705aa9f138bcc5db4617809413e90}
+      \strng{bibnamehash}{b65705aa9f138bcc5db4617809413e90}
+      \strng{authorbibnamehash}{b65705aa9f138bcc5db4617809413e90}
+      \strng{authornamehash}{b65705aa9f138bcc5db4617809413e90}
+      \strng{authorfullhash}{b65705aa9f138bcc5db4617809413e90}
+      \field{sortinit}{A}
+      \field{sortinithash}{a3dcedd53b04d1adfd5ac303ecd5e6fa}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Adafruit Triple-Axis Accelerometer - ±2/4/8g @ 14-bit - {MMA8451}}
+      \field{urlday}{16}
+      \field{urlmonth}{4}
+      \field{urlyear}{2021}
+      \field{year}{2021}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://www.adafruit.com/product/2019
+      \endverb
+      \verb{url}
+      \verb https://www.adafruit.com/product/2019
+      \endverb
+    \endentry
+    \entry{erickson}{article}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=624674ab8c794d9239e37e260d6078ac}{%
+           family={Erickson},
+           familyi={E\bibinitperiod},
+           given={V.},
+           giveni={V\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=659c9b7aa0f3fde007d9ce0a121e4085}{%
+           family={Kamthe},
+           familyi={K\bibinitperiod},
+           given={A.U.},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=370749bd3e23ff32146b983328dbe245}{%
+           family={Cerpa},
+           familyi={C\bibinitperiod},
+           given={A.E.},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{a9badf0848d6d56bfc1e3a1aa035d485}
+      \strng{fullhash}{8362abab91bfb634934a75804d4e87d7}
+      \strng{bibnamehash}{8362abab91bfb634934a75804d4e87d7}
+      \strng{authorbibnamehash}{8362abab91bfb634934a75804d4e87d7}
+      \strng{authornamehash}{a9badf0848d6d56bfc1e3a1aa035d485}
+      \strng{authorfullhash}{8362abab91bfb634934a75804d4e87d7}
+      \field{sortinit}{E}
+      \field{sortinithash}{c554bd1a0b76ea92b9f105fe36d9c7b0}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{SenSys '09: Proceedings of the Seventh ACM Conference on Embedded Network Sensor Systems}
+      \field{month}{11}
+      \field{title}{Demo Abstract: Measuring Foot Pronation Using RFID Sensor Networks}
+      \field{year}{2009}
+      \field{dateera}{ce}
+      \verb{doi}
+      \verb https://doi.org/10.1145/1644038.1644083
+      \endverb
+    \endentry
+    \entry{genova}{article}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=02ace40b49dd11a13b3a114dbf338b09}{%
+           family={Genova},
+           familyi={G\bibinitperiod},
+           given={Jean\bibnamedelima Massé},
+           giveni={J\bibinitperiod\bibinitdelim M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=44768b502a665fd4724d6993d91f211f}{%
+           family={Gross},
+           familyi={G\bibinitperiod},
+           given={Michael\bibnamedelima T.},
+           giveni={M\bibinitperiod\bibinitdelim T\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{5e11167a937d7bd2009b652d44503530}
+      \strng{fullhash}{5e11167a937d7bd2009b652d44503530}
+      \strng{bibnamehash}{5e11167a937d7bd2009b652d44503530}
+      \strng{authorbibnamehash}{5e11167a937d7bd2009b652d44503530}
+      \strng{authornamehash}{5e11167a937d7bd2009b652d44503530}
+      \strng{authorfullhash}{5e11167a937d7bd2009b652d44503530}
+      \field{sortinit}{G}
+      \field{sortinithash}{62eb2aa29549e4fdbd3cb154ec5711cb}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Study Design Repeated measures analysis of intervention. Objectives To determine the effects of foot orthotics and shoewear on calcaneal eversion for standing and treadmill walking. Background Foot orthotics are commonly used as an intervention for treating lower extremity musculoskeletal pathology. Qualitative research regarding the benefit of foot orthotics tends to be favorable, while the results of quantitative studies often conflict. Methods and Measures Eight men (mean age = 35.8 ± 12.7 years) and 5 women (mean age = 30.4 ± 10.6 years), who demonstrated abnormal pronation, walked quickly (average velocity = 1.9 m/s) on a treadmill with and without foot orthotics. Subjects were filmed using a 2-dimensional video system and plastic molds designed to indicate calcaneal position inside the shoe during static standing and treadmill walking. Results Paired t tests indicated that foot orthotics significantly reduced the mean maximum calcaneal eversion angle by 2.2° and the mean calcaneal eversion angle at heel rise by 2.1° during fast walking. Orthotic and nonorthotic conditions did not differ significantly for the remaining kinematic variables. A one-way ANOVA indicated that calcaneal eversion in standing was significantly greater for barefoot standing compared with standing in shoes with or without orthotics. ANOVA also indicated that the plastic molds provided reliable measures of calcaneal position. Conclusions Foot orthotics have a significant effect on calcaneal eversion and shoes also should be considered in conjunction with foot orthotic prescription. J Orthop Sports Phys Ther 2000;30:664–675.}
+      \field{journaltitle}{Journal of Orthopaedic \& Sports Physical Therapy}
+      \field{note}{PMID: 11104377}
+      \field{number}{11}
+      \field{title}{Effect of Foot Orthotics on Calcaneal Eversion During Standing and Treadmill Walking for Subjects With Abnormal Pronation}
+      \field{volume}{30}
+      \field{year}{2000}
+      \field{pages}{664\bibrangedash 675}
+      \range{pages}{12}
+      \verb{doi}
+      \verb 10.2519/jospt.2000.30.11.664
+      \endverb
+      \verb{eprint}
+      \verb https://doi.org/10.2519/jospt.2000.30.11.664
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.2519/jospt.2000.30.11.664
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.2519/jospt.2000.30.11.664
+      \endverb
+    \endentry
+    \entry{grahn}{thesis}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=b0fb9d18015dc8e40453f5533b0dcf8d}{%
+           family={Grahn},
+           familyi={G\bibinitperiod},
+           given={Erik},
+           giveni={E\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{institution}{1}{%
+        {KTH Royal Institute of Technology}%
+      }
+      \strng{namehash}{b0fb9d18015dc8e40453f5533b0dcf8d}
+      \strng{fullhash}{b0fb9d18015dc8e40453f5533b0dcf8d}
+      \strng{bibnamehash}{b0fb9d18015dc8e40453f5533b0dcf8d}
+      \strng{authorbibnamehash}{b0fb9d18015dc8e40453f5533b0dcf8d}
+      \strng{authornamehash}{b0fb9d18015dc8e40453f5533b0dcf8d}
+      \strng{authorfullhash}{b0fb9d18015dc8e40453f5533b0dcf8d}
+      \field{sortinit}{G}
+      \field{sortinithash}{62eb2aa29549e4fdbd3cb154ec5711cb}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprinttype}{Digitala Vetenskapliga Arkivet}
+      \field{title}{Evaluation of {MEMS} accelerometer and gyroscope for orientation tracking nutrunner functionality}
+      \field{type}{Bachelor's Thesis}
+      \field{year}{2017}
+      \verb{eprint}
+      \verb diva2:1146723
+      \endverb
+      \verb{urlraw}
+      \verb https://www.diva-portal.org/smash/get/diva2:1146723/FULLTEXT01.pdf
+      \endverb
+      \verb{url}
+      \verb https://www.diva-portal.org/smash/get/diva2:1146723/FULLTEXT01.pdf
+      \endverb
+    \endentry
+    \entry{griffiths}{online}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=dae7efae9abed83fe4408ecae0545fd5}{%
+           family={Griffiths},
+           familyi={G\bibinitperiod},
+           given={I.},
+           giveni={I\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{organization}{1}{%
+        {Kinetic Revolution}%
+      }
+      \strng{namehash}{dae7efae9abed83fe4408ecae0545fd5}
+      \strng{fullhash}{dae7efae9abed83fe4408ecae0545fd5}
+      \strng{bibnamehash}{dae7efae9abed83fe4408ecae0545fd5}
+      \strng{authorbibnamehash}{dae7efae9abed83fe4408ecae0545fd5}
+      \strng{authornamehash}{dae7efae9abed83fe4408ecae0545fd5}
+      \strng{authorfullhash}{dae7efae9abed83fe4408ecae0545fd5}
+      \field{sortinit}{G}
+      \field{sortinithash}{62eb2aa29549e4fdbd3cb154ec5711cb}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{What is Overpronation?}
+      \field{urlday}{16}
+      \field{urlmonth}{4}
+      \field{urlyear}{2021}
+      \field{year}{2021}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://www.kinetic-revolution.com/overpronation-accurate-or-out-of-date-terminology
+      \endverb
+      \verb{url}
+      \verb https://www.kinetic-revolution.com/overpronation-accurate-or-out-of-date-terminology
+      \endverb
+    \endentry
+    \entry{menz}{article}{}
+      \name{author}{5}{}{%
+        {{un=0,uniquepart=base,hash=8fd4b69a76ecad3486d1a9bca6391be1}{%
+           family={Menz},
+           familyi={M\bibinitperiod},
+           given={Hylton\bibnamedelima B.},
+           giveni={H\bibinitperiod\bibinitdelim B\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=f728ad3ab66afa8ac65e7ad2ee1a5f7b}{%
+           family={Dufour},
+           familyi={D\bibinitperiod},
+           given={Alyssa\bibnamedelima B.},
+           giveni={A\bibinitperiod\bibinitdelim B\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=3351360f27e6305f6c8da7d321de5e2b}{%
+           family={Riskowski},
+           familyi={R\bibinitperiod},
+           given={Jody\bibnamedelima L.},
+           giveni={J\bibinitperiod\bibinitdelim L\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=4533abe1dab766f22f6edba3e6647699}{%
+           family={Hillstrom},
+           familyi={H\bibinitperiod},
+           given={Howard\bibnamedelima J.},
+           giveni={H\bibinitperiod\bibinitdelim J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=7c1a5c92e9c52cba40a371e5042d1cad}{%
+           family={Hannan},
+           familyi={H\bibinitperiod},
+           given={Marian\bibnamedelima T.},
+           giveni={M\bibinitperiod\bibinitdelim T\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{d6c07e57d470bf386b7515d2f4aee066}
+      \strng{fullhash}{6610672b96d16ee05a6ea7ffa3f1d54d}
+      \strng{bibnamehash}{6610672b96d16ee05a6ea7ffa3f1d54d}
+      \strng{authorbibnamehash}{6610672b96d16ee05a6ea7ffa3f1d54d}
+      \strng{authornamehash}{d6c07e57d470bf386b7515d2f4aee066}
+      \strng{authorfullhash}{6610672b96d16ee05a6ea7ffa3f1d54d}
+      \field{sortinit}{M}
+      \field{sortinithash}{2e5c2f51f7fa2d957f3206819bf86dc3}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Objective To examine the associations of foot posture and foot function to foot pain. Methods Data were collected on 3,378 members of the Framingham Study cohort who completed foot examinations in 2002–2008. Foot pain (generalized and at 6 locations) was based on the response to the following question: “On most days, do you have pain, aching or stiffness in either foot?” Foot posture was categorized as normal, planus, or cavus using static pressure measurements of the arch index. Foot function was categorized as normal, pronated, or supinated using the center of pressure excursion index from dynamic pressure measurements. Sex-specific multivariate logistic regression models were used to examine the effect of foot posture and function on generalized and location-specific foot pain, adjusting for age and weight. Results Planus foot posture was significantly associated with an increased likelihood of arch pain in men (odds ratio [OR] 1.38, 95\% confidence interval [95\% CI] 1.01–1.90), while cavus foot posture was protective against ball of foot pain (OR 0.74, 95\% CI 0.55–1.00) and arch pain (OR 0.64, 95\% CI 0.48–0.85) in women. Pronated foot function was significantly associated with an increased likelihood of generalized foot pain (OR 1.28, 95\% CI 1.04–1.56) and heel pain (OR 1.54, 95\% CI 1.04–2.27) in men, while supinated foot function was protective against hindfoot pain in women (OR 0.74, 95\% CI 0.55–1.00). Conclusion Planus foot posture and pronated foot function are associated with foot symptoms. Interventions that modify abnormal foot posture and function may therefore have a role in the prevention and treatment of foot pain.}
+      \field{journaltitle}{Arthritis Care \& Research}
+      \field{number}{12}
+      \field{title}{Association of Planus Foot Posture and Pronated Foot Function With Foot Pain: The Framingham Foot Study}
+      \field{volume}{65}
+      \field{year}{2013}
+      \field{pages}{1991\bibrangedash 1999}
+      \range{pages}{9}
+      \verb{doi}
+      \verb https://doi.org/10.1002/acr.22079
+      \endverb
+      \verb{eprint}
+      \verb https://onlinelibrary.wiley.com/doi/pdf/10.1002/acr.22079
+      \endverb
+      \verb{urlraw}
+      \verb https://onlinelibrary.wiley.com/doi/abs/10.1002/acr.22079
+      \endverb
+      \verb{url}
+      \verb https://onlinelibrary.wiley.com/doi/abs/10.1002/acr.22079
+      \endverb
+    \endentry
+    \entry{neumann}{book}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=fb2a423b9c54c776086b7e1bd73abb89}{%
+           family={Neumann},
+           familyi={N\bibinitperiod},
+           given={Donald\bibnamedelima A.},
+           giveni={D\bibinitperiod\bibinitdelim A\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {Elsevier}%
+      }
+      \strng{namehash}{fb2a423b9c54c776086b7e1bd73abb89}
+      \strng{fullhash}{fb2a423b9c54c776086b7e1bd73abb89}
+      \strng{bibnamehash}{fb2a423b9c54c776086b7e1bd73abb89}
+      \strng{authorbibnamehash}{fb2a423b9c54c776086b7e1bd73abb89}
+      \strng{authornamehash}{fb2a423b9c54c776086b7e1bd73abb89}
+      \strng{authorfullhash}{fb2a423b9c54c776086b7e1bd73abb89}
+      \field{sortinit}{N}
+      \field{sortinithash}{98cf339a479c0454fe09153a08675a15}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{edition}{3}
+      \field{title}{Kinesiology of the Muscoloskeletel System: Foundations for Rehabilitation}
+      \field{year}{2017}
+    \endentry
+    \entry{newton}{online}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=c74725e68d6deea9b784b5731c258650}{%
+           family={Newton},
+           familyi={N\bibinitperiod},
+           given={Alex},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{organization}{1}{%
+        {How To Electronics}%
+      }
+      \strng{namehash}{c74725e68d6deea9b784b5731c258650}
+      \strng{fullhash}{c74725e68d6deea9b784b5731c258650}
+      \strng{bibnamehash}{c74725e68d6deea9b784b5731c258650}
+      \strng{authorbibnamehash}{c74725e68d6deea9b784b5731c258650}
+      \strng{authornamehash}{c74725e68d6deea9b784b5731c258650}
+      \strng{authorfullhash}{c74725e68d6deea9b784b5731c258650}
+      \field{sortinit}{N}
+      \field{sortinithash}{98cf339a479c0454fe09153a08675a15}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{day}{17}
+      \field{month}{9}
+      \field{title}{Measure Tilt Angle Using {MPU6050} Gyro/Accelerometer \& {Arduino}}
+      \field{year}{2020}
+      \field{dateera}{ce}
+      \verb{urlraw}
+      \verb https://how2electronics.com/measure-tilt-angle-mpu6050-arduino
+      \endverb
+      \verb{url}
+      \verb https://how2electronics.com/measure-tilt-angle-mpu6050-arduino
+      \endverb
+    \endentry
+    \entry{pedley}{manual}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=d08b7e5225584fe59d1a1477c5cae72d}{%
+           family={Pedley},
+           familyi={P\bibinitperiod},
+           given={Mark},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{organization}{1}{%
+        {NXP Semiconductors}%
+      }
+      \strng{namehash}{d08b7e5225584fe59d1a1477c5cae72d}
+      \strng{fullhash}{d08b7e5225584fe59d1a1477c5cae72d}
+      \strng{bibnamehash}{d08b7e5225584fe59d1a1477c5cae72d}
+      \strng{authorbibnamehash}{d08b7e5225584fe59d1a1477c5cae72d}
+      \strng{authornamehash}{d08b7e5225584fe59d1a1477c5cae72d}
+      \strng{authorfullhash}{d08b7e5225584fe59d1a1477c5cae72d}
+      \field{sortinit}{P}
+      \field{sortinithash}{bb5b15f2db90f7aef79bb9e83defefcb}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{3}
+      \field{number}{AN3461}
+      \field{title}{Tilt Sensing Using a Three-Axis Accelerometer}
+      \field{version}{6}
+      \field{year}{2013}
+      \field{dateera}{ce}
+      \field{pages}{6\bibrangedash 11}
+      \range{pages}{6}
+      \verb{urlraw}
+      \verb https://www.nxp.com/docs/en/application-note/AN3461.pdf
+      \endverb
+      \verb{url}
+      \verb https://www.nxp.com/docs/en/application-note/AN3461.pdf
+      \endverb
+    \endentry
+    \entry{psf}{online}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=c7b5508dc5e59a2846d22617276cc27c}{%
+           family={{Python Software Foundation}},
+           familyi={P\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {Python Software Foundation}%
+      }
+      \strng{namehash}{c7b5508dc5e59a2846d22617276cc27c}
+      \strng{fullhash}{c7b5508dc5e59a2846d22617276cc27c}
+      \strng{bibnamehash}{c7b5508dc5e59a2846d22617276cc27c}
+      \strng{authorbibnamehash}{c7b5508dc5e59a2846d22617276cc27c}
+      \strng{authornamehash}{c7b5508dc5e59a2846d22617276cc27c}
+      \strng{authorfullhash}{c7b5508dc5e59a2846d22617276cc27c}
+      \field{sortinit}{P}
+      \field{sortinithash}{bb5b15f2db90f7aef79bb9e83defefcb}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{day}{22}
+      \field{month}{8}
+      \field{title}{The Zen of {Python}}
+      \field{urlday}{19}
+      \field{urlmonth}{4}
+      \field{urlyear}{2021}
+      \field{year}{2004}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://www.python.org/dev/peps/pep-0020
+      \endverb
+      \verb{url}
+      \verb https://www.python.org/dev/peps/pep-0020
+      \endverb
+    \endentry
+    \entry{richards}{article}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=42cbd98d5faadc62ae0d980e6303897f}{%
+           family={Richards},
+           familyi={R\bibinitperiod},
+           given={C\bibnamedelima E},
+           giveni={C\bibinitperiod\bibinitdelim E\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=7971afcb5916fc98d5e8dda3fb7348cc}{%
+           family={Magin},
+           familyi={M\bibinitperiod},
+           given={P\bibnamedelima J},
+           giveni={P\bibinitperiod\bibinitdelim J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=1331803df52547f096542b3b68d5c410}{%
+           family={Callister},
+           familyi={C\bibinitperiod},
+           given={R},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{2}{%
+        {British Association of Sport}%
+        {Excercise Medicine}%
+      }
+      \strng{namehash}{fd0756810228c3dd145e2d04ee2c74a7}
+      \strng{fullhash}{f2dc66fa7f1364a277ef01de7ff7b406}
+      \strng{bibnamehash}{f2dc66fa7f1364a277ef01de7ff7b406}
+      \strng{authorbibnamehash}{f2dc66fa7f1364a277ef01de7ff7b406}
+      \strng{authornamehash}{fd0756810228c3dd145e2d04ee2c74a7}
+      \strng{authorfullhash}{f2dc66fa7f1364a277ef01de7ff7b406}
+      \field{sortinit}{R}
+      \field{sortinithash}{b9c68a358aea118dfa887b6e902414a7}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Objectives: To determine whether the current practice of prescribing distance running shoes featuring elevated cushioned heels and pronation control systems tailored to the individual{’}s foot type is evidence-based.Data sources: MEDLINE (1950{–}May 2007), CINAHL (1982{–}May 2007), EMBASE (1980{–}May 2007), PsychInfo (1806{–}May 2007), Cochrane Database of Systematic Reviews (2nd Quarter 2007), Cochrane Central Register of Controlled trials (2nd Quarter 2007), SPORTSDiscus (1985{–}May 2007) and AMED (1985{–}May 2007).Review methods: English language articles were identified via keyword and medical subject headings (MeSH) searches of the above electronic databases. With these searches and the subsequent review process, controlled trials or systematic reviews were sought in which the study population included adult recreational or competitive distance runners, the exposure was distance running, the intervention evaluated was a running shoe with an elevated cushioned heel and pronation control systems individualised to the wearer{’}s foot type, and the outcome measures included either running injury rates, distance running performance, osteoarthritis risk, physical activity levels, or overall health and wellbeing. The quality of these studies and their findings were then evaluated.Results: No original research that met the study criteria was identified either directly or via the findings of the six systematic reviews identified.Conclusion: The prescription of this shoe type to distance runners is not evidence-based.}
+      \field{issn}{0306-3674}
+      \field{journaltitle}{British Journal of Sports Medicine}
+      \field{number}{3}
+      \field{title}{Is your prescription of distance running shoes evidence-based? [{Abstract}]}
+      \field{volume}{43}
+      \field{year}{2009}
+      \field{pages}{159\bibrangedash 162}
+      \range{pages}{4}
+      \verb{doi}
+      \verb 10.1136/bjsm.2008.046680
+      \endverb
+      \verb{eprint}
+      \verb https://bjsm.bmj.com/content/43/3/159.full.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://bjsm.bmj.com/content/43/3/159
+      \endverb
+      \verb{url}
+      \verb https://bjsm.bmj.com/content/43/3/159
+      \endverb
+    \endentry
+    \entry{tekscan-cycle}{online}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=9eb2c2ae254556713fda922806b93840}{%
+           family={Tekscan},
+           familyi={T\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {Tekscan}%
+      }
+      \strng{namehash}{9eb2c2ae254556713fda922806b93840}
+      \strng{fullhash}{9eb2c2ae254556713fda922806b93840}
+      \strng{bibnamehash}{9eb2c2ae254556713fda922806b93840}
+      \strng{authorbibnamehash}{9eb2c2ae254556713fda922806b93840}
+      \strng{authornamehash}{9eb2c2ae254556713fda922806b93840}
+      \strng{authorfullhash}{9eb2c2ae254556713fda922806b93840}
+      \field{extraname}{1}
+      \field{sortinit}{T}
+      \field{sortinithash}{51f9faf24c60c62ca764a77f78cf5666}
+      \field{extradate}{1}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{The Gait Cycle: Phases, Parameters to Evaluate \& Technology}
+      \field{urlday}{16}
+      \field{urlmonth}{4}
+      \field{urlyear}{2021}
+      \field{year}{2021}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://www.tekscan.com/print/blog/medical/gait-cycle-phases-parameters-evaluate-technology
+      \endverb
+      \verb{url}
+      \verb https://www.tekscan.com/print/blog/medical/gait-cycle-phases-parameters-evaluate-technology
+      \endverb
+    \endentry
+    \entry{tekscan-convert}{online}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=9eb2c2ae254556713fda922806b93840}{%
+           family={Tekscan},
+           familyi={T\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {Tekscan}%
+      }
+      \strng{namehash}{9eb2c2ae254556713fda922806b93840}
+      \strng{fullhash}{9eb2c2ae254556713fda922806b93840}
+      \strng{bibnamehash}{9eb2c2ae254556713fda922806b93840}
+      \strng{authorbibnamehash}{9eb2c2ae254556713fda922806b93840}
+      \strng{authornamehash}{9eb2c2ae254556713fda922806b93840}
+      \strng{authorfullhash}{9eb2c2ae254556713fda922806b93840}
+      \field{extraname}{2}
+      \field{sortinit}{T}
+      \field{sortinithash}{51f9faf24c60c62ca764a77f78cf5666}
+      \field{extradate}{2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{How to Convert Resistance ({Ohms}) to Force (lbs)?}
+      \field{urlday}{16}
+      \field{urlmonth}{4}
+      \field{urlyear}{2021}
+      \field{year}{2021}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://www.tekscan.com/support/faqs/how-convert-resistance-ohms-force-lbs
+      \endverb
+      \verb{url}
+      \verb https://www.tekscan.com/support/faqs/how-convert-resistance-ohms-force-lbs
+      \endverb
+    \endentry
+    \entry{tekscan-sensor}{online}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=9eb2c2ae254556713fda922806b93840}{%
+           family={Tekscan},
+           familyi={T\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {Tekscan}%
+      }
+      \strng{namehash}{9eb2c2ae254556713fda922806b93840}
+      \strng{fullhash}{9eb2c2ae254556713fda922806b93840}
+      \strng{bibnamehash}{9eb2c2ae254556713fda922806b93840}
+      \strng{authorbibnamehash}{9eb2c2ae254556713fda922806b93840}
+      \strng{authornamehash}{9eb2c2ae254556713fda922806b93840}
+      \strng{authorfullhash}{9eb2c2ae254556713fda922806b93840}
+      \field{extraname}{3}
+      \field{sortinit}{T}
+      \field{sortinithash}{51f9faf24c60c62ca764a77f78cf5666}
+      \field{extradate}{3}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Small Force Sensing Resistor}
+      \field{urlday}{16}
+      \field{urlmonth}{4}
+      \field{urlyear}{2021}
+      \field{year}{2021}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://www.tekscan.com/products-solutions/force-sensors/a201
+      \endverb
+      \verb{url}
+      \verb https://www.tekscan.com/products-solutions/force-sensors/a201
+      \endverb
+    \endentry
+    \entry{tsai}{article}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=cde10acca0ef94ee535a4b974b1264c6}{%
+           family={Tsai},
+           familyi={T\bibinitperiod},
+           given={Liang-Ching},
+           giveni={L\bibinithyphendelim C\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=fc6283cba40337baef29625ca7f4d236}{%
+           family={Yu},
+           familyi={Y\bibinitperiod},
+           given={Bing},
+           giveni={B\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=14795aa9344f6989a5f495286486beb7}{%
+           family={Mercer},
+           familyi={M\bibinitperiod},
+           given={Vicki\bibnamedelima S.},
+           giveni={V\bibinitperiod\bibinitdelim S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=44768b502a665fd4724d6993d91f211f}{%
+           family={Gross},
+           familyi={G\bibinitperiod},
+           given={Michael\bibnamedelima T.},
+           giveni={M\bibinitperiod\bibinitdelim T\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{e601e1d03d3d4ba7328e8c58fce53169}
+      \strng{fullhash}{f95d01733bef53939623278a337bff4f}
+      \strng{bibnamehash}{f95d01733bef53939623278a337bff4f}
+      \strng{authorbibnamehash}{f95d01733bef53939623278a337bff4f}
+      \strng{authornamehash}{e601e1d03d3d4ba7328e8c58fce53169}
+      \strng{authorfullhash}{f95d01733bef53939623278a337bff4f}
+      \field{sortinit}{T}
+      \field{sortinithash}{51f9faf24c60c62ca764a77f78cf5666}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Study Design Matched group comparison of 3 subject groups with 3 different foot structures for force plate and clinical measures of postural control. Objectives To determine if subjects with different weight-bearing foot structure would demonstrate differences in static standing postural control, and to determine the reliability of study procedures. Background Weight-bearing foot structure may influence postural control either because of a decreased base of support (supinated foot structure) or because of passive instability of the joints of the foot (pronated foot structure). Methods and Measures Young adults were categorized based on weight-bearing foot structure into neutral, pronated, or supinated groups (15 subjects per group). Postural control in single-limb stance with eyes closed was assessed using force plate measures and by measuring duration of single-limb stance on a firm floor and on a balance pad. Force plate measures were normalized center-of-pressure average speed; and standard deviation and maximum displacement in the anterior-posterior and medial-lateral directions. Results Individuals in the supinated group had significantly greater center-of-pressure average speed, greater maximum displacement in the anterior-posterior direction, and greater SD and maximum displacement in the medial-lateral direction than individuals in the neutral group. The individuals in the pronated group had significantly greater SD and maximum displacement in the anterior-posterior direction, used more trials to complete force plate testing, and had shorter single-limb stance duration than those in the neutral group. Conclusion Individuals with pronated feet or supinated feet have poorer postural control than individuals with neutral feet, but perhaps through different mechanisms. J Orthop Sports Phys Ther 2006;36(12):942–953. doi:10.2519/jospt.2006.2336}
+      \field{journaltitle}{Journal of Orthopaedic \& Sports Physical Therapy}
+      \field{note}{PMID: 17193872}
+      \field{number}{12}
+      \field{title}{Comparison of Different Structural Foot Types for Measures of Standing Postural Control}
+      \field{volume}{36}
+      \field{year}{2006}
+      \field{pages}{942\bibrangedash 953}
+      \range{pages}{12}
+      \verb{doi}
+      \verb 10.2519/jospt.2006.2336
+      \endverb
+      \verb{eprint}
+      \verb https://doi.org/10.2519/jospt.2006.2336
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.2519/jospt.2006.2336
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.2519/jospt.2006.2336
+      \endverb
+    \endentry
+    \entry{willems}{article}{}
+      \name{author}{5}{}{%
+        {{un=0,uniquepart=base,hash=f40f1e1f40a331f6bc3a94541b6cb542}{%
+           family={Willems},
+           familyi={W\bibinitperiod},
+           given={Tine\bibnamedelima Marieke},
+           giveni={T\bibinitperiod\bibinitdelim M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=f15803860efce73df25c32aa1e1a015c}{%
+           family={Ley},
+           familyi={L\bibinitperiod},
+           given={Christophe},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=0a4c41729c3dc1275a1ab028d65265f2}{%
+           family={Goetghebeur},
+           familyi={G\bibinitperiod},
+           given={Els},
+           giveni={E\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=544804707f4895c661b24e68af03db62}{%
+           family={Theisen},
+           familyi={T\bibinitperiod},
+           given={Daniel},
+           giveni={D\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=2fbbbdcf9847ad48fbcbfd4723cfe559}{%
+           family={Malisoux},
+           familyi={M\bibinitperiod},
+           given={Laurent},
+           giveni={L\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{d3dcbb22dad2ba5219914fcb3370bc0c}
+      \strng{fullhash}{1960902bd78779c121ab15d48ad1b0f5}
+      \strng{bibnamehash}{1960902bd78779c121ab15d48ad1b0f5}
+      \strng{authorbibnamehash}{1960902bd78779c121ab15d48ad1b0f5}
+      \strng{authornamehash}{d3dcbb22dad2ba5219914fcb3370bc0c}
+      \strng{authorfullhash}{1960902bd78779c121ab15d48ad1b0f5}
+      \field{sortinit}{W}
+      \field{sortinithash}{1af34bd8c148ffb32de1494636b49713}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Objective To investigate whether motion-control shoes reduce the risk of pronation-related injuries in recreational runners. Design Secondary analysis of a randomized controlled trial of the effect of shoes on running injuries. Methods Three hundred seventy-two recreational runners were randomized to receive either standard neutral or motion-control shoes and were followed up for 6 months regarding running activity and injury. Running injuries that occurred during this period were registered and classified as pronation-related injuries (Achilles tendinopathy, plantar fasciopathy, exercise-related lower-leg pain, and anterior knee pain) or other running-related injuries. With the use of competing risk analysis, the relationship between pronation-related and other running-related injuries and shoe type was evaluated by estimating the cause-specific hazard, controlling for other possible confounders like age, sex, body mass index, previous injury, and sport participation pattern. Results Twenty-five runners sustained pronation-related running injuries and 68 runners sustained other running-related injuries. Runners wearing the motion-control shoes had a lower risk of pronation-related running injuries compared with runners who wore standard neutral shoes (hazard ratio = 0.41; 95\% confidence interval: 0.17, 0.98). There was no effect of shoe type (hazard ratio = 0.68; 95\% confidence interval: 0.41, 1.10) on the risk of other running-related injuries. Conclusion Motion-control shoes may reduce the risk of pronation-related running injuries, but did not influence the risk of other running-related injuries. J Orthop Sports Phys Ther 2021;51(3):135–143. Epub 11 Dec 2020. doi:10.2519/jospt.2021.9710}
+      \field{journaltitle}{Journal of Orthopaedic \& Sports Physical Therapy}
+      \field{note}{PMID: 33306927}
+      \field{number}{3}
+      \field{title}{Motion-Control Shoes Reduce the Risk of Pronation-Related Pathologies in Recreational Runners: A Secondary Analysis of a Randomized Controlled Trial}
+      \field{volume}{51}
+      \field{year}{2021}
+      \field{pages}{135\bibrangedash 143}
+      \range{pages}{9}
+      \verb{doi}
+      \verb 10.2519/jospt.2021.9710
+      \endverb
+      \verb{eprint}
+      \verb https://doi.org/10.2519/jospt.2021.9710
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.2519/jospt.2021.9710
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.2519/jospt.2021.9710
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

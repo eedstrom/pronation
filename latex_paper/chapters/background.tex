@@ -1,0 +1,64 @@
+PR and SP can be qualitatively described by looking at qualities such as the foot’s arch, a person's shoe wear pattern, and surface area contact shape with a flat surface \parencite{erickson}.
+To quantify PR and SP, angular ranges are measured of how the ankle joint moves with respect to a reference.
+\hyperref[{fig:x AOP}]{Figure \ref*{fig:x AOP}} shows two of these angles on a right leg.
+The reference is the perpendicular line that runs up from the ground through the middle of the  Achilles tendon, just above the heel.
+In a normal, neutral stance the line goes through all the red points.
+The angular displacement that the calf and lower heel points make from the reference line are two of the angles of PR and SP that we are interested in recording for this experiment.\par
+
+This method of measuring PR and SP is based on a paper by Genova and Gross (2000), but slightly modified\nocite{genova}.
+The main difference is that Genova and Gross use the midline of the calf as a reference line, and measure the angle that midline of the heel makes with it when the two intersect.
+An example of Genova and Gross's unmodified method appears in \hyperref[{fig:x gg orig.}]{Figure \ref*{fig:x gg orig.}}.\par
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.33]{bw_foot}
+  \caption[Method of Genova and Gross]{The method of measuring pronation used by Genova and Gross \parencite{tsai}}
+  \label{fig:x gg orig.}
+\end{figure}
+
+This method creates only one angle to measure, while we have two with our method.
+Our angles would subtract to Genova and Gross’s angle.
+The top angle is subtracted because it is the reference for the lower angle.
+Our reference line splits Genova and Gross’s angle into two angles.
+The angle on the calf that we are measuring is the opposite vertical angle of the leftover angle to the left of our reference that was created when splitting Genova and Gross’s angle.
+This deviation was made to make the measurement more easily obtainable using accelerometers.
+As mentioned before, some PR and SP is normal; so, to distinguish between overpronation and supination, we used cutoff angles from Genova and Gross.
+The cutoff values correspond to the difference of the two angles, not each one individually.
+For pronation, the cutoff angle would be a resultant angle greater than $\SI{10}{\degree}$.
+For supination, the cut off angle would be a resultant angle less than $\SI{3}{\degree}$.\par
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.8]{pronation_angle}
+  \caption[Pronation angle]{Pronation and supination classified in humans. Angle of pronation is denoted by AOP, and angle of supination by AOS \parencite{erickson}}
+  \label{fig:x AOP}
+\end{figure}
+
+The second way that PR and SP is quantitatively measured is to measure how pressure is distributed on the bottom of the foot.
+In a study where they examined associations between foot posture and foot function, and foot pain, PR and SP were measured using a pressure mat on which subjects would stand \parencite{menz}.
+Their results were heat maps that show how a person distributed their weight on the pads of their feet while bearing additional weight.
+\hyperref[{fig:x press. map}]{Figure \ref*{fig:x press. map}} shows a sample of their pressure maps where red shows the areas of highest pressure and blue the areas of lowest pressure.
+This figure is also of a subject whom they considered to be neutral, not severely pronated or supinated.
+In this experiment, we would expect to find subjects who pronated to have more pressure toward the under arch and less on the outer edges of the foot.
+For supination, we would expect to find more pressure on the outer edges, and very little or no pressure under the arch.\par
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.3]{foot_pressure_map}
+  \caption[Foot pressure map]{Center of pressure calculation from dynamic foot pressure map \parencite{menz}}
+  \label{fig:x press. map}
+\end{figure}
+
+Based on these static measurements, individuals are often prescribed a shoe intended to correct their stride \parencite{neumann}.
+However, recent studies have cast doubt on the reliability of this method \parencite{richards}.
+Indeed, Neumann concludes that “no validated algorithm yet exists to determine the appropriate shoe for an individual that will minimize injury risk while maintaining or improving performance” (p. 719).
+Given the uncertainty over how best to assess an individual’s needs for a particular shoe, and the apparent unreliability of measuring static foot posture, we decided to try developing an alternative method of measuring PR and SP in runners and others.
+Our primary goal was to measure foot posture during the act of running itself, seeing as this is the activity during which injury risk is maximized.
+This, we hoped, would provide a more realistic measure of a person’s tendency to pronate when running, and may better inform the decision of what type of shoe they should wear.\par
+
+Measuring the foot pronation or supination of a runner in motion is no trivial task.
+To obtain accurate data, we would need to account for a number of factors.
+First, we would need to design a reliable and quantitative method for measuring pronation while running.
+Second, we would need a way to easily manipulate the data, in order to correct errors, analyze the data in different ways, and elegantly present it to others.
+Finally, we would need our method to be repeatable by others, so it would need to use readily available components with easy assembly.
+With these considerations in mind, we set out to design our data acquisition unit.\par
